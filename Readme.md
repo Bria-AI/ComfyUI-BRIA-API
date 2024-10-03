@@ -22,6 +22,8 @@ The **Eraser** node allows users to remove specific objects or areas from an ima
 
 This functionality is powered by BRIA's ControlNet inpainting, available on [this model card](https://huggingface.co/briaai/BRIA-2.3-ControlNet-Inpainting) on Hugging Face.
 
+You can also try out BRIA's Eraser demo by visiting our Hugging Face space [here](https://huggingface.co/spaces/briaai/BRIA-Eraser-API).
+
 ## Installation
 There are two methods to install the BRIA ComfyUI API nodes:
 
