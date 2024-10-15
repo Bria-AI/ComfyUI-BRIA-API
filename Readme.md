@@ -3,7 +3,7 @@
 ## Overview
 This repository contains custom nodes for ComfyUI that allow access to BRIA's API endpoints.
 
-To use the nodes in the workflow, you need a valid BRIA API token. You can get one [here](https://bria.ai/api/)
+To use the nodes in the workflow, you need a valid BRIA API token. You can get one [here](https://bria.ai/api/) (with 1000 free calls)
 
 You can load the workflow, which includes all available nodes, by importing the [workflow.json](workflow.json) file in this repo. 
 
