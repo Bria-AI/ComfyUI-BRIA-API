@@ -1,7 +1,7 @@
 # BRIA ComfyUI API Nodes
 
 ## Overview
-This repository contains custom nodes for ComfyUI that allow access to BRIA's API endpoints.
+This repository contains custom nodes for ComfyUI that allow access to BRIA's API endpoints. You can find our API documentation [here](https://bria-ai-api-docs.redoc.ly/#operation//generation/bria-v2/text-to-image).
 
 To use the nodes in the workflow, you need a valid BRIA API token. You can get one [here](https://bria.ai/api/) (with 1000 free calls)
 
