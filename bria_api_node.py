@@ -174,7 +174,7 @@ class GenerativeFillNode(BriaAPINode):
                 response_dict = response.json()
                 image_response = requests.get(response_dict['urls'][0])
                 result_image = Image.open(io.BytesIO(image_response.content))
-                result_image = result_image.convert("RGBA")
+                result_image = result_image.convert("RGB")
                 result_image = np.array(result_image).astype(np.float32) / 255.0
                 result_image = torch.from_numpy(result_image)[None,]
                 return (result_image,)
