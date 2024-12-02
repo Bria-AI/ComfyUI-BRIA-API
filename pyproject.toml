@@ -1,7 +1,7 @@
 [project]
 name = "comfyui-bria-api"
 description = "Custom nodes for ComfyUI using BRIA's API."
-version = "1.0.0"
+version = "1.0.1"
 license = {file = "LICENSE"}
 
 [project.urls]
