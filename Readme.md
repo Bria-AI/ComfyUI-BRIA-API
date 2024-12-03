@@ -24,6 +24,13 @@ This functionality is powered by BRIA's ControlNet inpainting, available on [thi
 
 You can also try out BRIA's Eraser demo by visiting our Hugging Face space [here](https://huggingface.co/spaces/briaai/BRIA-Eraser-API).
 
+### Generative Fill
+The **Generative Fill** node allows users to add and modify objects or areas in an image by providing a mask and a prompt.
+
+This functionality is powered by BRIA's ControlNet Generative Fill, available on [this model card](https://huggingface.co/briaai/BRIA-2.3-ControlNet-Generative-Fill) on Hugging Face.
+
+You can also try out BRIA's Generative Fill demo by visiting our Hugging Face space [here](https://huggingface.co/spaces/briaai/BRIA-Generative-Fill-API).
+
 ## Installation
 There are two methods to install the BRIA ComfyUI API nodes:
 
