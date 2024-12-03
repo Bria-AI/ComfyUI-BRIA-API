@@ -7,13 +7,9 @@ To use the nodes in the workflow, you need a valid BRIA API token. You can get o
 
 You can load the different workflows, by importing the compatible workflow.json files in this [folder](workflows). 
 
-You can also download the following image and import it to comfyui:
+An illustration of our workflows:
 
-<img src="./images/eraser_workflow.png" alt="Original image" width="500"/>
-
-An illustration of the workflow:
-
- <img src="./images/bria_api_nodes_workflow_diagram.jpg" alt="all workflows example" width="650"/>
+ <img src="./images/bria_api_nodes_workflow_diagram.png" alt="all workflows example" width="650"/>
 
 ## Available Nodes
 
