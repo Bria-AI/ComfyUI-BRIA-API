@@ -5,7 +5,7 @@ This repository contains custom nodes for ComfyUI that allow access to BRIA's AP
 
 To use the nodes in the workflow, you need a valid BRIA API token. You can get one [here](https://bria.ai/api/) (with 1000 free calls)
 
-You can load the workflow, which includes all available nodes, by importing the [workflow.json](workflow.json) file in this repo. 
+You can load the different workflows, by importing the compatible workflow.json files in this [folder](workflows). 
 
 You can also download the following image and import it to comfyui:
 
@@ -13,7 +13,7 @@ You can also download the following image and import it to comfyui:
 
 An illustration of the workflow:
 
- <img src="./images/eraser_workflow_diagram.jpg" alt="Eraser workflow example" width="650"/> <img src="./images/original_image.jpg" alt="Original image" width="150"/>
+ <img src="./images/bria_api_nodes_workflow_diagram.jpg" alt="all workflows example" width="650"/>
 
 ## Available Nodes
 
@@ -24,8 +24,8 @@ This functionality is powered by BRIA's ControlNet inpainting, available on [thi
 
 You can also try out BRIA's Eraser demo by visiting our Hugging Face space [here](https://huggingface.co/spaces/briaai/BRIA-Eraser-API).
 
-### Generative Fill
-The **Generative Fill** node allows users to add and modify objects or areas in an image by providing a mask and a prompt.
+### GenFill
+The **GenFill** node allows users to add and modify objects or areas in an image by providing a mask and a prompt.
 
 This functionality is powered by BRIA's ControlNet Generative Fill, available on [this model card](https://huggingface.co/briaai/BRIA-2.3-ControlNet-Generative-Fill) on Hugging Face.
 
