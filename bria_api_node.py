@@ -113,7 +113,7 @@ class EraserNode(BriaAPINode):
 
 
 # Generative Fill Node
-class GenerativeFillNode(BriaAPINode):
+class GenFillNode(BriaAPINode):
     @staticmethod
     def INPUT_TYPES():
         return {
