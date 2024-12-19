@@ -27,6 +27,16 @@ This functionality is powered by BRIA's ControlNet Generative Fill, available on
 
 You can also try out BRIA's Generative Fill demo by visiting our Hugging Face space [here](https://huggingface.co/spaces/briaai/BRIA-Generative-Fill-API).
 
+### ShotByText and ShotByImage
+The **ShotByText** node allows users to modify the background in an image by providing a prompt.
+
+The **ShotByImage** node allows users to modify the background in an image by providing a reference image.
+
+This functionality is powered by BRIA's ControlNet Background-Generation, available on [this model card](https://huggingface.co/briaai/BRIA-2.3-ControlNet-BG-Gen) on Hugging Face.
+
+You can also try out BRIA's ShotByText and ShotByImage demos by visiting our Hugging Face space [here](https://huggingface.co/spaces/briaai/Product-Shot-Generation).
+
+
 ## Installation
 There are two methods to install the BRIA ComfyUI API nodes:
 
