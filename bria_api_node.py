@@ -127,7 +127,7 @@ class ShotByTextNode(BriaAPINode):
             "required": {
                 "image": ("IMAGE",),  # Input image from another node
                 "scene_description": ("STRING",),
-                "optimize_description": ("BOOLEAN", {"default": "True"}),
+                "optimize_description": ("INT", {"default": 1}),
                 "api_key": ("STRING", {"default": "BRIA_API_TOKEN"})  # API Key input with a default value
             }
         }
@@ -149,6 +149,7 @@ class ShotByTextNode(BriaAPINode):
         if isinstance(image, torch.Tensor):
             image = self.preprocess_image(image)
 
+        optimize_description = bool(optimize_description)
         image_base64 = self.image_to_base64(image)
         payload = {
             "file": image_base64,
@@ -187,7 +188,7 @@ class ShotByImageNode(BriaAPINode):
             "required": {
                 "image": ("IMAGE",),  # Input image from another node
                 "ref_image": ("IMAGE",),  # ref image from another node
-                "enhance_ref_image": ("BOOLEAN", {"default": "True"}),
+                "enhance_ref_image": ("INT", {"default": 1}),
                 "api_key": ("STRING", {"default": "BRIA_API_TOKEN"})  # API Key input with a default value
             }
         }
@@ -214,6 +215,7 @@ class ShotByImageNode(BriaAPINode):
         # Convert the image and mask directly to Base64 strings                    
         image_base64 = self.image_to_base64(image)
         ref_image_base64 = self.image_to_base64(ref_image)
+        enhance_ref_image = bool(enhance_ref_image)
 
         payload = {
             "file": image_base64,
