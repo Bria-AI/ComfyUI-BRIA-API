@@ -32,7 +32,7 @@ The **ShotByText** node allows users to modify the background in an image by pro
 
 The **ShotByImage** node allows users to modify the background in an image by providing a reference image.
 
-This functionality is powered by BRIA's ControlNet Background-Generation, available on [this model card](https://huggingface.co/briaai/BRIA-2.3-ControlNet-BG-Gen) on Hugging Face.
+This functionality is powered by BRIA's ControlNet Background-Generation and BRIA's Image-Prompt, available on [this model card](https://huggingface.co/briaai/BRIA-2.3-ControlNet-BG-Gen) and [this model card](https://huggingface.co/briaai/Image-Prompt) respectively on Hugging Face.
 
 You can also try out BRIA's ShotByText and ShotByImage demos by visiting our Hugging Face space [here](https://huggingface.co/spaces/briaai/Product-Shot-Generation).
 
