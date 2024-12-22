@@ -27,7 +27,7 @@ This functionality is powered by BRIA's ControlNet Generative Fill, available on
 
 You can also try out BRIA's Generative Fill demo by visiting our Hugging Face space [here](https://huggingface.co/spaces/briaai/BRIA-Generative-Fill-API).
 
-### ShotByText and ShotByImage
+### Product Shot Generation
 The **ShotByText** node allows users to modify the background in an image by providing a prompt.
 
 The **ShotByImage** node allows users to modify the background in an image by providing a reference image.
