@@ -9,7 +9,7 @@ You can load the different workflows, by importing the compatible workflow.json 
 
 An illustration of our workflows:
 
- <img src="./images/bria_api_nodes_workflow_diagram.png" alt="all workflows example" width="650"/>
+ <img src="./images/bria_api_nodes_workflow_diagram.png" alt="all workflows example" width="500"/> <img src="./images/bria_api_nodes_workflow_diagram_2.png" alt="all workflows example" width="500"/>
 
 ## Available Nodes
 
