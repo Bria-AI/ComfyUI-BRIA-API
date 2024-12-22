@@ -1,0 +1,296 @@
+{
+  "last_node_id": 42,
+  "last_link_id": 65,
+  "nodes": [
+    {
+      "id": 39,
+      "type": "LoadImage",
+      "pos": [
+        599.7152709960938,
+        988.0053100585938
+      ],
+      "size": [
+        315,
+        314
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            59
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "example.png",
+        "image"
+      ]
+    },
+    {
+      "id": 15,
+      "type": "Note",
+      "pos": [
+        995.4524536132812,
+        601.5353393554688
+      ],
+      "size": [
+        306.28387451171875,
+        58
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        "You can get your BRIA API token at:\nhttps://bria.ai/api/"
+      ],
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 40,
+      "type": "PreviewImage",
+      "pos": [
+        1432.8616943359375,
+        726.57568359375
+      ],
+      "size": [
+        210,
+        26
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 62
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      }
+    },
+    {
+      "id": 41,
+      "type": "PreviewImage",
+      "pos": [
+        1423.845947265625,
+        939.8465576171875
+      ],
+      "size": [
+        210,
+        26
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 63
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      }
+    },
+    {
+      "id": 36,
+      "type": "ShotByTextNode",
+      "pos": [
+        995.5117797851562,
+        735.8842163085938
+      ],
+      "size": [
+        315,
+        106
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 64
+        }
+      ],
+      "outputs": [
+        {
+          "name": "output_image",
+          "type": "IMAGE",
+          "links": [
+            62
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ShotByTextNode"
+      },
+      "widgets_values": [
+        "a beautiful sunset",
+        "True",
+        "BRIA_API_TOKEN"
+      ]
+    },
+    {
+      "id": 37,
+      "type": "ShotByImageNode",
+      "pos": [
+        1001.3532104492188,
+        908.3685913085938
+      ],
+      "size": [
+        315,
+        102
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "link": 65
+        },
+        {
+          "name": "ref_image",
+          "type": "IMAGE",
+          "link": 59
+        }
+      ],
+      "outputs": [
+        {
+          "name": "output_image",
+          "type": "IMAGE",
+          "links": [
+            63
+          ],
+          "slot_index": 0
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ShotByImageNode"
+      },
+      "widgets_values": [
+        "True",
+        "BRIA_API_TOKEN"
+      ]
+    },
+    {
+      "id": 42,
+      "type": "LoadImage",
+      "pos": [
+        591.32861328125,
+        593.0836791992188
+      ],
+      "size": [
+        315,
+        314
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            64,
+            65
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "example.png",
+        "image"
+      ]
+    }
+  ],
+  "links": [
+    [
+      59,
+      39,
+      0,
+      37,
+      1,
+      "IMAGE"
+    ],
+    [
+      62,
+      36,
+      0,
+      40,
+      0,
+      "IMAGE"
+    ],
+    [
+      63,
+      37,
+      0,
+      41,
+      0,
+      "IMAGE"
+    ],
+    [
+      64,
+      42,
+      0,
+      36,
+      0,
+      "IMAGE"
+    ],
+    [
+      65,
+      42,
+      0,
+      37,
+      0,
+      "IMAGE"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.7400249944258311,
+      "offset": [
+        6.0506820393698035,
+        -330.2739639756643
+      ]
+    }
+  },
+  "version": 0.4
+}
