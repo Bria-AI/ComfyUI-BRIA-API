@@ -1,4 +1,4 @@
-from .bria_api_node import EraserNode, GenFillNode, ShotByTextNode, ShotByImageNode
+from .nodes import EraserNode, GenFillNode, ShotByTextNode, ShotByImageNode
 # Map the node class to a name used internally by ComfyUI
 NODE_CLASS_MAPPINGS = {
     "BriaEraser": EraserNode,  # Return the class, not an instance
