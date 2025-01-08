@@ -19,36 +19,28 @@ Placeholder image of cool workflows.
 
  <!-- <img src="./images/bria_api_nodes_workflow_diagram.png" alt="all workflows example" width="400"/> <img src="./images/bria_api_nodes_workflow_diagram_2.png" alt="all workflows example" width="400"/> -->
 
+## Coming soon
 
+- [ ] Image Generation
+- [ ] Tailored Generation
+- [ ] Video Editing
 
-
-
-
-## Available Nodes by Product
-
-### Image Generation
-Coming soon
-
-### Tailored Generation
-Coming soon
+## Available Nodes
 
 ### Image Editing
-#### Eraser
-The **Eraser** node allows users to remove specific objects or areas from an image by providing a mask. Powered by BRIA's ControlNet inpainting [[🤗model card](https://huggingface.co/briaai/BRIA-2.3-ControlNet-Inpainting)] [[🤗HF demo](https://huggingface.co/spaces/briaai/BRIA-Eraser-API)].
+#### **Eraser**
+This node allows users to remove specific objects or areas from an image by providing a mask. Powered by BRIA's ControlNet inpainting [[🤗model card](https://huggingface.co/briaai/BRIA-2.3-ControlNet-Inpainting)] [[🤗HF demo](https://huggingface.co/spaces/briaai/BRIA-Eraser-API)].
 
-#### GenFill
-The **GenFill** Route enables the generation of objects by prompt in a specific region of an image. This functionality is powered by BRIA's ControlNet Generative Fill. [[🤗model card](https://huggingface.co/briaai/BRIA-2.3-ControlNet-Generative-Fill)] [[🤗HF demo](https://huggingface.co/spaces/briaai/BRIA-Generative-Fill-API)]
+#### **GenFill**
+This node enables the generation of objects by prompt in a specific region of an image. This functionality is powered by BRIA's ControlNet Generative Fill. [[🤗model card](https://huggingface.co/briaai/BRIA-2.3-ControlNet-Generative-Fill)] [[🤗HF demo](https://huggingface.co/spaces/briaai/BRIA-Generative-Fill-API)]
 
 ### Product Shot Generation
-#### ShotByText
-The **ShotByText** node allows users to modify the background in an image by providing a prompt, This functionality is powered by BRIA's ControlNet Background-Generation.[[🤗ContrlNet model card](https://huggingface.co/briaai/BRIA-2.3-ControlNet-BG-Gen)] [[🤗HF demo](https://huggingface.co/spaces/briaai/Product-Shot-Generation)].
+#### **ShotByText**
+This node allows users to modify the background in an image by providing a prompt, This functionality is powered by BRIA's ControlNet Background-Generation.[[🤗ContrlNet model card](https://huggingface.co/briaai/BRIA-2.3-ControlNet-BG-Gen)] [[🤗HF demo](https://huggingface.co/spaces/briaai/Product-Shot-Generation)].
 
-#### ShotByImage
-The **ShotByImage** node allows users to modify the background in an image by providing a reference image. This functionality is powered by BRIA's ControlNet Background-Generation and BRIA's Image-Prompt. [[🤗ContrlNet model card](https://huggingface.co/briaai/BRIA-2.3-ControlNet-Inpainting)] [[🤗IP-Adapter model card](https://huggingface.co/briaai/Image-Prompt)] [[🤗HF demo](https://huggingface.co/spaces/briaai/Product-Shot-Generation)].
+#### **ShotByImage**
+This node allows users to modify the background in an image by providing a reference image. This functionality is powered by BRIA's ControlNet Background-Generation and BRIA's Image-Prompt. [[🤗ContrlNet model card](https://huggingface.co/briaai/BRIA-2.3-ControlNet-Inpainting)] [[🤗IP-Adapter model card](https://huggingface.co/briaai/Image-Prompt)] [[🤗HF demo](https://huggingface.co/spaces/briaai/Product-Shot-Generation)].
 
-
-### Video Editing
-Coming soon
 
 <!-- ### Campaign generation
 Coming soon -->
