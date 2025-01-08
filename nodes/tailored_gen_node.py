@@ -17,14 +17,13 @@ class TailoredGenNode():
                 "aspect_ratio": (["1:1", "2:3", "3:2", "3:4", "4:3", "4:5", "5:4", "9:16", "16:9"], {"default": "4:3"}),
                 "seed": ("INT", {"default": -1}),
                 "model_influence": ("FLOAT", {"default": 1.0}),
-                "include_generation_prefix": ("INT", {"default": 0}),
                 "negative_prompt": ("STRING", {"default": ""}),
                 "fast": ("INT", {"default": 1}), # possibly get this from the tailored model info node
                 "steps_num": ("INT", {"default": 8}), # possibly get this from the tailored model info node
-                "guidance_method_1": (["controlnet_canny", "controlnet_depth", "controlnet_recoloring", "controlnet_color_grid"],),
+                "guidance_method_1": (["controlnet_canny", "controlnet_depth", "controlnet_recoloring", "controlnet_color_grid"], {"default": "controlnet_canny"}),
                 "guidance_method_1_scale": ("FLOAT", {"default": 1.0}),
                 "guidance_method_1_image": ("IMAGE", ),
-                "guidance_method_2": (["controlnet_canny", "controlnet_depth", "controlnet_recoloring", "controlnet_color_grid"],),
+                "guidance_method_2": (["controlnet_canny", "controlnet_depth", "controlnet_recoloring", "controlnet_color_grid"], {"default": "controlnet_canny"}),
                 "guidance_method_2_scale": ("FLOAT", {"default": 1.0}),
                 "guidance_method_2_image": ("IMAGE", ),
             }
@@ -40,11 +39,10 @@ class TailoredGenNode():
 
     def execute(
             self, model_id, api_key, prompt, generation_prefix, aspect_ratio, 
-            seed, model_influence, include_generation_prefix, negative_prompt, fast, steps_num,
+            seed, model_influence, negative_prompt, fast, steps_num,
             guidance_method_1=None, guidance_method_1_scale=None, guidance_method_1_image=None,
             guidance_method_2=None, guidance_method_2_scale=None, guidance_method_2_image=None,
         ):
-        include_generation_prefix = bool(include_generation_prefix)
         fast = bool(fast)
         payload = {
             "prompt": generation_prefix + prompt,
@@ -53,10 +51,10 @@ class TailoredGenNode():
             "sync": True,
             "seed": seed,
             "model_influence": model_influence,
-            "include_generation_prefix": include_generation_prefix,
             "negative_prompt": negative_prompt,
             "fast": fast,
             "steps_num": steps_num,
+            "include_generation_prefix": False,
         }
         if guidance_method_1_image is not None:
             guidance_method_1_image = preprocess_image(guidance_method_1_image)
