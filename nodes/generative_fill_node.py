@@ -2,17 +2,14 @@ import numpy as np
 import requests
 from PIL import Image
 import io
-import base64
-from torchvision.transforms import ToPILImage, ToTensor
 import torch
 
-from .base_node import BriaAPINode
+from .common import image_to_base64, preprocess_image, preprocess_mask
 
 
-# Generative Fill Node
-class GenFillNode(BriaAPINode):
-    @staticmethod
-    def INPUT_TYPES():
+class GenFillNode():
+    @classmethod
+    def INPUT_TYPES(self):
         return {
             "required": {
                 "image": ("IMAGE",),  # Input image from another node
@@ -28,7 +25,7 @@ class GenFillNode(BriaAPINode):
     FUNCTION = "execute"  # This is the method that will be executed
 
     def __init__(self):
-        super().__init__("https://engine.prod.bria-api.com/v1/gen_fill")  # Eraser API URL
+        self.api_url = "https://engine.prod.bria-api.com/v1/gen_fill"  # Eraser API URL
 
     # Define the execute method as expected by ComfyUI
     def execute(self, image, mask, prompt, api_key):
@@ -37,13 +34,13 @@ class GenFillNode(BriaAPINode):
 
         # Check if image and mask are tensors, if so, convert to NumPy arrays
         if isinstance(image, torch.Tensor):
-            image = self.preprocess_image(image)
+            image = preprocess_image(image)
         if isinstance(mask, torch.Tensor):
-            mask = self.preprocess_mask(mask)
+            mask = preprocess_mask(mask)
 
         # Convert the image and mask directly to Base64 strings
-        image_base64 = self.image_to_base64(image)
-        mask_base64 = self.image_to_base64(mask)
+        image_base64 = image_to_base64(image)
+        mask_base64 = image_to_base64(mask)
 
         # Prepare the API request payload
         payload = {

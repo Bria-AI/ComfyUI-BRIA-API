@@ -1,17 +1,11 @@
-import numpy as np
 import requests
-from PIL import Image
-import io
-import base64
-from torchvision.transforms import ToPILImage, ToTensor
 import torch
 
-from .base_node import BriaAPINode
+from .common import postprocess_image, preprocess_image, image_to_base64
 
-# shot by text Node
-class ShotByTextNode(BriaAPINode):
-    @staticmethod
-    def INPUT_TYPES():
+class ShotByTextNode():
+    @classmethod
+    def INPUT_TYPES(self):
         return {
             "required": {
                 "image": ("IMAGE",),  # Input image from another node
@@ -27,8 +21,8 @@ class ShotByTextNode(BriaAPINode):
     FUNCTION = "execute"  # This is the method that will be executed
 
     def __init__(self):
-        super().__init__("https://engine.prod.bria-api.com/v1/product/lifestyle_shot_by_text")  # Eraser API URL
-
+        self.api_url = "https://engine.prod.bria-api.com/v1/product/lifestyle_shot_by_text"  # Eraser API URL
+        
     # Define the execute method as expected by ComfyUI
     def execute(self, image, api_key, scene_description, optimize_description, ):
         if api_key.strip() == "" or api_key.strip() == "BRIA_API_TOKEN":
@@ -36,10 +30,10 @@ class ShotByTextNode(BriaAPINode):
 
         # Check if image and mask are tensors, if so, convert to NumPy arrays
         if isinstance(image, torch.Tensor):
-            image = self.preprocess_image(image)
+            image = preprocess_image(image)
 
         optimize_description = bool(optimize_description)
-        image_base64 = self.image_to_base64(image)
+        image_base64 = image_to_base64(image)
         payload = {
             "file": image_base64,
             "scene_description": scene_description,
@@ -60,7 +54,7 @@ class ShotByTextNode(BriaAPINode):
                 # Process the output image from API response
                 response_dict = response.json()
                 image_response = requests.get(response_dict['result'][0][0])
-                result_image = self.postprocess_image(image_response.content)
+                result_image = postprocess_image(image_response.content)
                 return (result_image,)
             else:
                 raise Exception(f"Error: API request failed with status code {response.status_code}")

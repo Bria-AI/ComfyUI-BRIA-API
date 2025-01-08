@@ -1,17 +1,8 @@
-import numpy as np
-import requests
-from PIL import Image
-import io
-import base64
-from torchvision.transforms import ToPILImage, ToTensor
-import torch
+from .common import process_request
 
-from .base_node import BriaAPINode
-
-# Eraser Node
-class EraserNode(BriaAPINode):
-    @staticmethod
-    def INPUT_TYPES():
+class EraserNode():
+    @classmethod
+    def INPUT_TYPES(self):
         return {
             "required": {
                 "image": ("IMAGE",),  # Input image from another node
@@ -26,9 +17,9 @@ class EraserNode(BriaAPINode):
     FUNCTION = "execute"  # This is the method that will be executed
 
     def __init__(self):
-        super().__init__("https://engine.prod.bria-api.com/v1/eraser")  # Eraser API URL
+        self.api_url = "https://engine.prod.bria-api.com/v1/eraser"  # Eraser API URL
 
     # Define the execute method as expected by ComfyUI
     def execute(self, image, mask, api_key):
-        return self.process_request(image, mask, api_key)
+        return process_request(self.api_url, image, mask, api_key)
     
