@@ -1,17 +1,11 @@
-import numpy as np
 import requests
-from PIL import Image
-import io
-import base64
-from torchvision.transforms import ToPILImage, ToTensor
 import torch
 
-from .base_node import BriaAPINode
+from .common import postprocess_image, preprocess_image, image_to_base64
 
-# shot by image Node
-class ShotByImageNode(BriaAPINode):
-    @staticmethod
-    def INPUT_TYPES():
+class ShotByImageNode():
+    @classmethod
+    def INPUT_TYPES(self):
         return {
             "required": {
                 "image": ("IMAGE",),  # Input image from another node
@@ -36,13 +30,13 @@ class ShotByImageNode(BriaAPINode):
 
         # Check if image and mask are tensors, if so, convert to NumPy arrays
         if isinstance(image, torch.Tensor):
-            image = self.preprocess_image(image)
+            image = preprocess_image(image)
         if isinstance(ref_image, torch.Tensor):
-            ref_image = self.preprocess_image(ref_image)
+            ref_image = preprocess_image(ref_image)
 
         # Convert the image and mask directly to Base64 strings                    
-        image_base64 = self.image_to_base64(image)
-        ref_image_base64 = self.image_to_base64(ref_image)
+        image_base64 = image_to_base64(image)
+        ref_image_base64 = image_to_base64(ref_image)
         enhance_ref_image = bool(enhance_ref_image)
 
         payload = {
@@ -65,7 +59,7 @@ class ShotByImageNode(BriaAPINode):
                 # Process the output image from API response
                 response_dict = response.json()
                 image_response = requests.get(response_dict['result'][0][0])
-                result_image = self.postprocess_image(image_response.content)
+                result_image = postprocess_image(image_response.content)
                 return (result_image,)
             else:
                 raise Exception(f"Error: API request failed with status code {response.status_code}")
