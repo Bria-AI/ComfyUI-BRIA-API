@@ -46,9 +46,8 @@ There are two methods to install the BRIA ComfyUI API nodes:
 
 # Available Nodes
 
-<h2> Tailored Generation Nodes </h2>
-
-Run trained custom models to reproduce unique visual styles, enabling personalized image and vector generation aligned with your brand. [[API docs](https://bria-ai-api-docs.redoc.ly/tag/Tailored-Generation)].
+## Tailored Generation Nodes
+These nodes use pre-trained tailored models to generate images in a specific visual style based on provided samples. [[API docs](https://bria-ai-api-docs.redoc.ly/tag/Tailored-Generation)].
 
 ### **Tailored Model Info**
 This node retrieves the **default settings** and **prompt prefix** of a **trained tailored model**. It provides the necessary information to configure and run the model in the **Tailored Gen node**, ensuring consistency with the model's intended behavior.  
@@ -56,9 +55,8 @@ This node retrieves the **default settings** and **prompt prefix** of a **traine
 ### **Tailored Gen**
 This node is used to generate using a trained tailored model. It is designed to preserve the visual characteristics and ensure style fidelity established during model training.
 
-<h2> Image Editing Nodes </h2>
-
-Edit and enhance images with tools for resizing, cropping, background editing, and object removal, with support for masks and captions.[[API docs](https://bria-ai-api-docs.redoc.ly/tag/Image-Editing)]
+## Image Editing Nodes
+These nodes modify specific parts of images, enabling adjustments, while maintaining the integrity of the rest of the image.[[API docs](https://bria-ai-api-docs.redoc.ly/tag/Image-Editing)]
 
 ### **Eraser**
 This node is used to remove specific objects or areas from an image by providing a mask. Powered by BRIA's ControlNet inpainting [[🤗model card](https://huggingface.co/briaai/BRIA-2.3-ControlNet-Inpainting)] [[🤗HF demo](https://huggingface.co/spaces/briaai/BRIA-Eraser-API)].
@@ -66,9 +64,8 @@ This node is used to remove specific objects or areas from an image by providing
 ### **GenFill**
 This node is used to generate objects by prompt in a specific region of an image. This functionality is powered by BRIA's ControlNet Generative Fill. [[🤗model card](https://huggingface.co/briaai/BRIA-2.3-ControlNet-Generative-Fill)] [[🤗HF demo](https://huggingface.co/spaces/briaai/BRIA-Generative-Fill-API)]
 
-<h2> Product Shot Generation Nodes </h2>
-
-Create high-quality product images, including cutouts, packshots, shadows, and lifestyle scenes, for catalogs and online stores. [[API docs](https://bria-ai-api-docs.redoc.ly/tag/Product-Shots-Generation)]
+## Product Shot Generation Nodes
+These nodes create high-quality product images for eCommerce workflows. [[API docs](https://bria-ai-api-docs.redoc.ly/tag/Product-Shots-Generation)]
 
 ### **ShotByText**
 This node is used to modify the background in an image by providing a prompt, This functionality is powered by BRIA's ControlNet Background-Generation.[[🤗ContrlNet model card](https://huggingface.co/briaai/BRIA-2.3-ControlNet-BG-Gen)] [[🤗HF demo](https://huggingface.co/spaces/briaai/Product-Shot-Generation)].
