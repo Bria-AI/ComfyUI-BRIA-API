@@ -21,7 +21,6 @@ To load a workflow, import the compatible workflow.json files from this [folder]
 
 # Coming soon
 
-- [ ] Image Generation
 - [ ] Video Editing
 
 # Installation
@@ -45,6 +44,11 @@ There are two methods to install the BRIA ComfyUI API nodes:
 3. Restart ComfyUI and load the workflows.
 
 # Available Nodes
+
+## Image Generation Nodes
+
+### **Text2Image Base Node**
+This node generates images from text prompts, serving as the foundation for creating visuals based on descriptive input. [[🤗model card](https://huggingface.co/briaai/BRIA-2.3)]
 
 ## Tailored Generation Nodes
 These nodes use pre-trained tailored models to generate images in a specific visual style based on provided samples. [[API docs](https://bria-ai-api-docs.redoc.ly/tag/Tailored-Generation)].
