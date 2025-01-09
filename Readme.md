@@ -31,10 +31,10 @@ To load a workflow, import the compatible workflow.json files from this [folder]
 This node generates images from text prompts, serving as the foundation for creating visuals based on descriptive input. [[🤗model card](https://huggingface.co/briaai/BRIA-2.3)]
 
 ## Tailored Generation Nodes
-These nodes use pre-trained tailored models to generate images in a specific visual style based on provided samples. [[API docs](https://bria-ai-api-docs.redoc.ly/tag/Tailored-Generation)].
+These nodes use pre-trained tailored models to generate images that faithfully reproduce specific visual IP elements or guidelines. [[API docs](https://bria-ai-api-docs.redoc.ly/tag/Tailored-Generation)].
 
 ### **Tailored Gen**
-This node is used to generate using a trained tailored model. It is designed to preserve the visual characteristics and ensure style fidelity established during model training.
+This node generates images using a trained tailored model, faithfully reproducing specific visual IP elements or guidelines established during model training.
 
 ### **Tailored Model Info**
 This node retrieves the **default settings** and **prompt prefix** of a **trained tailored model**. It provides the necessary information to configure and run the model in the **Tailored Gen node**, ensuring consistency with the model's intended behavior.  
