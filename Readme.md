@@ -23,26 +23,6 @@ To load a workflow, import the compatible workflow.json files from this [folder]
 
 - [ ] Video Editing
 
-# Installation
-There are two methods to install the BRIA ComfyUI API nodes:
-
-### Method 1: Using ComfyUI's Custom Node Manager
-1. Open ComfyUI.
-2. Navigate to the [**Custom Node Manager**](https://github.com/ltdrdata/ComfyUI-Manager).
-3. Click on 'Install Missing Nodes' or search for BRIA API and install the node from the manager.
-
-### Method 2: Git Clone
-1. Navigate to the `custom_nodes` directory of your ComfyUI installation:
-   ```bash
-   cd path_to_comfyui/custom_nodes
-   ```
-2. Clone this repository:
-   ```bash
-   git clone https://github.com/your-repo-link/ComfyUI-BRIA-API.git
-   ```
-
-3. Restart ComfyUI and load the workflows.
-
 # Available Nodes
 
 ## Image Generation Nodes
@@ -77,6 +57,25 @@ This node is used to modify the background in an image by providing a prompt, Th
 ### **ShotByImage**
 This node is used to modify the background in an image by providing a reference image. This functionality is powered by BRIA's ControlNet Background-Generation and BRIA's Image-Prompt. [[🤗ContrlNet model card](https://huggingface.co/briaai/BRIA-2.3-ControlNet-Inpainting)] [[🤗IP-Adapter model card](https://huggingface.co/briaai/Image-Prompt)] [[🤗HF demo](https://huggingface.co/spaces/briaai/Product-Shot-Generation)].
 
+# Installation
+There are two methods to install the BRIA ComfyUI API nodes:
+
+### Method 1: Using ComfyUI's Custom Node Manager
+1. Open ComfyUI.
+2. Navigate to the [**Custom Node Manager**](https://github.com/ltdrdata/ComfyUI-Manager).
+3. Click on 'Install Missing Nodes' or search for BRIA API and install the node from the manager.
+
+### Method 2: Git Clone
+1. Navigate to the `custom_nodes` directory of your ComfyUI installation:
+   ```bash
+   cd path_to_comfyui/custom_nodes
+   ```
+2. Clone this repository:
+   ```bash
+   git clone https://github.com/your-repo-link/ComfyUI-BRIA-API.git
+   ```
+
+3. Restart ComfyUI and load the workflows.
 
 <!-- ### Campaign generation
 Coming soon -->
