@@ -14,7 +14,7 @@ An API token is required to use the nodes in your workflows. Get started quickly
 To load a workflow, import the compatible workflow.json files from this [folder](workflows).  
 
 
-Placeholder image of cool workflows.
+<!-- Placeholder image of cool workflows. -->
 
 
  <!-- <img src="./images/bria_api_nodes_workflow_diagram.png" alt="all workflows example" width="400"/> <img src="./images/bria_api_nodes_workflow_diagram_2.png" alt="all workflows example" width="400"/> -->
