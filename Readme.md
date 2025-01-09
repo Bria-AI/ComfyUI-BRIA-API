@@ -49,11 +49,11 @@ There are two methods to install the BRIA ComfyUI API nodes:
 ## Tailored Generation Nodes
 These nodes use pre-trained tailored models to generate images in a specific visual style based on provided samples. [[API docs](https://bria-ai-api-docs.redoc.ly/tag/Tailored-Generation)].
 
-### **Tailored Model Info**
-This node retrieves the **default settings** and **prompt prefix** of a **trained tailored model**. It provides the necessary information to configure and run the model in the **Tailored Gen node**, ensuring consistency with the model's intended behavior.  
-
 ### **Tailored Gen**
 This node is used to generate using a trained tailored model. It is designed to preserve the visual characteristics and ensure style fidelity established during model training.
+
+### **Tailored Model Info**
+This node retrieves the **default settings** and **prompt prefix** of a **trained tailored model**. It provides the necessary information to configure and run the model in the **Tailored Gen node**, ensuring consistency with the model's intended behavior.  
 
 ## Image Editing Nodes
 These nodes modify specific parts of images, enabling adjustments, while maintaining the integrity of the rest of the image.[[API docs](https://bria-ai-api-docs.redoc.ly/tag/Image-Editing)]
