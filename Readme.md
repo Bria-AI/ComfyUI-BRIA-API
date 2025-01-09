@@ -24,7 +24,7 @@ To load a workflow, import the compatible workflow.json files from this [folder]
 - [ ] Image Generation
 - [ ] Video Editing
 
-## Installation
+# Installation
 There are two methods to install the BRIA ComfyUI API nodes:
 
 ### Method 1: Using ComfyUI's Custom Node Manager
