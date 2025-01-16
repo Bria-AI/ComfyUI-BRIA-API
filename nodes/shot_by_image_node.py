@@ -21,7 +21,7 @@ class ShotByImageNode():
     FUNCTION = "execute"  # This is the method that will be executed
 
     def __init__(self):
-        super().__init__("https://engine.prod.bria-api.com/v1/product/lifestyle_shot_by_image")  # Eraser API URL
+        self.api_url = "https://engine.prod.bria-api.com/v1/product/lifestyle_shot_by_image"  # Eraser API URL
 
     # Define the execute method as expected by ComfyUI
     def execute(self, image, ref_image, api_key, enhance_ref_image, ):
