@@ -25,6 +25,9 @@ class Text2ImageBaseNode():
                 "guidance_method_2": (["controlnet_canny", "controlnet_depth", "controlnet_recoloring", "controlnet_color_grid"], {"default": "controlnet_canny"}),
                 "guidance_method_2_scale": ("FLOAT", {"default": 1.0}),
                 "guidance_method_2_image": ("IMAGE", ),
+                "image_prompt_mode": (["none", "regular", "style_only"], {"default": "none"}),
+                "image_prompt_image": ("IMAGE", ),
+                "image_prompt_scale": ("FLOAT", {"default": 1.0}),
             }
         }
 
@@ -41,6 +44,7 @@ class Text2ImageBaseNode():
             steps_num, prompt_enhancement, text_guidance_scale, medium,
             guidance_method_1=None, guidance_method_1_scale=None, guidance_method_1_image=None,
             guidance_method_2=None, guidance_method_2_scale=None, guidance_method_2_image=None,
+            image_prompt_mode=None, image_prompt_image=None, image_prompt_scale=None,
         ):
         prompt_enhancement = bool(prompt_enhancement)
         payload = {
@@ -68,6 +72,12 @@ class Text2ImageBaseNode():
             payload["guidance_method_2"] = guidance_method_2
             payload["guidance_method_2_scale"] = guidance_method_2_scale
             payload["guidance_method_2_image_file"] = guidance_method_2_image
+        if image_prompt_mode != "none":
+            image_prompt_image = preprocess_image(image_prompt_image)
+            image_prompt_image = image_to_base64(image_prompt_image)
+            payload["image_prompt_mode"] = image_prompt_mode
+            payload["image_prompt_file"] = image_prompt_image
+            payload["image_prompt_scale"] = image_prompt_scale
         response = requests.post(
             self.api_url,
             json=payload,
