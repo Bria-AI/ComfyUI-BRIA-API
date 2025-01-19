@@ -9,9 +9,9 @@ class Text2ImageBaseNode():
         return {
             "required": {
                 "api_key": ("STRING", ),
-                "prompt": ("STRING",),
             },
             "optional": {
+                "prompt": ("STRING",),
                 "aspect_ratio": (["1:1", "2:3", "3:2", "3:4", "4:3", "4:5", "5:4", "9:16", "16:9"], {"default": "4:3"}),
                 "seed": ("INT", {"default": -1}),
                 "negative_prompt": ("STRING", {"default": ""}),
@@ -25,7 +25,7 @@ class Text2ImageBaseNode():
                 "guidance_method_2": (["controlnet_canny", "controlnet_depth", "controlnet_recoloring", "controlnet_color_grid"], {"default": "controlnet_canny"}),
                 "guidance_method_2_scale": ("FLOAT", {"default": 1.0}),
                 "guidance_method_2_image": ("IMAGE", ),
-                "image_prompt_mode": (["none", "regular", "style_only"], {"default": "none"}),
+                "image_prompt_mode": (["regular", "style_only"], {"default": "regular"}),
                 "image_prompt_image": ("IMAGE", ),
                 "image_prompt_scale": ("FLOAT", {"default": 1.0}),
             }
@@ -72,7 +72,7 @@ class Text2ImageBaseNode():
             payload["guidance_method_2"] = guidance_method_2
             payload["guidance_method_2_scale"] = guidance_method_2_scale
             payload["guidance_method_2_image_file"] = guidance_method_2_image
-        if image_prompt_mode != "none":
+        if image_prompt_image != "none":
             image_prompt_image = preprocess_image(image_prompt_image)
             image_prompt_image = image_to_base64(image_prompt_image)
             payload["image_prompt_mode"] = image_prompt_mode

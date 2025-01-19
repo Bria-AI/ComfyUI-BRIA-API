@@ -9,9 +9,9 @@ class Text2ImageHDNode():
         return {
             "required": {
                 "api_key": ("STRING", ),
-                "prompt": ("STRING",),
             },
             "optional": {
+                "prompt": ("STRING",),
                 "aspect_ratio": (["1:1", "2:3", "3:2", "3:4", "4:3", "4:5", "5:4", "9:16", "16:9"], {"default": "4:3"}),
                 "seed": ("INT", {"default": -1}),
                 "negative_prompt": ("STRING", {"default": ""}),

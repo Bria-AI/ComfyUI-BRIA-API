@@ -7,3 +7,4 @@ from .tailored_model_info_node import TailoredModelInfoNode
 from .text_2_image_base_node import Text2ImageBaseNode
 from .text_2_image_fast_node import Text2ImageFastNode
 from .text_2_image_hd_node import Text2ImageHDNode
+from .reimagine_node import ReimagineNode
