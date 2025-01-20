@@ -9,9 +9,9 @@ class ReimagineNode():
         return {
             "required": {
                 "api_key": ("STRING", ),
+                "prompt": ("STRING",),
             },
             "optional": {
-                "prompt": ("STRING",),
                 "seed": ("INT", {"default": -1}),
                 "steps_num": ("INT", {"default": 12}), # if used with tailored, possibly get this from the tailored model info node
                 "structure_ref_influence": ("FLOAT", {"default": 0.75}),
