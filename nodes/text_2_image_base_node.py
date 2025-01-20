@@ -72,7 +72,6 @@ class Text2ImageBaseNode():
             payload["guidance_method_2"] = guidance_method_2
             payload["guidance_method_2_scale"] = guidance_method_2_scale
             payload["guidance_method_2_image_file"] = guidance_method_2_image
-        print(image_prompt_image)
         if image_prompt_image is not None:
             image_prompt_image = preprocess_image(image_prompt_image)
             image_prompt_image = image_to_base64(image_prompt_image)
