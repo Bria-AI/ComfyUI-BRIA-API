@@ -11,8 +11,8 @@ class TailoredModelInfoNode():
             }
         }
 
-    RETURN_TYPES = ("STRING", "INT", "INT", )
-    RETURN_NAMES = ("generation_prefix", "default_fast",  "default_steps_num", )
+    RETURN_TYPES = ("STRING", "STRING","INT", "INT", )
+    RETURN_NAMES = ("generation_prefix", "model_id", "default_fast",  "default_steps_num", )
     CATEGORY = "API Nodes"
     FUNCTION = "execute"  # This is the method that will be executed
 
@@ -30,6 +30,6 @@ class TailoredModelInfoNode():
             training_version = response.json()["training_version"]
             default_fast = 1 if training_version == "light" else 0
             default_steps_num = 8 if training_version == "light" else 30
-            return (generation_prefix, default_fast, default_steps_num,)
+            return (generation_prefix, model_id, default_fast, default_steps_num,)
         else:
             raise Exception(f"Error: API request failed with status code {response.status_code} and text {response.text}")
