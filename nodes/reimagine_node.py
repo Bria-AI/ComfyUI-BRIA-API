@@ -58,11 +58,6 @@ class ReimagineNode():
             json=payload,
             headers={"api_token": api_key}
         )
-        print("api_key" + api_key)
-        print("api_url" + self.api_url)
-        print("payload" + str(payload))
-
-        print("now")
         if response.status_code == 200:
                 response_dict = response.json()
                 image_response = requests.get(response_dict['result'][0]["urls"][0])
