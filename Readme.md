@@ -26,6 +26,12 @@ To load a workflow, import the compatible workflow.json files from this [folder]
 ### **Text2Image Base Node**
 This node generates images from text prompts, serving as the foundation for creating visuals based on descriptive input. [[🤗model card](https://huggingface.co/briaai/BRIA-2.3)]
 
+### **Text2Image Fast Node**
+This node generates images from text prompts, optimized for speed. It provides faster results while maintaining quality. [[🤗model card](https://huggingface.co/briaai/BRIA-2.3-FAST)]
+
+### **Text2Image HD Node**
+This node generates images from text prompts, optimized for high-resolution outputs. It produces detailed and sharp visuals. [[🤗model card](https://huggingface.co/briaai/BRIA-2.2-HD)]
+
 ## Tailored Generation Nodes
 These nodes use pre-trained tailored models to generate images that faithfully reproduce specific visual IP elements or guidelines. [[API docs](https://bria-ai-api-docs.redoc.ly/tag/Tailored-Generation)].
 
