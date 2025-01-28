@@ -19,10 +19,6 @@ To load a workflow, import the compatible workflow.json files from this [folder]
 
  <!-- <img src="./images/bria_api_nodes_workflow_diagram.png" alt="all workflows example" width="400"/> <img src="./images/bria_api_nodes_workflow_diagram_2.png" alt="all workflows example" width="400"/> -->
 
-# Coming soon
-
-- [ ] Video Editing
-
 # Available Nodes
 
 ## Image Generation Nodes
