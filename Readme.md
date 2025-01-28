@@ -30,10 +30,10 @@ This node generates images from text prompts, serving as the foundation for crea
 These nodes use pre-trained tailored models to generate images that faithfully reproduce specific visual IP elements or guidelines. [[API docs](https://bria-ai-api-docs.redoc.ly/tag/Tailored-Generation)].
 
 ### **Tailored Gen**
-This node generates images using a trained tailored model, faithfully reproducing specific visual IP elements or guidelines established during model training. To load the default model's configuration, use the Tailored Model Info node, which provides the necessary settings and prompt prefix.
+This node generates images using a trained tailored model, reproducing specific visual IP elements or guidelines. Use the Tailored Model Info node to load the model's default settings.
 
 ### **Tailored Model Info**
-This node retrieves the **default settings** and **prompt prefix** of a **trained tailored model**. It provides the necessary information to configure and run the model in the **Tailored Gen node**, ensuring consistency with the model's intended behavior.  
+This node retrieves the default settings and prompt prefix of a trained tailored model, which can be used to configure the Tailored Gen node.
 
 ## Image Editing Nodes
 These nodes modify specific parts of images, enabling adjustments, while maintaining the integrity of the rest of the image.[[API docs](https://bria-ai-api-docs.redoc.ly/tag/Image-Editing)]
