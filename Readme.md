@@ -49,7 +49,7 @@ These nodes modify specific parts of images, enabling adjustments, while maintai
 This node removes the background from an image, isolating the foreground subject. Powered by BRIA's RMBG 2.0 model. [[🤗model Card](https://huggingface.co/briaai/RMBG-2.0)] [[🤗HF demo](https://huggingface.co/spaces/briaai/BRIA-RMBG-2.0)]
 
 ### **Replace Background**
-This node replaces the background of an image while preserving the subject. The new background can be guided either by a provided reference image or generated based on a prompt. [[🤗model card](https://huggingface.co/briaai/BRIA-2.3-ControlNet-BG-Gen)]
+This node replaces an image’s background with a new one, guided by either a reference image or a prompt. [[🤗model card](https://huggingface.co/briaai/BRIA-2.3-ControlNet-BG-Gen)]
 
 ### **Expand Image**
 This node expands the dimensions of an image, generating new content to fill the extended areas.
