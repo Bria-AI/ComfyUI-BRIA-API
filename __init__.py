@@ -1,10 +1,14 @@
-from .nodes import (EraserNode, GenFillNode, ShotByTextNode, ShotByImageNode, TailoredGenNode,
+from .nodes import (EraserNode, GenFillNode, ImageExpansionNode, ReplaceBgNode, RmbgNode, RemoveForegroundNode, ShotByTextNode, ShotByImageNode, TailoredGenNode,
                      TailoredModelInfoNode, Text2ImageBaseNode, Text2ImageFastNode, Text2ImageHDNode,
                      ReimagineNode)
 # Map the node class to a name used internally by ComfyUI
 NODE_CLASS_MAPPINGS = {
     "BriaEraser": EraserNode,  # Return the class, not an instance
     "BriaGenFill": GenFillNode,
+    "ImageExpansionNode": ImageExpansionNode,
+    "ReplaceBgNode": ReplaceBgNode,
+    "RmbgNode": RmbgNode,
+    "RemoveForegroundNode": RemoveForegroundNode,
     "ShotByTextNode": ShotByTextNode,
     "ShotByImageNode": ShotByImageNode,
     "BriaTailoredGen": TailoredGenNode,
@@ -18,6 +22,10 @@ NODE_CLASS_MAPPINGS = {
 NODE_DISPLAY_NAME_MAPPINGS = {
     "BriaEraser": "Bria Eraser",
     "BriaGenFill": "Bria GenFill",
+    "ImageExpansionNode": "Bria Image Expansion",
+    "ReplaceBgNode": "Bria Replace Background",
+    "RmbgNode": "Bria RMBG",
+    "RemoveForegroundNode": "Bria Remove Foreground",
     "ShotByTextNode": "Bria Shot By Text",
     "ShotByImageNode": "Bria Shot By Image",
     "BriaTailoredGen": "Bria Tailored Gen",
