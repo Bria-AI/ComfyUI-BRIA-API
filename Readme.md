@@ -43,7 +43,7 @@ These nodes modify specific parts of images, enabling adjustments while maintain
 
 | Node                   | Description                                                        |
 |------------------------|--------------------------------------------------------------------|
-| **RMBG (Remove Background)** | Removes the background from an image, isolating the foreground subject. |
+| **RMBG 2.0 (Remove Background)** | Removes the background from an image, isolating the foreground subject. |
 | **Replace Background**  | Replaces an image’s background with a new one, guided by either a reference image or a prompt. |
 | **Expand Image**        | Expands the dimensions of an image, generating new content to fill the extended areas. |
 | **Eraser**             | Removes specific objects or areas from an image by providing a mask. |
