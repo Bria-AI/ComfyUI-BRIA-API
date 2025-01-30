@@ -45,11 +45,23 @@ This node retrieves the default settings and prompt prefix of a trained tailored
 ## Image Editing Nodes
 These nodes modify specific parts of images, enabling adjustments, while maintaining the integrity of the rest of the image.[[API docs](https://bria-ai-api-docs.redoc.ly/tag/Image-Editing)]
 
+### **RMBG (Remove Background)**
+This node removes the background from an image, isolating the foreground subject. Powered by BRIA's RMBG 2.0 model. [[🤗model Card](https://huggingface.co/briaai/RMBG-2.0)] [[🤗HF demo](https://huggingface.co/spaces/briaai/BRIA-RMBG-2.0)]
+
+### **Replace Background**
+This node replaces the background of an image while preserving the subject. The new background can be guided either by a provided reference image or generated based on a prompt. [[🤗model card](https://huggingface.co/briaai/BRIA-2.3-ControlNet-BG-Gen)]
+
+### **Expand Image**
+This node expands the dimensions of an image, generating new content to fill the extended areas.
+
 ### **Eraser**
 This node is used to remove specific objects or areas from an image by providing a mask. Powered by BRIA's ControlNet inpainting [[🤗model card](https://huggingface.co/briaai/BRIA-2.3-ControlNet-Inpainting)] [[🤗HF demo](https://huggingface.co/spaces/briaai/BRIA-Eraser-API)].
 
 ### **GenFill**
 This node is used to generate objects by prompt in a specific region of an image. This functionality is powered by BRIA's ControlNet Generative Fill. [[🤗model card](https://huggingface.co/briaai/BRIA-2.3-ControlNet-Generative-Fill)] [[🤗HF demo](https://huggingface.co/spaces/briaai/BRIA-Generative-Fill-API)]
+
+### **Erase Foreground**
+This node removes the foreground from an image, isolating the background.
 
 ## Product Shot Generation Nodes
 These nodes create high-quality product images for eCommerce workflows. [[API docs](https://bria-ai-api-docs.redoc.ly/tag/Product-Shots-Generation)]
