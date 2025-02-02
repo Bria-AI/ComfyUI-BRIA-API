@@ -23,6 +23,7 @@ class ImageExpansionNode():
                 "prompt": ("STRING", {"default": ""}),
                 "seed": ("INT", {"default": 681794}),
                 "negative_prompt": ("STRING", {"default": "Ugly, mutated"}),
+                "content_moderation": ("BOOLEAN", {"default": False}), 
             } 
         }
 
@@ -42,6 +43,7 @@ class ImageExpansionNode():
                 prompt,
                 seed,
                 negative_prompt,
+                content_moderation,
                 api_key):
         if api_key.strip() == "" or api_key.strip() == "BRIA_API_TOKEN":
             raise Exception("Please insert a valid API key.")
@@ -70,8 +72,8 @@ class ImageExpansionNode():
             "canvas_size": canvas_size,
             "prompt": prompt,
             "negative_prompt": negative_prompt,
-            "seed": seed
-            # "sync": True
+            "seed": seed,
+            "content_moderation": content_moderation
         }
 
         headers = {

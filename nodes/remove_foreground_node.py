@@ -15,6 +15,9 @@ class RemoveForegroundNode():
                 "image": ("IMAGE",),  # Input image from another node
                 "api_key": ("STRING", {"default": "BRIA_API_TOKEN"}), # API Key input with a default value
             },
+            "optional": {
+                "content_moderation": ("BOOLEAN", {"default": False}), 
+            }
         }
 
     RETURN_TYPES = ("IMAGE",)
@@ -26,7 +29,7 @@ class RemoveForegroundNode():
         self.api_url = "https://engine.internal.prod.bria-api.com/v1/erase_foreground"  # remove foreground API URL
 
     # Define the execute method as expected by ComfyUI
-    def execute(self, image, api_key):
+    def execute(self, image, content_moderation, api_key):
         if api_key.strip() == "" or api_key.strip() == "BRIA_API_TOKEN":
             raise Exception("Please insert a valid API key.")
 
@@ -41,7 +44,7 @@ class RemoveForegroundNode():
         
 #         files=[('file',('temp_img.jpeg', open(temp_img_path, 'rb'),'image/jpeg'))
 #   ]
-        payload = {"file": image_to_base64(image)}
+        payload = {"file": image_to_base64(image), "content_moderation": content_moderation}
 
         headers = {
             "Content-Type": "application/json",
