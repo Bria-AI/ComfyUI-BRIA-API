@@ -5,7 +5,7 @@ import io
 import torch
 
 from .common import preprocess_image
-
+from io import BytesIO
 
 class RmbgNode():
     @classmethod
@@ -35,11 +35,14 @@ class RmbgNode():
             image = preprocess_image(image)
 
         # Prepare the API request payload
-        # temporary save the image to /tmp
-        temp_img_path = "/tmp/temp_img.jpeg"
-        image.save(temp_img_path, format="JPEG")
-        files=[('file',('temp_img.jpeg', open(temp_img_path, 'rb'),'image/jpeg'))
-  ]
+        image_buffer = BytesIO()
+        image.save(image_buffer, format="JPEG")
+
+        # Get binary data from buffer
+        image_buffer.seek(0)  # Move cursor to the start of the buffer
+        binary_data = image_buffer.read()
+
+        files=[('file',('temp_img.jpeg',  BytesIO(binary_data),'image/jpeg'))]
 
         try:
             response = requests.post(self.api_url, data={}, headers={"api_token": api_key}, files=files)
