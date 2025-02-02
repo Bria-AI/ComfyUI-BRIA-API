@@ -17,6 +17,9 @@ class GenFillNode():
                 "prompt": ("STRING",),
                 "api_key": ("STRING", {"default": "BRIA_API_TOKEN"}), # API Key input with a default value
             },
+            "optional": {
+                "seed": ("INT", {"default": 123456})
+            }
         }
 
     RETURN_TYPES = ("IMAGE",)
@@ -28,7 +31,7 @@ class GenFillNode():
         self.api_url = "https://engine.prod.bria-api.com/v1/gen_fill"  # Eraser API URL
 
     # Define the execute method as expected by ComfyUI
-    def execute(self, image, mask, prompt, api_key):
+    def execute(self, image, mask, prompt, api_key, seed):
         if api_key.strip() == "" or api_key.strip() == "BRIA_API_TOKEN":
             raise Exception("Please insert a valid API key.")
 
@@ -48,7 +51,8 @@ class GenFillNode():
             "mask_file": f"{mask_base64}",
             "prompt": prompt,
             "negative_prompt": "blurry",
-            "sync": True
+            "sync": True,
+            "seed": seed,
         }
 
         headers = {
