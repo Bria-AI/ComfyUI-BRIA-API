@@ -4,7 +4,7 @@
   <img src="./images/Bria Logo.svg" alt="BRIA Logo" width="200"/>
 </p>
 
-This repository provides custom nodes for ComfyUI, enabling direct access to **BRIA's API endpoints** for image generation workflows. **API documentation** is available [**here**](https://bria-ai-api-docs.redoc.ly/#operation//generation/bria-v2/text-to-image). 
+This repository provides custom nodes for ComfyUI, enabling direct access to **BRIA's API endpoints** for image generation workflows. **API documentation** is available [**here**](https://docs.bria.ai/). 
 
 An API token is required to use the nodes in your workflows. Get started quickly here
 <a href="https://bria.ai/api/" style="text-decoration:none; vertical-align:middle;">
@@ -22,7 +22,7 @@ To load a workflow, import the compatible workflow.json files from this [folder]
 # Available Nodes
 
 ## Image Generation Nodes
-These nodes create high-quality images from text or image prompts, generating photorealistic or artistic results with support for various aspect ratios. [[API docs](https://bria-ai-api-docs.redoc.ly/tag/Image-Generation)].
+These nodes create high-quality images from text or image prompts, generating photorealistic or artistic results with support for various aspect ratios.
 
 | Node                   | Description                                                        |
 |------------------------|--------------------------------------------------------------------|
@@ -31,7 +31,7 @@ These nodes create high-quality images from text or image prompts, generating ph
 | **Text2Image HD**      | Optimized for high-resolution outputs, this node generates detailed and sharp visuals from text prompts. |
 
 ## Tailored Generation Nodes
-These nodes use pre-trained tailored models to generate images that faithfully reproduce specific visual IP elements or guidelines. [[API docs](https://bria-ai-api-docs.redoc.ly/tag/Tailored-Generation)].
+These nodes use pre-trained tailored models to generate images that faithfully reproduce specific visual IP elements or guidelines.
 
 | Node                   | Description                                                        |
 |------------------------|--------------------------------------------------------------------|
@@ -39,7 +39,7 @@ These nodes use pre-trained tailored models to generate images that faithfully r
 | **Tailored Model Info** | Retrieves the default settings and prompt prefix of a trained tailored model, which can be used to configure the Tailored Gen node. |
 
 ## Image Editing Nodes
-These nodes modify specific parts of images, enabling adjustments while maintaining the integrity of the rest of the image. [[API docs](https://bria-ai-api-docs.redoc.ly/tag/Image-Editing)].
+These nodes modify specific parts of images, enabling adjustments while maintaining the integrity of the rest of the image.
 
 | Node                   | Description                                                        |
 |------------------------|--------------------------------------------------------------------|
@@ -51,7 +51,7 @@ These nodes modify specific parts of images, enabling adjustments while maintain
 | **Erase Foreground**    | Removes the foreground from an image, isolating the background. |
 
 ## Product Shot Generation Nodes
-These nodes create high-quality product images for eCommerce workflows. [[API docs](https://bria-ai-api-docs.redoc.ly/tag/Product-Shots-Generation)].
+These nodes create high-quality product images for eCommerce workflows.
 
 | Node                   | Description                                                        |
 |------------------------|--------------------------------------------------------------------|
