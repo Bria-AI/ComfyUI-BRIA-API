@@ -29,6 +29,7 @@ These nodes create high-quality images from text or image prompts, generating ph
 | **Text2Image Base**    | Generates images from text prompts, serving as the foundation for text-based image creation. |
 | **Text2Image Fast**    | Optimized for speed, this node generates images from text prompts with faster results while maintaining quality. |
 | **Text2Image HD**      | Optimized for high-resolution outputs, this node generates detailed and sharp visuals from text prompts. |
+| **Reimagine**          | Guides image generation using both prompts and an input image. Preserve the original structure and depth while introducing new materials, colors, and textures. |
 
 ## Tailored Generation Nodes
 These nodes use pre-trained tailored models to generate images that faithfully reproduce specific visual IP elements or guidelines.
