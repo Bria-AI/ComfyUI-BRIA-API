@@ -26,6 +26,7 @@ class TailoredGenNode():
                 "guidance_method_2": (["controlnet_canny", "controlnet_depth", "controlnet_recoloring", "controlnet_color_grid"], {"default": "controlnet_canny"}),
                 "guidance_method_2_scale": ("FLOAT", {"default": 1.0}),
                 "guidance_method_2_image": ("IMAGE", ),
+                "content_moderation": ("INT", {"default": 0}),
             }
         }
 
@@ -42,8 +43,8 @@ class TailoredGenNode():
             seed, model_influence, negative_prompt, fast, steps_num,
             guidance_method_1=None, guidance_method_1_scale=None, guidance_method_1_image=None,
             guidance_method_2=None, guidance_method_2_scale=None, guidance_method_2_image=None,
+            content_moderation=0,
         ):
-        fast = bool(fast)
         payload = {
             "prompt": generation_prefix + prompt,
             "num_results": 1,
@@ -55,6 +56,7 @@ class TailoredGenNode():
             "fast": fast,
             "steps_num": steps_num,
             "include_generation_prefix": False,
+            "content_moderation": content_moderation,
         }
         if guidance_method_1_image is not None:
             guidance_method_1_image = preprocess_image(guidance_method_1_image)

@@ -20,6 +20,7 @@ class ReimagineNode():
                 "tailored_model_id": ("STRING", ),
                 "tailored_model_influence": ("FLOAT", {"default": 0.5}),
                 "tailored_generation_prefix": ("STRING",), # if used with tailored, possibly get this from the tailored model info node
+                "content_moderation": ("INT", {"default": 0}),
             }
         }
 
@@ -35,8 +36,8 @@ class ReimagineNode():
             self, api_key, prompt, seed, 
             steps_num, fast, structure_ref_influence, structure_image=None,
             tailored_model_id=None, tailored_model_influence=None, tailored_generation_prefix=None,
-        ):
-        fast = bool(fast)
+            content_moderation=0,
+        ):        
         payload = {
             "prompt": tailored_generation_prefix + prompt,
             "num_results": 1,
@@ -44,6 +45,7 @@ class ReimagineNode():
             "seed": seed,
             "steps_num": steps_num,
             "include_generation_prefix": False,
+            "content_moderation": content_moderation,
         }
         if structure_image is not None:
             structure_image = preprocess_image(structure_image)

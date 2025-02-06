@@ -25,6 +25,7 @@ class Text2ImageFastNode():
                 "image_prompt_mode": (["regular", "style_only"], {"default": "regular"}),
                 "image_prompt_image": ("IMAGE", ),
                 "image_prompt_scale": ("FLOAT", {"default": 1.0}),
+                "content_moderation": ("INT", {"default": 0}),
             }
         }
 
@@ -42,8 +43,8 @@ class Text2ImageFastNode():
             guidance_method_1=None, guidance_method_1_scale=None, guidance_method_1_image=None,
             guidance_method_2=None, guidance_method_2_scale=None, guidance_method_2_image=None,
             image_prompt_mode=None, image_prompt_image=None, image_prompt_scale=None,
+            content_moderation=0,
         ):
-        prompt_enhancement = bool(prompt_enhancement)
         payload = {
             "prompt": prompt,
             "num_results": 1,
@@ -52,6 +53,7 @@ class Text2ImageFastNode():
             "seed": seed,
             "steps_num": steps_num,
             "prompt_enhancement": prompt_enhancement,
+            "content_moderation": content_moderation,
         }
         if guidance_method_1_image is not None:
             guidance_method_1_image = preprocess_image(guidance_method_1_image)

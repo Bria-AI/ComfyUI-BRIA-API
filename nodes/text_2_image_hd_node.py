@@ -19,6 +19,7 @@ class Text2ImageHDNode():
                 "prompt_enhancement": ("INT", {"default": 0}),
                 "text_guidance_scale": ("INT", {"default": 5}),
                 "medium": (["photography", "art", "none"], {"default": "none"}),
+                "content_moderation": ("INT", {"default": 0}),
             }
         }
 
@@ -32,9 +33,8 @@ class Text2ImageHDNode():
 
     def execute(
             self, api_key, prompt, aspect_ratio, seed, negative_prompt, 
-            steps_num, prompt_enhancement, text_guidance_scale, medium,
+            steps_num, prompt_enhancement, text_guidance_scale, medium, content_moderation=0,
         ):
-        prompt_enhancement = bool(prompt_enhancement)
         payload = {
             "prompt": prompt,
             "num_results": 1,
@@ -45,6 +45,7 @@ class Text2ImageHDNode():
             "steps_num": steps_num,
             "text_guidance_scale": text_guidance_scale,
             "prompt_enhancement": prompt_enhancement,
+            "content_moderation": content_moderation,
         }
         if medium != "none":
             payload["medium"] = medium
