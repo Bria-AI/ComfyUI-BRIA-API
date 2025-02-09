@@ -12,6 +12,9 @@ An API token is required to use the nodes in your workflows. Get started quickly
 </a>.
 
 To load a workflow, import the compatible workflow.json files from this [folder](workflows).  
+<p align="center">
+  <img src="./images/background_workflow.png" width="1200"/>
+</p>
 
 
 <!-- Placeholder image of cool workflows. -->
