@@ -13,6 +13,8 @@ An API token is required to use the nodes in your workflows. Get started quickly
   <img src="https://img.shields.io/badge/GET%20YOUR%20TOKEN-1000%20Free%20Calls-blue?style=flat-square" alt="Get Your Token" height="20">
 </a>.
 
+For direct API Endpoint use, look for the endpoint in our of our API partners like: [**fal.ai**](https://fal.ai/models?keywords=bria). 
+
 To load a workflow, import the compatible workflow.json files from this [folder](workflows).  
 <p align="center">
   <img src="./images/background_workflow.png" width="1200"/>
