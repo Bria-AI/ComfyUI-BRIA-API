@@ -14,6 +14,7 @@ An API token is required to use the nodes in your workflows. Get started quickly
 </a>.
 
 For direct API Endpoint use, look for the endpoint in our of our API partners like: [**fal.ai**](https://fal.ai/models?keywords=bria). 
+For source code and weigths access, go to our [**Hugging Face**](https://huggingface.co/briaai) space.
 
 To load a workflow, import the compatible workflow.json files from this [folder](workflows).  
 <p align="center">
