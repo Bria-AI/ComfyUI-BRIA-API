@@ -4,7 +4,7 @@
   <img src="./images/Bria Logo.svg" alt="BRIA Logo" width="200"/>
 </p>
 
-This repository provides custom nodes for ComfyUI, enabling direct access to **BRIA's API endpoints** for image generation workflows. **API documentation** is available [**here**](https://docs.bria.ai/). 
+This repository provides custom nodes for ComfyUI, enabling direct access to **BRIA's API endpoints** for image generation and editing workflows. **API documentation** is available [**here**](https://docs.bria.ai/). 
 
 BRIA's APIs and models are built for commercial use and trained on 100% licensed data and does not contain copyrighted materials, such as fictional characters, logos, trademarks, public figures, harmful content, or privacy-infringing content.
 
