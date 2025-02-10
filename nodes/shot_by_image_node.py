@@ -12,7 +12,10 @@ class ShotByImageNode():
                 "ref_image": ("IMAGE",),  # ref image from another node
                 "enhance_ref_image": ("INT", {"default": 1}),
                 "api_key": ("STRING", {"default": "BRIA_API_TOKEN"})  # API Key input with a default value
-            }
+            },
+            "optional": {
+                "content_moderation": ("BOOLEAN", {"default": False}), 
+            }        
         }
 
     RETURN_TYPES = ("IMAGE",)
@@ -24,7 +27,7 @@ class ShotByImageNode():
         self.api_url = "https://engine.prod.bria-api.com/v1/product/lifestyle_shot_by_image"  # Eraser API URL
 
     # Define the execute method as expected by ComfyUI
-    def execute(self, image, ref_image, api_key, enhance_ref_image, ):
+    def execute(self, image, ref_image, api_key, enhance_ref_image, content_moderation):
         if api_key.strip() == "" or api_key.strip() == "BRIA_API_TOKEN":
             raise Exception("Please insert a valid API key.")
 
@@ -45,7 +48,8 @@ class ShotByImageNode():
             "enhance_ref_image": enhance_ref_image,
             "placement_type": "original",
             "original_quality": True, 
-            "sync": True
+            "sync": True,
+            "content_moderation": content_moderation
         }
         headers = {
             "Content-Type": "application/json",

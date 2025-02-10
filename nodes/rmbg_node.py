@@ -15,6 +15,9 @@ class RmbgNode():
                 "image": ("IMAGE",),  # Input image from another node
                 "api_key": ("STRING", {"default": "BRIA_API_TOKEN"}), # API Key input with a default value
             },
+            "optional": {
+                "content_moderation": ("BOOLEAN", {"default": False}), 
+            }               
         }
 
     RETURN_TYPES = ("IMAGE",)
@@ -26,7 +29,7 @@ class RmbgNode():
         self.api_url = "https://engine.prod.bria-api.com/v1/background/remove"  # RMBG API URL
 
     # Define the execute method as expected by ComfyUI
-    def execute(self, image, api_key):
+    def execute(self, image, content_moderation, api_key):
         if api_key.strip() == "" or api_key.strip() == "BRIA_API_TOKEN":
             raise Exception("Please insert a valid API key.")
 
@@ -43,9 +46,10 @@ class RmbgNode():
         binary_data = image_buffer.read()
 
         files=[('file',('temp_img.jpeg',  BytesIO(binary_data),'image/jpeg'))]
+        payload = {"content_moderation": content_moderation}   
 
         try:
-            response = requests.post(self.api_url, data={}, headers={"api_token": api_key}, files=files)
+            response = requests.post(self.api_url, data=payload, headers={"api_token": api_key}, files=files)
             # Check for successful response
             if response.status_code == 200:
                 print('response is 200')

@@ -24,7 +24,8 @@ class ReplaceBgNode():
                 "original_quality": ("BOOLEAN", {"default": False}), 
                 "force_rmbg": ("BOOLEAN", {"default": False}), 
                 "negative_prompt": ("STRING", {"default": None}), 
-                "seed": ("INT", {"default": 681794})
+                "seed": ("INT", {"default": 681794}),
+                "content_moderation": ("BOOLEAN", {"default": False}), 
             }
         }
 
@@ -45,6 +46,7 @@ class ReplaceBgNode():
                 negative_prompt,
                 seed,
                 api_key,
+                content_moderation,
                 bg_prompt=None,
                 ref_image=None,):
         if api_key.strip() == "" or api_key.strip() == "BRIA_API_TOKEN":
@@ -74,7 +76,8 @@ class ReplaceBgNode():
             "negative_prompt": negative_prompt,
             "seed": seed,
             "sync": True,
-            "num_results": 1
+            "num_results": 1,
+            "content_moderation": content_moderation            
         }   
 
         headers = {

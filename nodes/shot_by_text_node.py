@@ -12,7 +12,10 @@ class ShotByTextNode():
                 "scene_description": ("STRING",),
                 "optimize_description": ("INT", {"default": 1}),
                 "api_key": ("STRING", {"default": "BRIA_API_TOKEN"})  # API Key input with a default value
-            }
+            },
+            "optional": {
+                "content_moderation": ("BOOLEAN", {"default": False}), 
+            }   
         }
 
     RETURN_TYPES = ("IMAGE",)
@@ -24,7 +27,7 @@ class ShotByTextNode():
         self.api_url = "https://engine.prod.bria-api.com/v1/product/lifestyle_shot_by_text"  # Eraser API URL
         
     # Define the execute method as expected by ComfyUI
-    def execute(self, image, api_key, scene_description, optimize_description, ):
+    def execute(self, image, api_key, scene_description, optimize_description, content_moderation):
         if api_key.strip() == "" or api_key.strip() == "BRIA_API_TOKEN":
             raise Exception("Please insert a valid API key.")
 
@@ -40,7 +43,9 @@ class ShotByTextNode():
             "optimize_description": optimize_description,
             "placement_type": "original",
             "original_quality": True,
-            "sync": True
+            "sync": True,
+            "content_moderation": content_moderation
+
         }
         headers = {
             "Content-Type": "application/json",
