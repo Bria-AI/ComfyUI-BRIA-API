@@ -59,7 +59,7 @@ These nodes modify specific parts of images, enabling adjustments while maintain
 | **GenFill**            | Generates objects by prompt in a specific region of an image. |
 | **Erase Foreground**    | Removes the foreground from an image, isolating the background. |
 
-## Product Shot Generation Nodes
+## Product Shot Editing Nodes
 These nodes create high-quality product images for eCommerce workflows.
 
 | Node                   | Description                                                        |
