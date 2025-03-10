@@ -4,7 +4,7 @@ from PIL import Image
 import io
 import torch
 
-from .common import image_to_base64
+from .common import image_to_base64, preprocess_image
 
 class TailoredPortraitNode():
     @classmethod
@@ -35,7 +35,10 @@ class TailoredPortraitNode():
         if api_key.strip() == "" or api_key.strip() == "BRIA_API_TOKEN":
             raise Exception("Please insert a valid API key.")
 
-        # Convert the image and mask directly to Base64 strings
+        # Convert the image and mask directly to  if isinstance(image, torch.Tensor):
+        if isinstance(image, torch.Tensor):
+            image = preprocess_image(image)
+            
         image_base64 = image_to_base64(image)
 
         # Prepare the API request payload
