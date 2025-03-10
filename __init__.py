@@ -1,5 +1,5 @@
 from .nodes import (EraserNode, GenFillNode, ImageExpansionNode, ReplaceBgNode, RmbgNode, RemoveForegroundNode, ShotByTextNode, ShotByImageNode, TailoredGenNode,
-                     TailoredModelInfoNode, Text2ImageBaseNode, Text2ImageFastNode, Text2ImageHDNode,
+                     TailoredModelInfoNode, Text2ImageBaseNode, Text2ImageFastNode, Text2ImageHDNode, TailoredPortraitNode,
                      ReimagineNode)
 # Map the node class to a name used internally by ComfyUI
 NODE_CLASS_MAPPINGS = {
@@ -13,6 +13,7 @@ NODE_CLASS_MAPPINGS = {
     "ShotByImageNode": ShotByImageNode,
     "BriaTailoredGen": TailoredGenNode,
     "TailoredModelInfoNode": TailoredModelInfoNode,
+    "TailoredPortraitNode": TailoredPortraitNode,
     "Text2ImageBaseNode": Text2ImageBaseNode,
     "Text2ImageFastNode": Text2ImageFastNode,
     "Text2ImageHDNode": Text2ImageHDNode,
