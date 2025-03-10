@@ -1,6 +1,5 @@
-from nodes.tailored_portrait_node import TailoredPortraitNode
 from .nodes import (EraserNode, GenFillNode, ImageExpansionNode, ReplaceBgNode, RmbgNode, RemoveForegroundNode, ShotByTextNode, ShotByImageNode, TailoredGenNode,
-                     TailoredModelInfoNode, Text2ImageBaseNode, Text2ImageFastNode, Text2ImageHDNode,
+                     TailoredModelInfoNode, Text2ImageBaseNode, Text2ImageFastNode, Text2ImageHDNode, TailoredPortraitNode,
                      ReimagineNode)
 # Map the node class to a name used internally by ComfyUI
 NODE_CLASS_MAPPINGS = {
