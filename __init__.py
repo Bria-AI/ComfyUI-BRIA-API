@@ -1,3 +1,4 @@
+from nodes.tailored_portrait_node import TailoredPortraitNode
 from .nodes import (EraserNode, GenFillNode, ImageExpansionNode, ReplaceBgNode, RmbgNode, RemoveForegroundNode, ShotByTextNode, ShotByImageNode, TailoredGenNode,
                      TailoredModelInfoNode, Text2ImageBaseNode, Text2ImageFastNode, Text2ImageHDNode,
                      ReimagineNode)
@@ -13,6 +14,7 @@ NODE_CLASS_MAPPINGS = {
     "ShotByImageNode": ShotByImageNode,
     "BriaTailoredGen": TailoredGenNode,
     "TailoredModelInfoNode": TailoredModelInfoNode,
+    "TailoredPortraitNode": TailoredPortraitNode,
     "Text2ImageBaseNode": Text2ImageBaseNode,
     "Text2ImageFastNode": Text2ImageFastNode,
     "Text2ImageHDNode": Text2ImageHDNode,
