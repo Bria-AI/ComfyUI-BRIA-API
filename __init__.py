@@ -31,6 +31,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "ShotByImageNode": "Bria Shot By Image",
     "BriaTailoredGen": "Bria Tailored Gen",
     "TailoredModelInfoNode": "Bria Tailored Model Info",
+    "TailoredPortraitNode": "Bria Restyle Portrait",
     "Text2ImageBaseNode": "Bria Text2Image Base",
     "Text2ImageFastNode": "Bria Text2Image Fast",
     "Text2ImageHDNode": "Bria Text2Image HD",
