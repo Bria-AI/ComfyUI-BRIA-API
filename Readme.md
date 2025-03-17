@@ -45,7 +45,8 @@ These nodes use pre-trained tailored models to generate images that faithfully r
 | Node                   | Description                                                        |
 |------------------------|--------------------------------------------------------------------|
 | **Tailored Gen**       | Generates images using a trained tailored model, reproducing specific visual IP elements or guidelines. Use the Tailored Model Info node to load the model's default settings. |
-| **Tailored Model Info** | Retrieves the default settings and prompt prefix of a trained tailored model, which can be used to configure the Tailored Gen node. |
+| **Tailored Model Info**| Retrieves the default settings and prompt prefix of a trained tailored model, which can be used to configure the Tailored Gen node. |
+| **Restyle Portrait**   | Transforms the style of a portrait while preserving the person's facial features. |
 
 ## Image Editing Nodes
 These nodes modify specific parts of images, enabling adjustments while maintaining the integrity of the rest of the image.
