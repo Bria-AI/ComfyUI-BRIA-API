@@ -38,7 +38,7 @@ class Text2ImageBaseNode():
     FUNCTION = "execute"  # This is the method that will be executed
 
     def __init__(self):
-        self.api_url = "https://engine.prod.bria-api.com/v1/text-to-image/base/3.1" 
+        self.api_url = "https://engine.prod.bria-api.com/v1/text-to-image/base/3.2" 
 
     def execute(
             self, api_key, prompt, aspect_ratio, seed, negative_prompt, 
