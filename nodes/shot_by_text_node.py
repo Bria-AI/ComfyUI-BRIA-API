@@ -11,6 +11,7 @@ class ShotByTextNode():
                 "image": ("IMAGE",),  # Input image from another node
                 "scene_description": ("STRING",),
                 "optimize_description": ("INT", {"default": 1}),
+                "mode": (["base", "fast", "high_control"], {"default": "high_control"}),
                 "api_key": ("STRING", {"default": "BRIA_API_TOKEN"})  # API Key input with a default value
             },
             "optional": {
@@ -27,7 +28,7 @@ class ShotByTextNode():
         self.api_url = "https://engine.prod.bria-api.com/v1/product/lifestyle_shot_by_text"  # Eraser API URL
         
     # Define the execute method as expected by ComfyUI
-    def execute(self, image, api_key, scene_description, optimize_description, content_moderation):
+    def execute(self, image, api_key, scene_description, optimize_description, mode, content_moderation):
         if api_key.strip() == "" or api_key.strip() == "BRIA_API_TOKEN":
             raise Exception("Please insert a valid API key.")
 
@@ -40,6 +41,7 @@ class ShotByTextNode():
         payload = {
             "file": image_base64,
             "scene_description": scene_description,
+            "mode": mode,
             "optimize_description": optimize_description,
             "placement_type": "original",
             "original_quality": True,
