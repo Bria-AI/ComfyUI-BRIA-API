@@ -35,7 +35,6 @@ class ShotByTextNode():
         if isinstance(image, torch.Tensor):
             image = preprocess_image(image)
 
-        optimize_description = bool(optimize_description)
         image_base64 = image_to_base64(image)
         payload = {
             "file": image_base64,
