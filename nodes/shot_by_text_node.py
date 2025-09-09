@@ -27,7 +27,7 @@ class ShotByTextNode():
         self.api_url = "https://engine.prod.bria-api.com/v1/product/lifestyle_shot_by_text"  # Eraser API URL
         
     # Define the execute method as expected by ComfyUI
-    def execute(self, image, api_key, scene_description, optimize_description, mode, content_moderation):
+    def execute(self, image, api_key, scene_description, mode, content_moderation):
         if api_key.strip() == "" or api_key.strip() == "BRIA_API_TOKEN":
             raise Exception("Please insert a valid API key.")
 
@@ -41,7 +41,6 @@ class ShotByTextNode():
             "file": image_base64,
             "scene_description": scene_description,
             "mode": mode,
-            "optimize_description": optimize_description,
             "placement_type": "original",
             "original_quality": True,
             "sync": True,
