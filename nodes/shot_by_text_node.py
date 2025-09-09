@@ -10,7 +10,6 @@ class ShotByTextNode():
             "required": {
                 "image": ("IMAGE",),  # Input image from another node
                 "scene_description": ("STRING",),
-                "optimize_description": ("INT", {"default": 1}),
                 "mode": (["base", "fast", "high_control"], {"default": "high_control"}),
                 "api_key": ("STRING", {"default": "BRIA_API_TOKEN"})  # API Key input with a default value
             },
