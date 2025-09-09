@@ -16,7 +16,7 @@ class ReplaceBgNode():
                 "api_key": ("STRING", {"default": "BRIA_API_TOKEN"}), # API Key input with a default value
             },
             "optional": {
-                "fast": ("BOOLEAN", {"default": True}), 
+                "mode": (["base", "fast", "high_control"], {"default": "high_control"}),
                 "bg_prompt": ("STRING",),
                 "ref_image": ("IMAGE",), # Input ref image from another node
                 "refine_prompt": ("BOOLEAN", {"default": True}), 
@@ -38,7 +38,7 @@ class ReplaceBgNode():
         self.api_url = "https://engine.prod.bria-api.com/v1/background/replace"  # Replace BG API URL
 
     # Define the execute method as expected by ComfyUI
-    def execute(self, image, fast,
+    def execute(self, image, mode,
                 refine_prompt,
                 enhance_ref_image,
                 original_quality,
@@ -66,7 +66,7 @@ class ReplaceBgNode():
         # Prepare the API request payload
         payload = {
             "file": f"{image_base64}",
-            "fast": fast,
+            "mode": mode,
             "bg_prompt": bg_prompt,
             "ref_image_file": ref_image_file,
             "refine_prompt": refine_prompt,
