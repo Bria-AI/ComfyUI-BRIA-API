@@ -26,7 +26,7 @@ class RemoveForegroundNode():
     FUNCTION = "execute"  # This is the method that will be executed
 
     def __init__(self):
-        self.api_url = "https://engine.internal.prod.bria-api.com/v1/erase_foreground"  # remove foreground API URL
+        self.api_url = "https://engine.prod.bria-api.com/v1/erase_foreground"  # remove foreground API URL
 
     # Define the execute method as expected by ComfyUI
     def execute(self, image, content_moderation, api_key):
