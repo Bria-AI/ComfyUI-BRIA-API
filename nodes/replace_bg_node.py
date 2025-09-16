@@ -4,7 +4,7 @@ from PIL import Image
 import io
 import torch
 
-from .common import image_to_base64, preprocess_image, preprocess_mask
+from .common import image_to_base64, preprocess_image, preprocess_mask, poll_status_until_completed
 
 
 class ReplaceBgNode():
@@ -16,16 +16,17 @@ class ReplaceBgNode():
                 "api_key": ("STRING", {"default": "BRIA_API_TOKEN"}), # API Key input with a default value
             },
             "optional": {
-                "mode": (["base", "fast", "high_control"], {"default": "high_control"}),
-                "bg_prompt": ("STRING",),
-                "ref_image": ("IMAGE",), # Input ref image from another node
+                "mode": (["base", "fast", "high_control"], {"default": "base"}),
+                "prompt": ("STRING",),
+                "ref_images": ("IMAGE",),
                 "refine_prompt": ("BOOLEAN", {"default": True}), 
-                "enhance_ref_image": ("BOOLEAN", {"default": True}), 
+                "enhance_ref_images": ("BOOLEAN", {"default": True}), 
                 "original_quality": ("BOOLEAN", {"default": False}), 
-                "force_rmbg": ("BOOLEAN", {"default": False}), 
                 "negative_prompt": ("STRING", {"default": None}), 
                 "seed": ("INT", {"default": 681794}),
-                "content_moderation": ("BOOLEAN", {"default": False}), 
+                "visual_output_content_moderation": ("BOOLEAN", {"default": False}), 
+                "prompt_content_moderation": ("BOOLEAN", {"default": False}),
+                "force_background_detection": ("BOOLEAN", {"default": False}),
             }
         }
 
@@ -35,20 +36,21 @@ class ReplaceBgNode():
     FUNCTION = "execute"  # This is the method that will be executed
 
     def __init__(self):
-        self.api_url = "https://engine.prod.bria-api.com/v1/background/replace"  # Replace BG API URL
+        self.api_url = "https://engine.prod.bria-api.com/v2/image/edit/replace_background"  # Replace BG API URL
 
     # Define the execute method as expected by ComfyUI
     def execute(self, image, mode,
                 refine_prompt,
-                enhance_ref_image,
                 original_quality,
-                force_rmbg,
                 negative_prompt,
                 seed,
                 api_key,
-                content_moderation,
-                bg_prompt=None,
-                ref_image=None,):
+                visual_output_content_moderation,
+                prompt_content_moderation,
+                enhance_ref_images,
+                force_background_detection,
+                prompt=None,
+                ref_images=None,):
         if api_key.strip() == "" or api_key.strip() == "BRIA_API_TOKEN":
             raise Exception("Please insert a valid API key.")
 
@@ -56,28 +58,29 @@ class ReplaceBgNode():
         if isinstance(image, torch.Tensor):
             image = preprocess_image(image)
 
-        # Convert the image and mask directly to Base64 strings
+        # Convert the image to Base64 string
         image_base64 = image_to_base64(image)
-        ref_image_file = None # initialization, will be updated if it is supplied
-        if ref_image is not None:
-            ref_image = preprocess_image(ref_image)
-            ref_image_file = image_to_base64(ref_image)
+        
+        if ref_images is not None:
+            ref_images = preprocess_image(ref_images)
+            ref_images = [image_to_base64(ref_images)]
+        else:
+            ref_images=[]
 
-        # Prepare the API request payload
+        # Prepare the API request payload for v2 API
         payload = {
-            "file": f"{image_base64}",
+            "image": image_base64,
             "mode": mode,
-            "bg_prompt": bg_prompt,
-            "ref_image_file": ref_image_file,
+            "prompt": prompt,
+            "ref_images":ref_images,
             "refine_prompt": refine_prompt,
-            "enhance_ref_image": enhance_ref_image,
             "original_quality": original_quality,
-            "force_rmbg": force_rmbg,
             "negative_prompt": negative_prompt,
             "seed": seed,
-            "sync": True,
-            "num_results": 1,
-            "content_moderation": content_moderation            
+            "prompt_content_moderation": prompt_content_moderation,
+            "visual_output_content_moderation":visual_output_content_moderation,
+            "enhance_ref_images":enhance_ref_images,
+            "force_background_detection": force_background_detection        
         }   
 
         headers = {
@@ -87,16 +90,31 @@ class ReplaceBgNode():
 
         try:
             response = requests.post(self.api_url, json=payload, headers=headers)
-            # Check for successful response
-            if response.status_code == 200:
-                print('response is 200')
-                # Process the output image from API response
+            
+            if response.status_code == 200 or response.status_code == 202:
+                print('Initial replace background request successful, polling for completion...')
                 response_dict = response.json()
-                image_response = requests.get(response_dict['result'][0][0]) # first indexing for batched, second for url
+                status_url = response_dict.get('status_url')
+                request_id = response_dict.get('request_id')
+                
+                if not status_url:
+                    raise Exception("No status_url returned from API")
+                
+                print(f"Request ID: {request_id}, Status URL: {status_url}")
+                
+                # Poll status URL until completion
+                final_response = poll_status_until_completed(status_url, api_key)
+                
+                # Get the result image URL
+                result_image_url = final_response['result']['image_url']
+                
+                # Download and process the result image
+                image_response = requests.get(result_image_url)
                 result_image = Image.open(io.BytesIO(image_response.content))
                 result_image = result_image.convert("RGB")
                 result_image = np.array(result_image).astype(np.float32) / 255.0
                 result_image = torch.from_numpy(result_image)[None,]
+                
                 return (result_image,)
             else:
                 raise Exception(f"Error: API request failed with status code {response.status_code}")

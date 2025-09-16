@@ -8,6 +8,10 @@ class EraserNode():
                 "image": ("IMAGE",),  # Input image from another node
                 "mask": ("MASK",),  # Binary mask input
                 "api_key": ("STRING", {"default": "BRIA_API_TOKEN"})  # API Key input with a default value
+            },
+            "optional": {
+                "visual_input_content_moderation": ("BOOLEAN", {"default": False}), 
+                "visual_output_content_moderation": ("BOOLEAN", {"default": False}), 
             }
         }
 
@@ -17,9 +21,9 @@ class EraserNode():
     FUNCTION = "execute"  # This is the method that will be executed
 
     def __init__(self):
-        self.api_url = "https://engine.prod.bria-api.com/v1/eraser"  # Eraser API URL
+        self.api_url = "https://engine.prod.bria-api.com/v2/image/edit/erase"  # Eraser API URL
 
     # Define the execute method as expected by ComfyUI
-    def execute(self, image, mask, api_key):
-        return process_request(self.api_url, image, mask, api_key)
+    def execute(self, image, mask, api_key, visual_input_content_moderation, visual_output_content_moderation):
+        return process_request(self.api_url, image, mask, api_key, visual_input_content_moderation, visual_output_content_moderation)
     
