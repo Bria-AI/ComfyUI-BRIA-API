@@ -133,7 +133,7 @@ def poll_status_until_completed(status_url, api_key, timeout=360, check_interval
                 
                 if status == "COMPLETED":
                     return response_dict
-                elif status == "FAILED":
+                elif status == "ERROR":
                     raise Exception(f"Request failed: {response_dict}")
                 else:
                     print(f"Status: {status}, waiting...")
