@@ -5,6 +5,7 @@ import torch
 import base64
 from torchvision.transforms import ToPILImage
 import requests
+import time
 
 def postprocess_image(image):
     result_image = Image.open(io.BytesIO(image))
@@ -44,7 +45,7 @@ def preprocess_mask(mask):
     return mask
 
 
-def process_request(api_url, image, mask, api_key):
+def process_request(api_url, image, mask, api_key, visual_input_content_moderation, visual_output_content_moderation):
     if api_key.strip() == "" or api_key.strip() == "BRIA_API_TOKEN":
         raise Exception("Please insert a valid API key.")
 
@@ -58,10 +59,12 @@ def process_request(api_url, image, mask, api_key):
     image_base64 = image_to_base64(image)
     mask_base64 = image_to_base64(mask)
 
-    # Prepare the API request payload
+    # Prepare the API request payload for v2 API
     payload = {
-        "file": f"{image_base64}",
-        "mask_file": f"{mask_base64}"
+        "image": image_base64,
+        "mask": mask_base64,
+        "visual_input_content_moderation":visual_input_content_moderation,
+        "visual_output_content_moderation":visual_output_content_moderation
     }
 
     headers = {
@@ -70,13 +73,23 @@ def process_request(api_url, image, mask, api_key):
     }
 
     try:
-        response = requests.post(api_url, json=payload, headers=headers)
-        # Check for successful response
-        if response.status_code == 200:
-            print('response is 200')
-            # Process the output image from API response
+        response = requests.post(api_url, json=payload, headers=headers) 
+        if response.status_code == 200 or response.status_code == 202:
+            print('Initial request successful, polling for completion...')
             response_dict = response.json()
-            image_response = requests.get(response_dict['result_url'])
+            status_url = response_dict.get('status_url')
+            request_id = response_dict.get('request_id')
+            
+            if not status_url:
+                raise Exception("No status_url returned from API")
+            
+            print(f"Request ID: {request_id}, Status URL: {status_url}")
+            
+            final_response = poll_status_until_completed(status_url, api_key)
+            result_image_url = final_response['result']['image_url']
+            
+            # Download and process the result image
+            image_response = requests.get(result_image_url)
             result_image = Image.open(io.BytesIO(image_response.content))
             result_image = result_image.convert("RGBA")
             result_image = np.array(result_image).astype(np.float32) / 255.0
@@ -84,9 +97,51 @@ def process_request(api_url, image, mask, api_key):
             # image_tensor = image_tensor = ToTensor()(output_image)
             # image_tensor = image_tensor.permute(1, 2, 0) / 255.0  # Shape now becomes [1, 2200, 1548, 3]
             # print(f"output tensor shape is: {image_tensor.shape}")
-            return (result_image,)
+            return (result_image,)  
         else:
             raise Exception(f"Error: API request failed with status code {response.status_code}")
 
     except Exception as e:
         raise Exception(f"{e}")
+
+
+def poll_status_until_completed(status_url, api_key, timeout=360, check_interval=2):
+    """
+    Poll a status URL until the status is COMPLETED or timeout is reached.
+    
+    Args:
+        status_url (str): The status URL to poll
+        api_key (str): API token for authentication
+        timeout (int): Maximum time to wait in seconds (default: 360)
+        check_interval (int): Time between checks in seconds (default: 2)
+    
+    Returns:
+        dict: The final response containing the result
+    
+    Raises:
+        Exception: If timeout is reached or API request fails
+    """
+    start_time = time.time()
+    headers = {"api_token": api_key}
+    
+    while time.time() - start_time < timeout:
+        try:
+            response = requests.get(status_url, headers=headers)            
+            if response.status_code == 200 or response.status_code == 202:
+                response_dict = response.json()
+                status = response_dict.get("status", "").upper()
+                
+                if status == "COMPLETED":
+                    return response_dict
+                elif status == "ERROR":
+                    raise Exception(f"Request failed: {response_dict}")
+                else:
+                    print(f"Status: {status}, waiting...")
+                    time.sleep(check_interval)
+            else:
+                raise Exception(f"Status check failed with status code {response.status_code}")
+                
+        except requests.exceptions.RequestException as e:
+            raise Exception(f"Error checking status: {e}")
+    
+    raise Exception(f"Timeout reached after {timeout} seconds")
