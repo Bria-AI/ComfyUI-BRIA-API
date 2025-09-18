@@ -81,7 +81,7 @@ class RmbgNode():
                 
                 return (result_image,)
             else:
-                raise Exception(f"Error: API request failed with status code {response.status_code}")
+                raise Exception(f"Error: API request failed with status code {response.status_code} {response.text}")
 
         except Exception as e:
             raise Exception(f"{e}")

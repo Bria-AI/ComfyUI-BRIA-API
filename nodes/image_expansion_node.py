@@ -59,8 +59,6 @@ class ImageExpansionNode():
         original_image_location = [int(x.strip()) for x in original_image_location.split(",")] if original_image_location else ()
         canvas_size = [int(x.strip()) for x in canvas_size.split(",")] if canvas_size else ()
         
-        if prompt == "":
-            prompt = None
         if negative_prompt == "":
             negative_prompt = " " # hack to avoid error in triton which expects non-empty string
 
