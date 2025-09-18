@@ -99,7 +99,7 @@ def process_request(api_url, image, mask, api_key, visual_input_content_moderati
             # print(f"output tensor shape is: {image_tensor.shape}")
             return (result_image,)  
         else:
-            raise Exception(f"Error: API request failed with status code {response.status_code}")
+            raise Exception(f"Error: API request failed with status code {response.status_code} {response.text}")
 
     except Exception as e:
         raise Exception(f"{e}")
