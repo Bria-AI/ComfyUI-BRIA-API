@@ -1,6 +1,6 @@
 from .nodes import (EraserNode, GenFillNode, ImageExpansionNode, ReplaceBgNode, RmbgNode, RemoveForegroundNode, ShotByTextNode, ShotByImageNode, TailoredGenNode,
                      TailoredModelInfoNode, Text2ImageBaseNode, Text2ImageFastNode, Text2ImageHDNode, TailoredPortraitNode,
-                     ReimagineNode)
+                     ReimagineNode, AttributionByImageNode)
 # Map the node class to a name used internally by ComfyUI
 NODE_CLASS_MAPPINGS = {
     "BriaEraser": EraserNode,  # Return the class, not an instance
@@ -18,6 +18,7 @@ NODE_CLASS_MAPPINGS = {
     "Text2ImageFastNode": Text2ImageFastNode,
     "Text2ImageHDNode": Text2ImageHDNode,
     "ReimagineNode": ReimagineNode,
+    "AttributionByImageNode":AttributionByImageNode
 }
 # Map the node display name to the one shown in the ComfyUI node interface
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -36,4 +37,5 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "Text2ImageFastNode": "Bria Text2Image Fast",
     "Text2ImageHDNode": "Bria Text2Image HD",
     "ReimagineNode": "Bria Reimagine",
+    "AttributionByImageNode":"Attribution By Image Node"
 }
