@@ -1,10 +1,12 @@
 from .utils.shot_utils import get_image_input_types, create_image_payload, make_api_request, shot_by_image_api_url
 
 
-class ShotByImageOriginalNode:
+class ShotByImageManualPaddingNode:
     @classmethod
     def INPUT_TYPES(self):
         input_types = get_image_input_types()
+        input_types["required"]["padding_values"] = ("STRING", {"default": "0,0,0,0"})
+
         return input_types
 
     RETURN_TYPES = ("IMAGE",)
@@ -19,9 +21,10 @@ class ShotByImageOriginalNode:
         self,
         image,
         ref_image,
+        padding_values,
         api_key,
         sku="",
-        sync=True,
+        sync=False,
         enhance_ref_image=True,
         ref_image_influence=1.0,
         force_rmbg=False,
@@ -31,8 +34,8 @@ class ShotByImageOriginalNode:
             image,
             ref_image,
             api_key,
-            "original",
-            original_quality=True,
+            "manual_padding",
+            padding_values=padding_values,
             sku=sku,
             sync=sync,
             enhance_ref_image=enhance_ref_image,

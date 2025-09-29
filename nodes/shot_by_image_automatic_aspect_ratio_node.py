@@ -1,10 +1,14 @@
 from .utils.shot_utils import get_image_input_types, create_image_payload, make_api_request, shot_by_image_api_url
 
 
-class ShotByImageOriginalNode:
+class ShotByImageAutomaticAspectRatioNode:
     @classmethod
     def INPUT_TYPES(self):
         input_types = get_image_input_types()
+        input_types["required"]["aspect_ratio"] = (
+            ["1:1", "2:3", "3:2", "3:4", "4:3", "4:5", "5:4", "9:16", "16:9"],
+            {"default": "1:1"},
+        )
         return input_types
 
     RETURN_TYPES = ("IMAGE",)
@@ -19,9 +23,10 @@ class ShotByImageOriginalNode:
         self,
         image,
         ref_image,
+        aspect_ratio,
         api_key,
         sku="",
-        sync=True,
+        sync=False,
         enhance_ref_image=True,
         ref_image_influence=1.0,
         force_rmbg=False,
@@ -31,8 +36,8 @@ class ShotByImageOriginalNode:
             image,
             ref_image,
             api_key,
-            "original",
-            original_quality=True,
+            "automatic_aspect_ratio",
+            aspect_ratio=aspect_ratio,
             sku=sku,
             sync=sync,
             enhance_ref_image=enhance_ref_image,

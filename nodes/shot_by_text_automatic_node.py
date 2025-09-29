@@ -1,10 +1,11 @@
-from .utils.shot_utils import get_text_input_types, create_text_payload, make_api_request, shot_by_text_api_url
+from  .utils.shot_utils import get_text_input_types, create_text_payload, make_api_request, shot_by_text_api_url
 
 
-class ShotByTextOriginalNode:
+class ShotByTextAutomaticNode:
     @classmethod
     def INPUT_TYPES(self):
         input_types = get_text_input_types()
+        input_types["required"]["shot_size"] = ("STRING", {"default": "1000, 1000"})
         return input_types
 
     RETURN_TYPES = ("IMAGE",)
@@ -14,14 +15,16 @@ class ShotByTextOriginalNode:
 
     def __init__(self):
         self.api_url = shot_by_text_api_url
+
     def execute(
         self,
         image,
         scene_description,
         mode,
+        shot_size,
         api_key,
         sku="",
-        sync=True,
+        sync=False,
         optimize_description=True,
         exclude_elements="",
         force_rmbg=False,
@@ -32,8 +35,8 @@ class ShotByTextOriginalNode:
             api_key,
             scene_description,
             mode,
-            "original",
-            original_quality=True,
+            "automatic",
+            shot_size=shot_size,
             sku=sku,
             sync=sync,
             optimize_description=optimize_description,

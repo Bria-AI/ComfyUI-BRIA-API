@@ -1,10 +1,11 @@
 from .utils.shot_utils import get_text_input_types, create_text_payload, make_api_request, shot_by_text_api_url
 
 
-class ShotByTextOriginalNode:
+class ShotByTextManualPaddingNode:
     @classmethod
     def INPUT_TYPES(self):
         input_types = get_text_input_types()
+        input_types["required"]["padding_values"] = ("STRING", {"default": "0,0,0,0"})
         return input_types
 
     RETURN_TYPES = ("IMAGE",)
@@ -14,14 +15,16 @@ class ShotByTextOriginalNode:
 
     def __init__(self):
         self.api_url = shot_by_text_api_url
+
     def execute(
         self,
         image,
         scene_description,
         mode,
+        padding_values,
         api_key,
         sku="",
-        sync=True,
+        sync=False,
         optimize_description=True,
         exclude_elements="",
         force_rmbg=False,
@@ -32,8 +35,8 @@ class ShotByTextOriginalNode:
             api_key,
             scene_description,
             mode,
-            "original",
-            original_quality=True,
+            "manual_padding",
+            padding_values=padding_values,
             sku=sku,
             sync=sync,
             optimize_description=optimize_description,
