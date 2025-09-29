@@ -1,4 +1,4 @@
-from .utils.shot_utils import get_text_input_types, create_text_payload, make_api_request, shot_by_text_api_url
+from .utils.shot_utils import get_text_input_types, create_text_payload, make_api_request, shot_by_text_api_url, PlacementType
 
 
 class ShotByTextCustomCoordinatesNode:
@@ -45,7 +45,7 @@ class ShotByTextCustomCoordinatesNode:
             api_key,
             scene_description,
             mode,
-            "custom_coordinates",
+            PlacementType.CUSTOM_COORDINATES.value,
             shot_size=shot_size,
             foreground_image_size=foreground_image_size,
             foreground_image_location=foreground_image_location,

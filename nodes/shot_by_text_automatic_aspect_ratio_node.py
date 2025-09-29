@@ -1,4 +1,4 @@
-from .utils.shot_utils import get_text_input_types, create_text_payload, make_api_request, shot_by_text_api_url
+from .utils.shot_utils import get_text_input_types, create_text_payload, make_api_request, shot_by_text_api_url, PlacementType
 
 
 class ShotByTextAutomaticAspectRatioNode:
@@ -38,7 +38,7 @@ class ShotByTextAutomaticAspectRatioNode:
             api_key,
             scene_description,
             mode,
-            "automatic_aspect_ratio",
+            PlacementType.AUTOMATIC_ASPECT_RATIO.value,
             aspect_ratio=aspect_ratio,
             sku=sku,
             sync=sync,

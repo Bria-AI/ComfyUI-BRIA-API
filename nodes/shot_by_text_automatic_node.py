@@ -1,4 +1,4 @@
-from  .utils.shot_utils import get_text_input_types, create_text_payload, make_api_request, shot_by_text_api_url
+from  .utils.shot_utils import get_text_input_types, create_text_payload, make_api_request, shot_by_text_api_url, PlacementType
 
 
 class ShotByTextAutomaticNode:
@@ -35,7 +35,7 @@ class ShotByTextAutomaticNode:
             api_key,
             scene_description,
             mode,
-            "automatic",
+            PlacementType.AUTOMATIC.value,
             shot_size=shot_size,
             sku=sku,
             sync=sync,

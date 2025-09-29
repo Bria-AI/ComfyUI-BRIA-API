@@ -1,4 +1,4 @@
-from .utils.shot_utils import get_image_input_types, create_image_payload, make_api_request, shot_by_image_api_url
+from .utils.shot_utils import get_image_input_types, create_image_payload, make_api_request, shot_by_image_api_url, PlacementType
 
 
 class ShotByImageManualPaddingNode:
@@ -34,7 +34,7 @@ class ShotByImageManualPaddingNode:
             image,
             ref_image,
             api_key,
-            "manual_padding",
+            PlacementType.MANUAL_PADDING.value,
             padding_values=padding_values,
             sku=sku,
             sync=sync,

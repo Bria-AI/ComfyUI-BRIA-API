@@ -1,4 +1,4 @@
-from .utils.shot_utils import get_image_input_types, create_image_payload, make_api_request, shot_by_image_api_url
+from .utils.shot_utils import get_image_input_types, create_image_payload, make_api_request, shot_by_image_api_url, PlacementType
 
 
 class ShotByImageAutomaticNode:
@@ -33,7 +33,7 @@ class ShotByImageAutomaticNode:
             image,
             ref_image,
             api_key,
-            "automatic",
+            PlacementType.AUTOMATIC.value,
             shot_size=shot_size,
             sku=sku,
             sync=sync,

@@ -1,4 +1,4 @@
-from .utils.shot_utils import get_text_input_types, create_text_payload, make_api_request, shot_by_text_api_url
+from .utils.shot_utils import get_text_input_types, create_text_payload, make_api_request, shot_by_text_api_url, PlacementType
 
 
 class ShotByTextManualPlacementNode:
@@ -51,7 +51,7 @@ class ShotByTextManualPlacementNode:
             api_key,
             scene_description,
             mode,
-            "manual_placement",
+            PlacementType.MANUAL_PLACEMENT.value,
             shot_size=shot_size,
             manual_placement_selection=manual_placement_selection,
             sku=sku,

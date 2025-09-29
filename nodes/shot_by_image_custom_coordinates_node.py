@@ -1,4 +1,4 @@
-from .utils.shot_utils import get_image_input_types, create_image_payload, make_api_request, shot_by_image_api_url
+from .utils.shot_utils import get_image_input_types, create_image_payload, make_api_request, shot_by_image_api_url, PlacementType
 
 
 class ShotByImageCustomCoordinatesNode:
@@ -43,7 +43,7 @@ class ShotByImageCustomCoordinatesNode:
             image,
             ref_image,
             api_key,
-            "custom_coordinates",
+            PlacementType.CUSTOM_COORDINATES.value,
             shot_size=shot_size,
             foreground_image_size=foreground_image_size,
             foreground_image_location=foreground_image_location,

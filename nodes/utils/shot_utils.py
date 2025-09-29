@@ -9,6 +9,17 @@ shot_by_image_api_url = (
     "https://engine.prod.bria-api.com/v1/product/lifestyle_shot_by_image"
 )
 
+from enum import Enum
+
+class PlacementType(str, Enum):
+    ORIGINAL = "original"
+    AUTOMATIC = "automatic"
+    MANUAL_PLACEMENT = "manual_placement"
+    MANUAL_PADDING = "manual_padding"
+    CUSTOM_COORDINATES = "custom_coordinates"
+    AUTOMATIC_ASPECT_RATIO = "automatic_aspect_ratio"
+
+
 
 def validate_api_key(api_key):
     """Validate API key input"""
@@ -17,18 +28,18 @@ def validate_api_key(api_key):
 
 
 def update_payload_for_placement(placement_type, payload, **kwargs):
-    if placement_type == "automatic":
+    if placement_type == PlacementType.AUTOMATIC.value:
         payload["shot_size"] = [
             int(x.strip()) for x in kwargs.get("shot_size").split(",")
         ]
-    elif placement_type == "manual_placement":
+    elif placement_type == PlacementType.MANUAL_PLACEMENT.value:
         payload["shot_size"] = [
             int(x.strip()) for x in kwargs.get("shot_size").split(",")
         ]
         payload["manual_placement_selection"] = [
             kwargs.get("manual_placement_selection", "upper_left")
         ]
-    elif placement_type == "custom_coordinates":
+    elif placement_type == PlacementType.CUSTOM_COORDINATES.value:
         payload["shot_size"] = [
             int(x.strip()) for x in kwargs.get("shot_size").split(",")
         ]
@@ -38,14 +49,14 @@ def update_payload_for_placement(placement_type, payload, **kwargs):
         payload["foreground_image_location"] = [
             int(x.strip()) for x in kwargs.get("foreground_image_location").split(",")
         ]
-    elif placement_type == "manual_padding":
+    elif placement_type == PlacementType.MANUAL_PADDING.value:
         payload["padding_values"] = [
             int(x.strip()) for x in kwargs.get("padding_values").split(",")
         ]
 
-    elif placement_type == "automatic_aspect_ratio":
+    elif placement_type == PlacementType.AUTOMATIC_ASPECT_RATIO.value:
         payload["aspect_ratio"] = kwargs.get("aspect_ratio", "1:1")
-    elif placement_type == "original":
+    elif placement_type == PlacementType.ORIGINAL.value:
         payload["original_quality"] = kwargs.get("original_quality", True)
 
     return payload

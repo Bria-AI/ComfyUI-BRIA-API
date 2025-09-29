@@ -1,4 +1,4 @@
-from .utils.shot_utils import get_image_input_types, create_image_payload, make_api_request, shot_by_image_api_url
+from .utils.shot_utils import get_image_input_types, create_image_payload, make_api_request, shot_by_image_api_url, PlacementType
 
 
 class ShotByImageAutomaticAspectRatioNode:
@@ -36,7 +36,7 @@ class ShotByImageAutomaticAspectRatioNode:
             image,
             ref_image,
             api_key,
-            "automatic_aspect_ratio",
+            PlacementType.AUTOMATIC_ASPECT_RATIO.value,
             aspect_ratio=aspect_ratio,
             sku=sku,
             sync=sync,

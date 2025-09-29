@@ -1,4 +1,4 @@
-from .utils.shot_utils import get_text_input_types, create_text_payload, make_api_request, shot_by_text_api_url
+from .utils.shot_utils import get_text_input_types, create_text_payload, make_api_request, shot_by_text_api_url, PlacementType
 
 
 class ShotByTextManualPaddingNode:
@@ -35,7 +35,7 @@ class ShotByTextManualPaddingNode:
             api_key,
             scene_description,
             mode,
-            "manual_padding",
+            PlacementType.MANUAL_PADDING.value,
             padding_values=padding_values,
             sku=sku,
             sync=sync,

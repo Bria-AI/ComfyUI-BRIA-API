@@ -1,4 +1,4 @@
-from .utils.shot_utils import get_text_input_types, create_text_payload, make_api_request, shot_by_text_api_url
+from .utils.shot_utils import get_text_input_types, create_text_payload, make_api_request, shot_by_text_api_url, PlacementType
 
 
 class ShotByTextOriginalNode:
@@ -32,7 +32,7 @@ class ShotByTextOriginalNode:
             api_key,
             scene_description,
             mode,
-            "original",
+            PlacementType.ORIGINAL.value,
             original_quality=True,
             sku=sku,
             sync=sync,
