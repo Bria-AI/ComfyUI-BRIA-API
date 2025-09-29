@@ -25,3 +25,4 @@ from .shot_by_image_custom_coordinates_node import ShotByImageCustomCoordinatesN
 from .shot_by_image_node import ShotByImageOriginalNode
 from .shot_by_image_manual_placement_node import ShotByImageManualPlacementNode
 from .shot_by_image_manual_padding_node import ShotByImageManualPaddingNode
+from .attribution_by_image_node import AttributionByImageNode

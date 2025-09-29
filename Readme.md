@@ -68,6 +68,15 @@ These nodes create high-quality product images for eCommerce workflows.
 | **ShotByText**         | Modifies an image's background by providing a text prompt. Powered by BRIA's ControlNet Background-Generation. |
 | **ShotByImage**        | Modifies an image's background by providing a reference image. Uses BRIA's ControlNet Background-Generation and Image-Prompt. |
 
+## Attribution Node
+
+| Node                          | Description |
+|-------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Attribution By Image Node** | This node shares generated images via API for Bria to pay attribution to the data owners who contributed to the generation. Once the images are shared with Bria, Bria calculates the attribution, completes the payment on behalf of the user, and erases the images immediately. This node should be included in any workflow using nodes of Bria’s Models (not necessary for Bria’s API nodes). You can also refer to the [**API documentation**]( https://docs.bria.ai/bria-attribution-service/other/postattributionbyimage) |
+
+
+
+
 # Installation
 There are two methods to install the BRIA ComfyUI API nodes:
 
