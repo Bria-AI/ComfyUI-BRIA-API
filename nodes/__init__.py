@@ -14,3 +14,5 @@ from .text_2_image_fast_node import Text2ImageFastNode
 from .text_2_image_hd_node import Text2ImageHDNode
 from .reimagine_node import ReimagineNode
 from .attribution_by_image_node import AttributionByImageNode
+from .text_2_image_gaia_generate_node import Text2ImageGaiaGenerateNode
+from .text_2_image_gaia_refine_node import Text2ImageGaiaRefineAndRegenerateNode
