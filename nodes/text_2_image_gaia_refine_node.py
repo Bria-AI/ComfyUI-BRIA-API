@@ -1,6 +1,6 @@
 import requests
 
-from .common import postprocess_image, poll_status_until_completed
+from .common import poll_status_until_completed
 
 
 class Text2ImageGaiaRefineAndRegenerateNode:
@@ -21,12 +21,12 @@ class Text2ImageGaiaRefineAndRegenerateNode:
                 ),
                 "steps_num": ("INT", {"default": 30, "min": 20, "max": 50}),
                 "guidance_scale": ("INT", {"default": 5, "min": 3, "max": 5}),
-                "seed": ("INT", {"default": 1}),
+                "seed": ("INT", {"default": 123456}),
             },
         }
 
-    RETURN_TYPES = ("IMAGE", "STRING", "INT")
-    RETURN_NAMES = ("image", "structured_prompt", "seed")
+    RETURN_TYPES = ("STRING", "INT")
+    RETURN_NAMES = ("structured_prompt", "seed")
     CATEGORY = "API Nodes"
     FUNCTION = "execute"
 
@@ -37,6 +37,7 @@ class Text2ImageGaiaRefineAndRegenerateNode:
         self,
         api_token,
         prompt,
+        structured_prompt,
         mode,
         negative_prompt,
         aspect_ratio,
@@ -56,6 +57,7 @@ class Text2ImageGaiaRefineAndRegenerateNode:
             "steps_num": steps_num,
             "guidance_scale": guidance_scale,
             "seed": seed,
+            "structured_prompt":structured_prompt
         }
 
         headers = {"Content-Type": "application/json", "api_token": api_token}
@@ -83,15 +85,10 @@ class Text2ImageGaiaRefineAndRegenerateNode:
                 # Extract results
                 result = final_response.get("result", {})
                 print(result)
-                result_image_url = result.get("image_url")
                 structured_prompt = result.get("structured_prompt", "")
                 used_seed = result.get("seed", seed)
 
-                # Download and process the result image
-                image_response = requests.get(result_image_url)
-                result_image = postprocess_image(image_response.content)
-
-                return (result_image, structured_prompt, used_seed)
+                return (structured_prompt, used_seed)
             else:
                 raise Exception(
                     f"Error: API request failed with status code {response.status_code} {response.text}"

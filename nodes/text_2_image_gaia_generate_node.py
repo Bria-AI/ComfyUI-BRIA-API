@@ -15,7 +15,7 @@ class Text2ImageGaiaGenerateNode:
         return {
             "required": {
                 "api_token": ("STRING", {"default": "BRIA_API_TOKEN"}),
-                "prompt": ("STRING", {"multiline": True}),
+                "prompt": ("STRING",),
             },
             "optional": {
                 "mode": (["GAIA"], {"default": "GAIA"}),
@@ -27,7 +27,7 @@ class Text2ImageGaiaGenerateNode:
                 ),
                 "steps_num": ("INT", {"default": 30, "min": 20, "max": 50}),
                 "guidance_scale": ("INT", {"default": 5, "min": 3, "max": 5}),
-                "seed": ("INT", {"default": 1}),
+                "seed": ("INT", {"default": 123456}),
             },
         }
 
@@ -45,11 +45,11 @@ class Text2ImageGaiaGenerateNode:
         prompt,
         mode,
         negative_prompt,
-        image,
         aspect_ratio,
         steps_num,
         guidance_scale,
         seed,
+        image=None,
     ):
 
         if api_token.strip() == "" or api_token.strip() == "BRIA_API_TOKEN":
@@ -99,7 +99,7 @@ class Text2ImageGaiaGenerateNode:
                 print(result)
                 result_image_url = result.get("image_url")
                 structured_prompt = result.get("structured_prompt", "")
-                used_seed = result.get("seed", seed)
+                used_seed = result.get("seed")
 
                 # Download and process the result image
                 image_response = requests.get(result_image_url)
