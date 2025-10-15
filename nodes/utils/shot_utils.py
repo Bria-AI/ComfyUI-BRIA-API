@@ -86,8 +86,6 @@ def create_text_payload(
         "optimize_description": kwargs.get("optimize_description", True),
     }
 
-    if kwargs.get("sku", "").strip():
-        payload["sku"] = kwargs["sku"]
     if kwargs.get("exclude_elements", "").strip():
         payload["exclude_elements"] = kwargs["exclude_elements"]
 
@@ -121,8 +119,6 @@ def create_image_payload(image, ref_image, api_key, placement_type, **kwargs):
         "content_moderation": kwargs.get("content_moderation", False),
     }
 
-    if kwargs.get("sku", "").strip():
-        payload["sku"] = kwargs["sku"]
     payload = update_payload_for_placement(placement_type, payload, **kwargs)
 
     return payload
@@ -155,7 +151,6 @@ def get_common_input_types():
     return {
         "required": {"api_key": ("STRING", {"default": "BRIA_API_TOKEN"})},
         "optional": {
-            "sku": ("STRING", {"default": ""}),
             "force_rmbg": ("BOOLEAN", {"default": False}),
             "content_moderation": ("BOOLEAN", {"default": False}),
         },
