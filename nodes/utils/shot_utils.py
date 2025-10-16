@@ -124,7 +124,7 @@ def create_image_payload(image, ref_image, api_key, placement_type, **kwargs):
     return payload
 
 
-def make_api_request(api_url, payload, api_key):
+def make_api_request(api_url, payload, api_key, Placement_type = None):
     """Make API request and return processed image"""
     headers = {"Content-Type": "application/json", "api_token": f"{api_key}"}
 
@@ -134,6 +134,21 @@ def make_api_request(api_url, payload, api_key):
         if response.status_code == 200:
             print("response is 200")
             response_dict = response.json()
+            if Placement_type == PlacementType.AUTOMATIC.value:
+                result_images = []
+                for i, result in enumerate(response_dict.get("result", [])[:7]):
+                    image_url = result[0]
+                    image_response = requests.get(image_url)
+                    processed = postprocess_image(image_response.content)
+                    result_images.append(processed)
+
+                # If less than 7 images, pad with None to match ComfyUI return structure
+                while len(result_images) < 7:
+                    result_images.append(None)
+                print(result_images)
+
+                return tuple(result_images)
+
             image_response = requests.get(response_dict["result"][0][0])
             result_image = postprocess_image(image_response.content)
             return (result_image,)

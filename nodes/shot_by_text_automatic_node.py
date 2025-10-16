@@ -8,8 +8,16 @@ class ShotByTextAutomaticNode:
         input_types["required"]["shot_size"] = ("STRING", {"default": "1000, 1000"})
         return input_types
 
-    RETURN_TYPES = ("IMAGE",)
-    RETURN_NAMES = ("output_image",)
+    RETURN_TYPES = ("IMAGE", "IMAGE", "IMAGE", "IMAGE", "IMAGE", "IMAGE", "IMAGE")
+    RETURN_NAMES = (
+        "output_image_1",
+        "output_image_2",
+        "output_image_3",
+        "output_image_4",
+        "output_image_5",
+        "output_image_6",
+        "output_image_7",
+    )
     CATEGORY = "API Nodes"
     FUNCTION = "execute"
 
@@ -42,4 +50,4 @@ class ShotByTextAutomaticNode:
             force_rmbg=force_rmbg,
             content_moderation=content_moderation,
         )
-        return make_api_request(self.api_url, payload, api_key)
+        return make_api_request(self.api_url, payload, api_key, Placement_type= PlacementType.AUTOMATIC.value)
