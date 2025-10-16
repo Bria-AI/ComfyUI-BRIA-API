@@ -15,8 +15,8 @@ from .nodes import (
     TailoredPortraitNode,
     ReimagineNode,
     AttributionByImageNode,
-    Text2ImageGaiaGenerateNode,
-    Text2ImageGaiaRefineAndRegenerateNode,
+    FiboGenerateNode,
+    FiboRefineAndRegenerateNode,
 )
 
 # Map the node class to a name used internally by ComfyUI
@@ -37,8 +37,8 @@ NODE_CLASS_MAPPINGS = {
     "Text2ImageHDNode": Text2ImageHDNode,
     "ReimagineNode": ReimagineNode,
     "AttributionByImageNode": AttributionByImageNode,
-    "Text2ImageGaiaGenerateNode": Text2ImageGaiaGenerateNode,
-    "Text2ImageGaiaRefineAndRegenerateNode": Text2ImageGaiaRefineAndRegenerateNode,
+    "Text2ImageFiboGenerateNode": FiboGenerateNode,
+    "Text2ImageFiboRefineAndRegenerateNode": FiboRefineAndRegenerateNode,
 }
 # Map the node display name to the one shown in the ComfyUI node interface
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -58,6 +58,6 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "Text2ImageHDNode": "Bria Text2Image HD",
     "ReimagineNode": "Bria Reimagine",
     "AttributionByImageNode": "Attribution By Image Node",
-    "Text2ImageGaiaGenerateNode": "Bria GAIA - Generate",
-    "Text2ImageGaiaRefineAndRegenerateNode": "Bria GAIA - Refine and Regenerate",
+    "Text2ImageFiboGenerateNode": "Bria FIBO - Generate",
+    "Text2ImageFiboRefineAndRegenerateNode": "Bria FIBO - Refine and Regenerate",
 }

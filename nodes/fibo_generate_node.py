@@ -9,7 +9,7 @@ from .common import (
 )
 
 
-class Text2ImageGaiaGenerateNode:
+class FiboGenerateNode:
     @classmethod
     def INPUT_TYPES(self):
         return {
@@ -80,7 +80,7 @@ class Text2ImageGaiaGenerateNode:
 
             if response.status_code == 200 or response.status_code == 202:
                 print(
-                    "Initial GAIA generate request successful, polling for completion..."
+                    "Initial FIBO generate request successful, polling for completion..."
                 )
                 response_dict = response.json()
                 status_url = response_dict.get("status_url")

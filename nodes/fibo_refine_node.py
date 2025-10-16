@@ -3,7 +3,7 @@ import requests
 from .common import poll_status_until_completed
 
 
-class Text2ImageGaiaRefineAndRegenerateNode:
+class FiboRefineAndRegenerateNode:
     @classmethod
     def INPUT_TYPES(self):
         return {
@@ -68,7 +68,7 @@ class Text2ImageGaiaRefineAndRegenerateNode:
 
             if response.status_code == 200 or response.status_code == 202:
                 print(
-                    "Initial GAIA Refine and Regenerate request successful, polling for completion..."
+                    "Initial FIBO Refine and Regenerate request successful, polling for completion..."
                 )
                 response_dict = response.json()
                 status_url = response_dict.get("status_url")
