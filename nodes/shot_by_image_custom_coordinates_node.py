@@ -1,10 +1,19 @@
 from .utils.shot_utils import get_image_input_types, create_image_payload, make_api_request, shot_by_image_api_url, PlacementType
 
 
-class ShotByImageOriginalNode:
+class ShotByImageCustomCoordinatesNode:
     @classmethod
     def INPUT_TYPES(self):
         input_types = get_image_input_types()
+        input_types["required"]["shot_size"] = ("STRING", {"default": "1000, 1000"})
+        input_types["required"]["foreground_image_size"] = (
+            "STRING",
+            {"default": "500,500"},
+        )
+        input_types["required"]["foreground_image_location"] = (
+            "STRING",
+            {"default": "0, 0"},
+        )
         return input_types
 
     RETURN_TYPES = ("IMAGE",)
@@ -19,8 +28,11 @@ class ShotByImageOriginalNode:
         self,
         image,
         ref_image,
+        shot_size,
+        foreground_image_size,
+        foreground_image_location,
         api_key,
-        sync=True,
+        sync=False,
         enhance_ref_image=True,
         ref_image_influence=1.0,
         force_rmbg=False,
@@ -30,8 +42,10 @@ class ShotByImageOriginalNode:
             image,
             ref_image,
             api_key,
-            PlacementType.ORIGINAL.value,
-            original_quality=True,
+            PlacementType.CUSTOM_COORDINATES.value,
+            shot_size=shot_size,
+            foreground_image_size=foreground_image_size,
+            foreground_image_location=foreground_image_location,
             sync=sync,
             enhance_ref_image=enhance_ref_image,
             ref_image_influence=ref_image_influence,

@@ -1,18 +1,47 @@
 {
-  "last_node_id": 42,
-  "last_link_id": 65,
+  "id": "1cdd7d4c-58b5-4047-947b-1977ad36d364",
+  "revision": 0,
+  "last_node_id": 14,
+  "last_link_id": 11,
   "nodes": [
     {
-      "id": 42,
+      "id": 6,
+      "type": "PreviewImage",
+      "pos": [
+        1351.83154296875,
+        26.696861267089844
+      ],
+      "size": [
+        399.811279296875,
+        246
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 5
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 1,
       "type": "LoadImage",
-      "pos": {
-        "0": 591,
-        "1": 593
-      },
-      "size": {
-        "0": 315,
-        "1": 314
-      },
+      "pos": [
+        383.92852783203125,
+        38.40964889526367
+      ],
+      "size": [
+        397.5969543457031,
+        314
+      ],
       "flags": {},
       "order": 0,
       "mode": 0,
@@ -22,10 +51,9 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            64,
-            65
-          ],
-          "slot_index": 0
+            1,
+            3
+          ]
         },
         {
           "name": "MASK",
@@ -37,21 +65,21 @@
         "Node name for S&R": "LoadImage"
       },
       "widgets_values": [
-        "A_bottle_of_perfume.png",
+        "CAR.png",
         "image"
       ]
     },
     {
-      "id": 39,
+      "id": 2,
       "type": "LoadImage",
-      "pos": {
-        "0": 600,
-        "1": 988
-      },
-      "size": {
-        "0": 315,
-        "1": 314
-      },
+      "pos": [
+        369.0213623046875,
+        415.34893798828125
+      ],
+      "size": [
+        450.83685302734375,
+        314.0000305175781
+      ],
       "flags": {},
       "order": 1,
       "mode": 0,
@@ -61,9 +89,8 @@
           "name": "IMAGE",
           "type": "IMAGE",
           "links": [
-            59
-          ],
-          "slot_index": 0
+            4
+          ]
         },
         {
           "name": "MASK",
@@ -75,21 +102,21 @@
         "Node name for S&R": "LoadImage"
       },
       "widgets_values": [
-        "A_red_studio_with_a_shelf__close_up.png",
+        "seed_713360865.png",
         "image"
       ]
     },
     {
-      "id": 15,
+      "id": 5,
       "type": "Note",
-      "pos": {
-        "0": 995.4524536132812,
-        "1": 601.5353393554688
-      },
-      "size": {
-        "0": 306.28387451171875,
-        "1": 58
-      },
+      "pos": [
+        951.4669189453125,
+        5.085720062255859
+      ],
+      "size": [
+        210,
+        88
+      ],
       "flags": {},
       "order": 2,
       "mode": 0,
@@ -103,40 +130,14 @@
       "bgcolor": "#653"
     },
     {
-      "id": 40,
+      "id": 7,
       "type": "PreviewImage",
-      "pos": {
-        "0": 1408,
-        "1": 623
-      },
-      "size": [
-        210,
-        246
+      "pos": [
+        1368.5450439453125,
+        340.4889221191406
       ],
-      "flags": {},
-      "order": 5,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "images",
-          "type": "IMAGE",
-          "link": 62
-        }
-      ],
-      "outputs": [],
-      "properties": {
-        "Node name for S&R": "PreviewImage"
-      }
-    },
-    {
-      "id": 41,
-      "type": "PreviewImage",
-      "pos": {
-        "0": 1408,
-        "1": 951
-      },
       "size": [
-        210,
+        387.0335693359375,
         246
       ],
       "flags": {},
@@ -146,25 +147,26 @@
         {
           "name": "images",
           "type": "IMAGE",
-          "link": 63
+          "link": 6
         }
       ],
       "outputs": [],
       "properties": {
         "Node name for S&R": "PreviewImage"
-      }
+      },
+      "widgets_values": []
     },
     {
-      "id": 36,
-      "type": "ShotByTextNode",
-      "pos": {
-        "0": 996,
-        "1": 736
-      },
-      "size": {
-        "0": 315,
-        "1": 106
-      },
+      "id": 3,
+      "type": "ShotByTextOriginal",
+      "pos": [
+        941.8839111328125,
+        149.14889526367188
+      ],
+      "size": [
+        273.388671875,
+        202
+      ],
       "flags": {},
       "order": 3,
       "mode": 0,
@@ -172,7 +174,7 @@
         {
           "name": "image",
           "type": "IMAGE",
-          "link": 64
+          "link": 1
         }
       ],
       "outputs": [
@@ -180,31 +182,34 @@
           "name": "output_image",
           "type": "IMAGE",
           "links": [
-            62
-          ],
-          "slot_index": 0
+            5
+          ]
         }
       ],
       "properties": {
-        "Node name for S&R": "ShotByTextNode"
+        "Node name for S&R": "ShotByTextOriginal"
       },
       "widgets_values": [
-        "a beautiful sunset",
-        1,
+        "BRIA_API_TOKEN",
+        "sea",
+        "fast",
+        false,
+        false,
+        true,
         ""
       ]
     },
     {
-      "id": 37,
-      "type": "ShotByImageNode",
-      "pos": {
-        "0": 999,
-        "1": 932
-      },
-      "size": {
-        "0": 315,
-        "1": 102
-      },
+      "id": 4,
+      "type": "ShotByImageOriginal",
+      "pos": [
+        945.0781860351562,
+        441.9688415527344
+      ],
+      "size": [
+        272.0703125,
+        174
+      ],
       "flags": {},
       "order": 4,
       "mode": 0,
@@ -212,12 +217,12 @@
         {
           "name": "image",
           "type": "IMAGE",
-          "link": 65
+          "link": 3
         },
         {
           "name": "ref_image",
           "type": "IMAGE",
-          "link": 59
+          "link": 4
         }
       ],
       "outputs": [
@@ -225,58 +230,60 @@
           "name": "output_image",
           "type": "IMAGE",
           "links": [
-            63
-          ],
-          "slot_index": 0
+            6
+          ]
         }
       ],
       "properties": {
-        "Node name for S&R": "ShotByImageNode"
+        "Node name for S&R": "ShotByImageOriginal"
       },
       "widgets_values": [
-        0,
-        ""
+        "BRIA_API_TOKEN",
+        false,
+        false,
+        true,
+        1
       ]
     }
   ],
   "links": [
     [
-      59,
-      39,
+      1,
+      1,
       0,
-      37,
+      3,
+      0,
+      "IMAGE"
+    ],
+    [
+      3,
+      1,
+      0,
+      4,
+      0,
+      "IMAGE"
+    ],
+    [
+      4,
+      2,
+      0,
+      4,
       1,
       "IMAGE"
     ],
     [
-      62,
-      36,
+      5,
+      3,
       0,
-      40,
-      0,
-      "IMAGE"
-    ],
-    [
-      63,
-      37,
-      0,
-      41,
+      6,
       0,
       "IMAGE"
     ],
     [
-      64,
-      42,
+      6,
+      4,
       0,
-      36,
-      0,
-      "IMAGE"
-    ],
-    [
-      65,
-      42,
-      0,
-      37,
+      7,
       0,
       "IMAGE"
     ]
@@ -285,12 +292,13 @@
   "config": {},
   "extra": {
     "ds": {
-      "scale": 0.9849732675807669,
+      "scale": 0.7513148009015777,
       "offset": [
-        -339.6686422794803,
-        -496.4354678014682
+        11.112206386364164,
+        66.47311795454547
       ]
-    }
+    },
+    "frontendVersion": "1.25.11"
   },
   "version": 0.4
 }
