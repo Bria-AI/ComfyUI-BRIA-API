@@ -14,5 +14,5 @@ from .text_2_image_fast_node import Text2ImageFastNode
 from .text_2_image_hd_node import Text2ImageHDNode
 from .reimagine_node import ReimagineNode
 from .attribution_by_image_node import AttributionByImageNode
-from .fibo_generate_node import FiboGenerateNode
-from .fibo_refine_node import FiboRefineAndRegenerateNode
+from .generate_image_node_v2 import GenerateImageNodeV2, GenerateImageProNodeV2
+from .refine_image_node_v2 import RefineImageNodeV2, RefineImageProNodeV2
