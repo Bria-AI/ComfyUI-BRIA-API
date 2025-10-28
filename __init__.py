@@ -14,7 +14,6 @@ from .nodes import (
     Text2ImageHDNode,
     TailoredPortraitNode,
     ReimagineNode,
-    AttributionByImageNode,
     GenerateImageNodeV2,
     GenerateImageProNodeV2,
     RefineImageNodeV2,
