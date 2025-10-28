@@ -22,9 +22,9 @@ class _BaseGenerateImageNodeV2:
                 "prompt": ("STRING",),
             },
             "optional": {
-                "mode": (["GAIA"], {"default": "GAIA"}),
+                "model_version": (["FIBO"], {"default": "FIBO"}),
                 "negative_prompt": ("STRING", {"default": ""}),
-                "image": ("IMAGE",),
+                "images": ("IMAGE",),
                 "aspect_ratio": (
                     ["1:1", "2:3", "3:2", "3:4", "4:3", "4:5", "5:4", "9:16", "16:9"],
                     {"default": "1:1"},
@@ -47,17 +47,17 @@ class _BaseGenerateImageNodeV2:
     def _build_payload(
         self,
         prompt,
-        mode,
+        model_version,
         negative_prompt,
         aspect_ratio,
         steps_num,
         guidance_scale,
         seed,
-        image=None,
+        images=None,
     ):
         payload = {
             "prompt": prompt,
-            "mode": mode,
+            "model_version": model_version,
             "negative_prompt": negative_prompt,
             "aspect_ratio": aspect_ratio,
             "steps_num": steps_num,
@@ -65,10 +65,11 @@ class _BaseGenerateImageNodeV2:
             "seed": seed,
         }
 
-        if image is not None:
-            if isinstance(image, torch.Tensor):
-                image = preprocess_image(image)
-            payload["images"] = [image_to_base64(image)]
+        if images is not None:
+            if isinstance(images, torch.Tensor):
+                preprocess_images = preprocess_image(images)
+            payload["images"] = [image_to_base64(preprocess_images)]
+
 
         return payload
 
@@ -76,24 +77,24 @@ class _BaseGenerateImageNodeV2:
         self,
         api_token,
         prompt,
-        mode,
+        model_version,
         negative_prompt,
         aspect_ratio,
         steps_num,
         guidance_scale,
         seed,
-        image=None,
+        images=None,
     ):
         self._validate_token(api_token)
         payload = self._build_payload(
             prompt,
-            mode,
+            model_version,
             negative_prompt,
             aspect_ratio,
             steps_num,
             guidance_scale,
             seed,
-            image,
+            images,
         )
 
         headers = {"Content-Type": "application/json", "api_token": api_token}

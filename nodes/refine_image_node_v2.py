@@ -16,7 +16,7 @@ class _BaseRefineImageNodeV2:
                 "structured_prompt": ("STRING",),
             },
             "optional": {
-                "mode": (["GAIA"], {"default": "GAIA"}),
+                "model_version": (["FIBO"], {"default": "FIBO"}),
                 "negative_prompt": ("STRING", {"default": ""}),
                 "aspect_ratio": (
                     ["1:1", "2:3", "3:2", "3:4", "4:3", "4:5", "5:4", "9:16", "16:9"],
@@ -41,7 +41,7 @@ class _BaseRefineImageNodeV2:
         self,
         prompt,
         structured_prompt,
-        mode,
+        model_version,
         negative_prompt,
         aspect_ratio,
         steps_num,
@@ -50,7 +50,7 @@ class _BaseRefineImageNodeV2:
     ):
         return {
             "prompt": prompt,
-            "mode": mode,
+            "model_version": model_version,
             "negative_prompt": negative_prompt,
             "aspect_ratio": aspect_ratio,
             "steps_num": steps_num,
@@ -64,7 +64,7 @@ class _BaseRefineImageNodeV2:
         api_token,
         prompt,
         structured_prompt,
-        mode,
+        model_version,
         negative_prompt,
         aspect_ratio,
         steps_num,
@@ -75,7 +75,7 @@ class _BaseRefineImageNodeV2:
         payload = self._build_payload(
             prompt,
             structured_prompt,
-            mode,
+            model_version,
             negative_prompt,
             aspect_ratio,
             steps_num,
