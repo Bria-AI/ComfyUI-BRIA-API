@@ -11,7 +11,6 @@ from .text_2_image_base_node import Text2ImageBaseNode
 from .text_2_image_fast_node import Text2ImageFastNode
 from .text_2_image_hd_node import Text2ImageHDNode
 from .reimagine_node import ReimagineNode
-from .attribution_by_image_node import AttributionByImageNode
 from .generate_image_node_v2 import GenerateImageNodeV2, GenerateImageProNodeV2
 from .refine_image_node_v2 import RefineImageNodeV2, RefineImageProNodeV2
 from .shot_by_text_node import ShotByTextOriginalNode
