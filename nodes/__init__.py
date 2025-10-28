@@ -4,8 +4,6 @@ from .image_expansion_node import ImageExpansionNode
 from .replace_bg_node import ReplaceBgNode
 from .rmbg_node import RmbgNode
 from .remove_foreground_node import RemoveForegroundNode
-from .shot_by_text_node import ShotByTextNode
-from .shot_by_image_node import ShotByImageNode
 from .tailored_gen_node import TailoredGenNode
 from .tailored_model_info_node import TailoredModelInfoNode
 from .tailored_portrait_node import TailoredPortraitNode
@@ -16,3 +14,18 @@ from .reimagine_node import ReimagineNode
 from .attribution_by_image_node import AttributionByImageNode
 from .generate_image_node_v2 import GenerateImageNodeV2, GenerateImageProNodeV2
 from .refine_image_node_v2 import RefineImageNodeV2, RefineImageProNodeV2
+from .shot_by_text_node import ShotByTextOriginalNode
+from .shot_by_text_automatic_aspect_ratio_node import ShotByTextAutomaticAspectRatioNode
+from .shot_by_text_automatic_node import ShotByTextAutomaticNode
+from .shot_by_text_custom_coordinates_node import ShotByTextCustomCoordinatesNode
+from .shot_by_text_manual_placement_node import ShotByTextManualPlacementNode
+from .shot_by_text_manual_padding_node import ShotByTextManualPaddingNode
+from .shot_by_image_automatic_aspect_ratio_node import (
+    ShotByImageAutomaticAspectRatioNode,
+)
+from .shot_by_image_automatic_node import ShotByImageAutomaticNode
+from .shot_by_image_custom_coordinates_node import ShotByImageCustomCoordinatesNode
+from .shot_by_image_node import ShotByImageOriginalNode
+from .shot_by_image_manual_placement_node import ShotByImageManualPlacementNode
+from .shot_by_image_manual_padding_node import ShotByImageManualPaddingNode
+from .attribution_by_image_node import AttributionByImageNode
