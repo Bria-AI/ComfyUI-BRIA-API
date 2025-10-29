@@ -30,7 +30,21 @@ To load a workflow, import the compatible workflow.json files from this [folder]
 # Available Nodes
 
 ## Image Generation Nodes
-These nodes create high-quality images from text or image prompts, generating photorealistic or artistic results with support for various aspect ratios.
+
+These nodes allow you to leverage Bria's image generation capabilities within ComfyUI. We offer our latest **V2 nodes** designed for precise control via structured prompts (currently powered by the **FIBO** model), alongside our **V1 nodes** for various established pipelines.
+
+### V2 Generation Nodes
+
+These nodes generate images based on detailed **structured prompts** for enhanced control and consistency. They are currently powered by the state-of-the-art **FIBO** text-to-image model.
+
+| **Node** | **Description** |
+| --- | --- |
+| **Generate Image** | Creates new images from text or image inputs. Internally translates the input into a structured prompt using a selected VLM bridge before generating with the image model. |
+| **Refine and Regenerate Image** | Refines a generated image using a provided `structured_prompt` (from a previous generation) and a refinement text prompt. |
+
+### V1 Generation Nodes
+
+These nodes create high-quality images using Bria's V1 pipelines, supporting various aspect ratios and styles.
 
 | Node                   | Description                                                        |
 |------------------------|--------------------------------------------------------------------|
