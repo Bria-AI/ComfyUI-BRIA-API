@@ -15,9 +15,7 @@ from .nodes import (
     TailoredPortraitNode,
     ReimagineNode,
     GenerateImageNodeV2,
-    GenerateImageProNodeV2,
     RefineImageNodeV2,
-    RefineImageProNodeV2,
     ShotByTextAutomaticNode,
     ShotByImageManualPaddingNode,
     ShotByImageAutomaticAspectRatioNode,
@@ -61,8 +59,6 @@ NODE_CLASS_MAPPINGS = {
     "AttributionByImageNode": AttributionByImageNode,
     "GenerateImageNodeV2": GenerateImageNodeV2,
     "RefineImageNodeV2": RefineImageNodeV2,
-    "GenerateImageProNodeV2":GenerateImageProNodeV2,
-    "RefineImageProNodeV2":RefineImageProNodeV2
 }
 # Map the node display name to the one shown in the ComfyUI node interface
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -94,6 +90,4 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "AttributionByImageNode": "Attribution By Image Node",
     "GenerateImageNodeV2": "Generate Image",
     "RefineImageNodeV2": "Refine and Regenerate Image",
-    "GenerateImageProNodeV2":"Generate Image - Pro",
-    "RefineImageProNodeV2":"Refine and Regenerate Image - Pro"
 }
