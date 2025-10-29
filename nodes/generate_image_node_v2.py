@@ -139,9 +139,3 @@ class GenerateImageNodeV2(_BaseGenerateImageNodeV2):
     """Standard Image Generation Node"""
     def __init__(self):
         self.api_url = "https://engine.prod.bria-api.com/v2/image/generate"
-
-
-class GenerateImageProNodeV2(_BaseGenerateImageNodeV2):
-    """Pro Image Generation Node"""
-    def __init__(self):
-        self.api_url = "https://engine.prod.bria-api.com/v2/image/generate/pro"

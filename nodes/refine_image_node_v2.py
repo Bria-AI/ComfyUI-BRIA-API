@@ -1,11 +1,12 @@
 import requests
-from .common import poll_status_until_completed
+from .common import poll_status_until_completed, postprocess_image
 
 
 class _BaseRefineImageNodeV2:
     """Base class for refine image nodes (standard & pro)."""
 
     api_url = None  # Must be overridden by subclasses
+    generate_api_url = None
 
     @classmethod
     def INPUT_TYPES(cls):
@@ -28,8 +29,8 @@ class _BaseRefineImageNodeV2:
             },
         }
 
-    RETURN_TYPES = ("STRING", "INT")
-    RETURN_NAMES = ("structured_prompt", "seed")
+    RETURN_TYPES = ("IMAGE", "STRING", "INT")
+    RETURN_NAMES = ("image", "structured_prompt", "seed")
     CATEGORY = "API Nodes"
     FUNCTION = "execute"
 
@@ -105,7 +106,45 @@ class _BaseRefineImageNodeV2:
                 structured_prompt = result.get("structured_prompt", "")
                 used_seed = result.get("seed", seed)
 
-                return (structured_prompt, used_seed)
+                # Step 2 to call genearte image
+                payloadForImageGenetrate = {
+                    "prompt": prompt,
+                    "structured_prompt":structured_prompt,
+                    "model_version": model_version,
+                    "negative_prompt": negative_prompt,
+                    "aspect_ratio": aspect_ratio,
+                    "steps_num": steps_num,
+                    "guidance_scale": guidance_scale,
+                    "seed": used_seed,
+                }
+                headers = {"Content-Type": "application/json", "api_token": api_token}
+
+                response = requests.post(self.generate_api_url, json=payloadForImageGenetrate, headers=headers)
+
+                if response.status_code in (200, 202):
+                    print(
+                        f"Initial request successful to {self.generate_api_url}, polling for completion..."
+                    )
+                    response_dict = response.json()
+                    status_url = response_dict.get("status_url")
+                    request_id = response_dict.get("request_id")
+
+                    if not status_url:
+                        raise Exception("No status_url returned from API")
+
+                    print(f"Request ID: {request_id}, Status URL: {status_url}")
+
+                    final_response = poll_status_until_completed(status_url, api_token)
+
+                    result = final_response.get("result", {})
+                    result_image_url = result.get("image_url")
+                    structured_prompt = result.get("structured_prompt", "")
+                    used_seed = result.get("seed")
+
+                    image_response = requests.get(result_image_url)
+                    result_image = postprocess_image(image_response.content)
+
+                    return (result_image, structured_prompt, used_seed)
 
             raise Exception(
                 f"Error: API request failed with status code {response.status_code} {response.text}"
@@ -119,9 +158,4 @@ class RefineImageNodeV2(_BaseRefineImageNodeV2):
     """Standard Refine Image Node"""
     def __init__(self):
         self.api_url = "https://engine.prod.bria-api.com/v2/structured_prompt/generate"
-
-
-class RefineImageProNodeV2(_BaseRefineImageNodeV2):
-    """Pro Refine Image Node"""
-    def __init__(self):
-        self.api_url = "https://engine.prod.bria-api.com/v2/structured_prompt/generate/pro"
+        self.generate_api_url = "https://engine.prod.bria-api.com/v2/image/generate"
