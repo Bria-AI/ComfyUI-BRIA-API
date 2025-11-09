@@ -1,6 +1,6 @@
 import requests
 
-from .common import postprocess_image, preprocess_image, image_to_base64
+from .common import deserialize_and_get_comfy_key, postprocess_image, preprocess_image, image_to_base64
 
 
 class Text2ImageBaseNode():
@@ -48,6 +48,7 @@ class Text2ImageBaseNode():
             image_prompt_mode=None, image_prompt_image=None, image_prompt_scale=None,
             content_moderation=0,
         ):
+        api_key = deserialize_and_get_comfy_key(api_key)
         payload = {
             "prompt": prompt,
             "num_results": 1,

@@ -4,7 +4,7 @@ from PIL import Image
 import io
 import torch
 
-from .common import image_to_base64, preprocess_image, poll_status_until_completed
+from .common import deserialize_and_get_comfy_key, image_to_base64, preprocess_image, poll_status_until_completed
 
 
 class ImageExpansionNode():
@@ -55,6 +55,7 @@ class ImageExpansionNode():
                 api_key):
         if api_key.strip() == "" or api_key.strip() == "BRIA_API_TOKEN":
             raise Exception("Please insert a valid API key.")
+        api_key = deserialize_and_get_comfy_key(api_key)
         original_image_size = [int(x.strip()) for x in original_image_size.split(",")] if original_image_size else ()
         original_image_location = [int(x.strip()) for x in original_image_location.split(",")] if original_image_location else ()
         canvas_size = [int(x.strip()) for x in canvas_size.split(",")] if canvas_size else ()

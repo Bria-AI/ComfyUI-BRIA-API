@@ -1,6 +1,6 @@
 import requests
 
-from .common import postprocess_image
+from .common import deserialize_and_get_comfy_key, postprocess_image
 
 
 class Text2ImageHDNode():
@@ -29,12 +29,13 @@ class Text2ImageHDNode():
     FUNCTION = "execute"
 
     def __init__(self):
-        self.api_url = "https://engine.prod.bria-api.com/v1/text-to-image/hd/2.3" #"http://0.0.0.0:5000/v1/text-to-image/hd/2.3"
+        self.api_url = "https://engine.prod.bria-api.com/v1/text-to-image/hd/2.2" #"http://0.0.0.0:5000/v1/text-to-image/hd/2.3"
 
     def execute(
             self, api_key, prompt, aspect_ratio, seed, negative_prompt, 
             steps_num, prompt_enhancement, text_guidance_scale, medium, content_moderation=0,
         ):
+        api_key = deserialize_and_get_comfy_key(api_key)
         payload = {
             "prompt": prompt,
             "num_results": 1,

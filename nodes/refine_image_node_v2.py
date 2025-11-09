@@ -1,5 +1,5 @@
 import requests
-from .common import poll_status_until_completed, postprocess_image
+from .common import deserialize_and_get_comfy_key, poll_status_until_completed, postprocess_image
 
 
 class _BaseRefineImageNodeV2:
@@ -83,7 +83,7 @@ class _BaseRefineImageNodeV2:
             guidance_scale,
             seed,
         )
-
+        api_token = deserialize_and_get_comfy_key(api_token)
         headers = {"Content-Type": "application/json", "api_token": api_token}
 
         try:

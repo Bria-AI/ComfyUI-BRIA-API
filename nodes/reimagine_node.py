@@ -1,6 +1,6 @@
 import requests
 
-from .common import postprocess_image, preprocess_image, image_to_base64
+from .common import deserialize_and_get_comfy_key, postprocess_image, preprocess_image, image_to_base64
 
 
 class ReimagineNode():
@@ -37,7 +37,8 @@ class ReimagineNode():
             steps_num, fast, structure_ref_influence, structure_image=None,
             tailored_model_id=None, tailored_model_influence=None, tailored_generation_prefix=None,
             content_moderation=0,
-        ):        
+        ):    
+        api_key = deserialize_and_get_comfy_key(api_key)    
         payload = {
             "prompt": tailored_generation_prefix + prompt,
             "num_results": 1,

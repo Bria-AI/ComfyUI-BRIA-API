@@ -2,6 +2,7 @@ import requests
 import torch
 
 from .common import (
+    deserialize_and_get_comfy_key,
     postprocess_image,
     preprocess_image,
     image_to_base64,
@@ -96,6 +97,7 @@ class _BaseGenerateImageNodeV2:
             seed,
             images,
         )
+        api_token = deserialize_and_get_comfy_key(api_token)
 
         headers = {"Content-Type": "application/json", "api_token": api_token}
 
