@@ -1,6 +1,6 @@
 import requests
 import torch
-from ..common import postprocess_image, preprocess_image, image_to_base64
+from ..common import deserialize_and_get_comfy_key, postprocess_image, preprocess_image, image_to_base64
 
 shot_by_text_api_url = (
     "https://engine.prod.bria-api.com/v1/product/lifestyle_shot_by_text"
@@ -68,6 +68,7 @@ def create_text_payload(
 
     validate_api_key(api_key)
 
+
     # Process image
     if isinstance(image, torch.Tensor):
         image = preprocess_image(image)
@@ -126,9 +127,11 @@ def create_image_payload(image, ref_image, api_key, placement_type, **kwargs):
 
 def make_api_request(api_url, payload, api_key, Placement_type = None):
     """Make API request and return processed image"""
-    headers = {"Content-Type": "application/json", "api_token": f"{api_key}"}
+
 
     try:
+        api_key = deserialize_and_get_comfy_key(api_key)
+        headers = {"Content-Type": "application/json", "api_token": f"{api_key}"}
         response = requests.post(api_url, json=payload, headers=headers)
 
         if response.status_code == 200:

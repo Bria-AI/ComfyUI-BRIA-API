@@ -4,7 +4,7 @@ from PIL import Image
 import io
 import torch
 
-from .common import preprocess_image, preprocess_mask, image_to_base64, poll_status_until_completed
+from .common import deserialize_and_get_comfy_key, preprocess_image, preprocess_mask, image_to_base64, poll_status_until_completed
 
 
 class GenFillNode():
@@ -39,6 +39,7 @@ class GenFillNode():
     def execute(self, image, mask, prompt, api_key, seed, prompt_content_moderation, visual_input_content_moderation, visual_output_content_moderation):
         if api_key.strip() == "" or api_key.strip() == "BRIA_API_TOKEN":
             raise Exception("Please insert a valid API key.")
+        api_key = deserialize_and_get_comfy_key(api_key)
 
         # Check if image and mask are tensors, if so, convert to NumPy arrays
         if isinstance(image, torch.Tensor):

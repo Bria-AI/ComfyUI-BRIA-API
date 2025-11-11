@@ -6,6 +6,7 @@ import base64
 from torchvision.transforms import ToPILImage
 import requests
 import time
+import json
 
 def postprocess_image(image):
     result_image = Image.open(io.BytesIO(image))
@@ -48,6 +49,7 @@ def preprocess_mask(mask):
 def process_request(api_url, image, mask, api_key, visual_input_content_moderation, visual_output_content_moderation):
     if api_key.strip() == "" or api_key.strip() == "BRIA_API_TOKEN":
         raise Exception("Please insert a valid API key.")
+    api_key = deserialize_and_get_comfy_key(api_key)
 
     # Check if image and mask are tensors, if so, convert to NumPy arrays
     if isinstance(image, torch.Tensor):
@@ -145,3 +147,15 @@ def poll_status_until_completed(status_url, api_key, timeout=360, check_interval
             raise Exception(f"Error checking status: {e}")
     
     raise Exception(f"Timeout reached after {timeout} seconds")
+
+def deserialize_and_get_comfy_key(encoded: str):
+    try:
+        decoded = base64.b64decode(encoded).decode("utf-8")
+        payload = json.loads(decoded)
+        if (payload['type'] == "comfy"):
+            return payload['apiKey']
+        else:
+            raise Exception(f"Invalid token type")
+    except Exception as e:
+         raise Exception(f"Invalid token")
+   

@@ -4,7 +4,7 @@ from PIL import Image
 import io
 import torch
 
-from .common import image_to_base64, preprocess_image
+from .common import deserialize_and_get_comfy_key, image_to_base64, preprocess_image
 
 class TailoredPortraitNode():
     @classmethod
@@ -12,7 +12,7 @@ class TailoredPortraitNode():
         return {
             "required": {
                 "image": ("IMAGE",),  # Input image from another node
-                "tailored_model_id": ("INT",),
+                "tailored_model_id": ("STRING",), # API Key input with a default value
                 "api_key": ("STRING", {"default": "BRIA_API_TOKEN"}), # API Key input with a default value
             },
             "optional": {
@@ -34,6 +34,7 @@ class TailoredPortraitNode():
     def execute(self, image, tailored_model_id, api_key, seed, tailored_model_influence, id_strength):
         if api_key.strip() == "" or api_key.strip() == "BRIA_API_TOKEN":
             raise Exception("Please insert a valid API key.")
+        api_key = deserialize_and_get_comfy_key(api_key)
 
         # Convert the image and mask directly to  if isinstance(image, torch.Tensor):
         if isinstance(image, torch.Tensor):
@@ -44,7 +45,7 @@ class TailoredPortraitNode():
         # Prepare the API request payload
         payload = {
             "id_image_file": f"{image_base64}",
-            "tailored_model_id": tailored_model_id,
+            "tailored_model_id": int(tailored_model_id),
             "tailored_model_influence": tailored_model_influence,
             "id_strength": id_strength,
             "seed": seed
@@ -69,7 +70,7 @@ class TailoredPortraitNode():
                 result_image = torch.from_numpy(result_image)[None,]
                 return (result_image,)
             else:
-                raise Exception(f"Error: API request failed with status code {response.status_code}")
+                raise Exception(f"Error: API request failed with status code {response.status_code} {response.text}")
 
         except Exception as e:
             raise Exception(f"{e}")
