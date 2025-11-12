@@ -8,6 +8,14 @@ import requests
 import time
 import json
 
+
+COMFY_KEY_ERROR = (
+    "Invalid Token Type\n\n"
+    "The API token you’ve entered is not a ComfyUI token.\n"
+    "Please use the valid token from your BRIA Account API Keys page:\n"
+    "https://platform.bria.ai/console/account/api-keys"
+)
+
 def postprocess_image(image):
     result_image = Image.open(io.BytesIO(image))
     result_image = result_image.convert("RGB")
@@ -148,14 +156,20 @@ def poll_status_until_completed(status_url, api_key, timeout=360, check_interval
     
     raise Exception(f"Timeout reached after {timeout} seconds")
 
-def deserialize_and_get_comfy_key(encoded: str):
+def deserialize_and_get_comfy_key(encoded: str) -> str:
+    """
+    Decodes a base64-encoded JSON token and returns the ComfyUI API key.
+    """
     try:
         decoded = base64.b64decode(encoded).decode("utf-8")
         payload = json.loads(decoded)
-        if (payload['type'] == "comfy"):
-            return payload['apiKey']
-        else:
-            raise Exception(f"Invalid token type")
+
+        if payload.get("type") != "comfy":
+            raise Exception(COMFY_KEY_ERROR)
+
+        return payload.get("apiKey")
+
     except Exception as e:
-         raise Exception(f"Invalid token")
+        raise Exception(COMFY_KEY_ERROR)
+
    
