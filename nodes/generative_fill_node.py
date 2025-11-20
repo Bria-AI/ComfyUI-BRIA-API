@@ -60,7 +60,8 @@ class GenFillNode():
             "seed": seed,
             "prompt_content_moderation":prompt_content_moderation,
             "visual_input_content_moderation":visual_input_content_moderation,
-            "visual_output_content_moderation":visual_output_content_moderation
+            "visual_output_content_moderation":visual_output_content_moderation,
+            "version": 2
         }
 
         headers = {
