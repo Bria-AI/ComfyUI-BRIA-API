@@ -159,3 +159,10 @@ class RefineImageNodeV2(_BaseRefineImageNodeV2):
     def __init__(self):
         self.api_url = "https://engine.prod.bria-api.com/v2/structured_prompt/generate"
         self.generate_api_url = "https://engine.prod.bria-api.com/v2/image/generate"
+
+
+class RefineImageLiteNodeV2(_BaseRefineImageNodeV2):
+    """Lite Refine Image Node"""
+    def __init__(self):
+        self.api_url = "https://engine.prod.bria-api.com/v2/structured_prompt/generate/lite"
+        self.generate_api_url = "https://engine.prod.bria-api.com/v2/image/generate/lite"
