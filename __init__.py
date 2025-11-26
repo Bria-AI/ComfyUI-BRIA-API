@@ -97,11 +97,11 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "ReimagineNode": "Bria Reimagine",
     "AttributionByImageNode": "Attribution By Image Node",
     "GenerateImageNodeV2": "Generate Image",
-    "GenerateImageLiteNodeV2": "Generate Image - lite",
+    "GenerateImageLiteNodeV2": "Generate Image - Lite",
     "RefineImageNodeV2": "Refine and Regenerate Image",
-    "RefineImageLiteNodeV2": "Refine Image - lite",
+    "RefineImageLiteNodeV2": "Refine Image - Lite",
     "GenerateStructuredPromptNodeV2": "Generate Structured Prompt",
-    "GenerateStructuredPromptLiteNodeV2": "Generate Structured Prompt - lite",
+    "GenerateStructuredPromptLiteNodeV2": "Generate Structured Prompt - Lite",
 }
 
 

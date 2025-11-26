@@ -1,8 +1,11 @@
 import requests
 from .common import (
     deserialize_and_get_comfy_key,
+    image_to_base64,
     poll_status_until_completed,
+    preprocess_image,
 )
+import torch
 
 
 class _BaseGenerateStructuredPromptNodeV2:
@@ -16,17 +19,10 @@ class _BaseGenerateStructuredPromptNodeV2:
             "required": {
                 "api_token": ("STRING", {"default": "BRIA_API_TOKEN"}),
                 "prompt": ("STRING",),
-                "structured_prompt": ("STRING",),
             },
             "optional": {
-                "model_version": (["FIBO"], {"default": "FIBO"}),
-                "negative_prompt": ("STRING", {"default": ""}),
-                "aspect_ratio": (
-                    ["1:1", "2:3", "3:2", "3:4", "4:3", "4:5", "5:4", "9:16", "16:9"],
-                    {"default": "1:1"},
-                ),
-                "steps_num": ("INT", {"default": 50, "min": 20, "max": 50}),
-                "guidance_scale": ("INT", {"default": 5, "min": 3, "max": 5}),
+                "structured_prompt": ("STRING",),
+                "images": ("IMAGE",),
                 "seed": ("INT", {"default": 123456}),
             },
         }
@@ -43,47 +39,35 @@ class _BaseGenerateStructuredPromptNodeV2:
     def _build_payload(
         self,
         prompt,
-        model_version,
-        negative_prompt,
-        aspect_ratio,
-        steps_num,
-        guidance_scale,
         seed,
-        structured_prompt
+        structured_prompt,
+        images=None
     ):
-        return {
+        payload = {
             "prompt": prompt,
-            "model_version": model_version,
-            "negative_prompt": negative_prompt,
-            "aspect_ratio": aspect_ratio,
-            "steps_num": steps_num,
-            "guidance_scale": guidance_scale,
             "seed": seed,
             "structured_prompt":structured_prompt
         }
+        if images is not None:
+            if isinstance(images, torch.Tensor):
+                preprocess_images = preprocess_image(images)
+            payload["images"] = [image_to_base64(preprocess_images)]
+        return payload
 
     def execute(
         self,
         api_token,
         prompt,
-        model_version,
-        negative_prompt,
-        aspect_ratio,
-        steps_num,
-        guidance_scale,
         seed,
-        structured_prompt
+        structured_prompt,
+        images=None,
     ):
         self._validate_token(api_token)
         payload = self._build_payload(
             prompt,
-            model_version,
-            negative_prompt,
-            aspect_ratio,
-            steps_num,
-            guidance_scale,
             seed,
-            structured_prompt
+            structured_prompt,
+            images
         )
         api_token = deserialize_and_get_comfy_key(api_token)
 
