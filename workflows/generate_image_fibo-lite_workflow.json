@@ -1,0 +1,661 @@
+{
+  "id": "1c31a92d-1e48-46b0-b4ad-60d537260922",
+  "revision": 0,
+  "last_node_id": 23,
+  "last_link_id": 26,
+  "nodes": [
+    {
+      "id": 5,
+      "type": "PreviewImage",
+      "pos": [
+        1235.1895751953125,
+        10.958272933959961
+      ],
+      "size": [
+        140,
+        26
+      ],
+      "flags": {},
+      "order": 10,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 21
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 6,
+      "type": "PreviewImage",
+      "pos": [
+        774.4347534179688,
+        -58.6872444152832
+      ],
+      "size": [
+        140,
+        26
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 9
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 20,
+      "type": "GenerateStructuredPromptLiteNodeV2",
+      "pos": [
+        68.9760971069336,
+        82.11421966552734
+      ],
+      "size": [
+        310.7749938964844,
+        174
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "structured_prompt",
+          "type": "STRING",
+          "links": [
+            17
+          ]
+        },
+        {
+          "name": "seed",
+          "type": "INT",
+          "links": [
+            18
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "GenerateStructuredPromptLiteNodeV2"
+      },
+      "widgets_values": [
+        "BRIA_API_TOKEN",
+        "",
+        "",
+        123456,
+        "randomize"
+      ]
+    },
+    {
+      "id": 1,
+      "type": "Note",
+      "pos": [
+        -175.84976196289062,
+        102.76270294189453
+      ],
+      "size": [
+        210,
+        88
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        "If you would like to start with prompt"
+      ],
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 2,
+      "type": "Note",
+      "pos": [
+        -225.1866455078125,
+        624.7235107421875
+      ],
+      "size": [
+        210,
+        88
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {},
+      "widgets_values": [
+        "If you would like to start with reference image + prompt"
+      ],
+      "color": "#432",
+      "bgcolor": "#653"
+    },
+    {
+      "id": 15,
+      "type": "PreviewImage",
+      "pos": [
+        719.5359497070312,
+        443.11285400390625
+      ],
+      "size": [
+        140,
+        26
+      ],
+      "flags": {},
+      "order": 8,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 13
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 17,
+      "type": "PreviewImage",
+      "pos": [
+        1132.783935546875,
+        517.3931884765625
+      ],
+      "size": [
+        140,
+        26
+      ],
+      "flags": {},
+      "order": 11,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 26
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 21,
+      "type": "GenerateStructuredPromptLiteNodeV2",
+      "pos": [
+        0.6137512922286987,
+        587.301025390625
+      ],
+      "size": [
+        310.7749938964844,
+        174
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "structured_prompt",
+          "type": "STRING",
+          "links": [
+            19
+          ]
+        },
+        {
+          "name": "seed",
+          "type": "INT",
+          "links": [
+            20
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "GenerateStructuredPromptLiteNodeV2"
+      },
+      "widgets_values": [
+        "BRIA_API_TOKEN",
+        "",
+        "",
+        123456,
+        "randomize"
+      ]
+    },
+    {
+      "id": 23,
+      "type": "RefineImageLiteNodeV2",
+      "pos": [
+        873.1033325195312,
+        46.19507598876953
+      ],
+      "size": [
+        270,
+        290
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "structured_prompt",
+          "type": "STRING",
+          "widget": {
+            "name": "structured_prompt"
+          },
+          "link": 22
+        },
+        {
+          "name": "seed",
+          "shape": 7,
+          "type": "INT",
+          "widget": {
+            "name": "seed"
+          },
+          "link": 23
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            21
+          ]
+        },
+        {
+          "name": "structured_prompt",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "seed",
+          "type": "INT",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "RefineImageLiteNodeV2"
+      },
+      "widgets_values": [
+        "BRIA_API_TOKEN",
+        "",
+        "",
+        "FIBO",
+        "1:1",
+        50,
+        5,
+        123456,
+        "randomize"
+      ]
+    },
+    {
+      "id": 11,
+      "type": "GenerateImageLiteNodeV2",
+      "pos": [
+        475.5416564941406,
+        56.20505905151367
+      ],
+      "size": [
+        270,
+        290
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "structured_prompt",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "structured_prompt"
+          },
+          "link": 17
+        },
+        {
+          "name": "seed",
+          "shape": 7,
+          "type": "INT",
+          "widget": {
+            "name": "seed"
+          },
+          "link": 18
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            9
+          ]
+        },
+        {
+          "name": "structured_prompt",
+          "type": "STRING",
+          "links": [
+            22
+          ]
+        },
+        {
+          "name": "seed",
+          "type": "INT",
+          "links": [
+            23
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "GenerateImageLiteNodeV2"
+      },
+      "widgets_values": [
+        "BRIA_API_TOKEN",
+        "",
+        "FIBO",
+        "",
+        "1:1",
+        50,
+        5,
+        123456,
+        "randomize"
+      ]
+    },
+    {
+      "id": 14,
+      "type": "GenerateImageLiteNodeV2",
+      "pos": [
+        402.1038513183594,
+        569.592041015625
+      ],
+      "size": [
+        270,
+        290
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "shape": 7,
+          "type": "IMAGE",
+          "link": null
+        },
+        {
+          "name": "structured_prompt",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "structured_prompt"
+          },
+          "link": 19
+        },
+        {
+          "name": "seed",
+          "shape": 7,
+          "type": "INT",
+          "widget": {
+            "name": "seed"
+          },
+          "link": 20
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            13
+          ]
+        },
+        {
+          "name": "structured_prompt",
+          "type": "STRING",
+          "links": [
+            24
+          ]
+        },
+        {
+          "name": "seed",
+          "type": "INT",
+          "links": [
+            25
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "GenerateImageLiteNodeV2"
+      },
+      "widgets_values": [
+        "BRIA_API_TOKEN",
+        "",
+        "FIBO",
+        "",
+        "1:1",
+        50,
+        5,
+        123456,
+        "randomize"
+      ]
+    },
+    {
+      "id": 22,
+      "type": "RefineImageLiteNodeV2",
+      "pos": [
+        751.44189453125,
+        554.8574829101562
+      ],
+      "size": [
+        270,
+        290
+      ],
+      "flags": {},
+      "order": 9,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "structured_prompt",
+          "type": "STRING",
+          "widget": {
+            "name": "structured_prompt"
+          },
+          "link": 24
+        },
+        {
+          "name": "seed",
+          "shape": 7,
+          "type": "INT",
+          "widget": {
+            "name": "seed"
+          },
+          "link": 25
+        }
+      ],
+      "outputs": [
+        {
+          "name": "image",
+          "type": "IMAGE",
+          "links": [
+            26
+          ]
+        },
+        {
+          "name": "structured_prompt",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "seed",
+          "type": "INT",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "RefineImageLiteNodeV2"
+      },
+      "widgets_values": [
+        "BRIA_API_TOKEN",
+        "",
+        "",
+        "FIBO",
+        "1:1",
+        50,
+        5,
+        123456,
+        "randomize"
+      ]
+    }
+  ],
+  "links": [
+    [
+      9,
+      11,
+      0,
+      6,
+      0,
+      "IMAGE"
+    ],
+    [
+      13,
+      14,
+      0,
+      15,
+      0,
+      "IMAGE"
+    ],
+    [
+      17,
+      20,
+      0,
+      11,
+      1,
+      "STRING"
+    ],
+    [
+      18,
+      20,
+      1,
+      11,
+      2,
+      "INT"
+    ],
+    [
+      19,
+      21,
+      0,
+      14,
+      1,
+      "STRING"
+    ],
+    [
+      20,
+      21,
+      1,
+      14,
+      2,
+      "INT"
+    ],
+    [
+      21,
+      23,
+      0,
+      5,
+      0,
+      "IMAGE"
+    ],
+    [
+      22,
+      11,
+      1,
+      23,
+      0,
+      "STRING"
+    ],
+    [
+      23,
+      11,
+      2,
+      23,
+      1,
+      "INT"
+    ],
+    [
+      24,
+      14,
+      1,
+      22,
+      0,
+      "STRING"
+    ],
+    [
+      25,
+      14,
+      2,
+      22,
+      1,
+      "INT"
+    ],
+    [
+      26,
+      22,
+      0,
+      17,
+      0,
+      "IMAGE"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.6904379352119753,
+      "offset": [
+        474.44702633928136,
+        63.30066202433597
+      ]
+    },
+    "frontendVersion": "1.25.11"
+  },
+  "version": 0.4
+}
