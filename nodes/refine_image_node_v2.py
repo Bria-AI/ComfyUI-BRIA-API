@@ -7,26 +7,32 @@ class _BaseRefineImageNodeV2:
 
     api_url = None  # Must be overridden by subclasses
     generate_api_url = None
+    supports_negative_prompt = True  # Can be overridden by subclasses
 
     @classmethod
     def INPUT_TYPES(cls):
+        optional_inputs = {
+            "model_version": (["FIBO"], {"default": "FIBO"}),
+            "aspect_ratio": (
+                ["1:1", "2:3", "3:2", "3:4", "4:3", "4:5", "5:4", "9:16", "16:9"],
+                {"default": "1:1"},
+            ),
+            "steps_num": ("INT", {"default": 50, "min": 20, "max": 50}),
+            "guidance_scale": ("INT", {"default": 5, "min": 3, "max": 5}),
+            "seed": ("INT", {"default": 123456}),
+        }
+        
+        # Add negative_prompt only if supported
+        if cls.supports_negative_prompt:
+            optional_inputs["negative_prompt"] = ("STRING", {"default": ""})
+        
         return {
             "required": {
                 "api_token": ("STRING", {"default": "BRIA_API_TOKEN"}),
                 "prompt": ("STRING",),
                 "structured_prompt": ("STRING",),
             },
-            "optional": {
-                "model_version": (["FIBO"], {"default": "FIBO"}),
-                "negative_prompt": ("STRING", {"default": ""}),
-                "aspect_ratio": (
-                    ["1:1", "2:3", "3:2", "3:4", "4:3", "4:5", "5:4", "9:16", "16:9"],
-                    {"default": "1:1"},
-                ),
-                "steps_num": ("INT", {"default": 50, "min": 20, "max": 50}),
-                "guidance_scale": ("INT", {"default": 5, "min": 3, "max": 5}),
-                "seed": ("INT", {"default": 123456}),
-            },
+            "optional": optional_inputs,
         }
 
     RETURN_TYPES = ("IMAGE", "STRING", "INT")
@@ -43,22 +49,26 @@ class _BaseRefineImageNodeV2:
         prompt,
         structured_prompt,
         model_version,
-        negative_prompt,
         aspect_ratio,
         steps_num,
         guidance_scale,
         seed,
+        negative_prompt=None,
     ):
-        return {
+        payload = {
             "prompt": prompt,
             "model_version": model_version,
-            "negative_prompt": negative_prompt,
             "aspect_ratio": aspect_ratio,
             "steps_num": steps_num,
             "guidance_scale": guidance_scale,
             "seed": seed,
             "structured_prompt": structured_prompt,
         }
+        
+        if self.supports_negative_prompt and negative_prompt is not None:
+            payload["negative_prompt"] = negative_prompt
+        
+        return payload
 
     def execute(
         self,
@@ -66,22 +76,22 @@ class _BaseRefineImageNodeV2:
         prompt,
         structured_prompt,
         model_version,
-        negative_prompt,
         aspect_ratio,
         steps_num,
         guidance_scale,
         seed,
+        negative_prompt=None,
     ):
         self._validate_token(api_token)
         payload = self._build_payload(
             prompt,
             structured_prompt,
             model_version,
-            negative_prompt,
             aspect_ratio,
             steps_num,
             guidance_scale,
             seed,
+            negative_prompt,
         )
         api_token = deserialize_and_get_comfy_key(api_token)
         headers = {"Content-Type": "application/json", "api_token": api_token}
@@ -111,12 +121,16 @@ class _BaseRefineImageNodeV2:
                     "prompt": prompt,
                     "structured_prompt":structured_prompt,
                     "model_version": model_version,
-                    "negative_prompt": negative_prompt,
                     "aspect_ratio": aspect_ratio,
                     "steps_num": steps_num,
                     "guidance_scale": guidance_scale,
                     "seed": used_seed,
                 }
+                
+                # Add negative_prompt only if supported and provided
+                if self.supports_negative_prompt and negative_prompt is not None:
+                    payloadForImageGenetrate["negative_prompt"] = negative_prompt
+                
                 headers = {"Content-Type": "application/json", "api_token": api_token}
 
                 response = requests.post(self.generate_api_url, json=payloadForImageGenetrate, headers=headers)
@@ -159,3 +173,12 @@ class RefineImageNodeV2(_BaseRefineImageNodeV2):
     def __init__(self):
         self.api_url = "https://engine.prod.bria-api.com/v2/structured_prompt/generate"
         self.generate_api_url = "https://engine.prod.bria-api.com/v2/image/generate"
+
+
+class RefineImageLiteNodeV2(_BaseRefineImageNodeV2):
+    """Lite Refine Image Node"""
+    supports_negative_prompt = False
+    
+    def __init__(self):
+        self.api_url = "https://engine.prod.bria-api.com/v2/structured_prompt/generate/lite"
+        self.generate_api_url = "https://engine.prod.bria-api.com/v2/image/generate/lite"
