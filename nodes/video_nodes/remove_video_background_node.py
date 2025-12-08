@@ -26,7 +26,7 @@ class RemoveVideoBackgroundNode():
                 "api_key": ("STRING", {"default": "BRIA_API_TOKEN"}),
             },
             "optional": {
-                "preserve_audio": ("BOOLEAN", {"default": False}), 
+                "preserve_audio": ("BOOLEAN", {"default": True}), 
                 "output_container_and_codec": ([
                     "mp4_h264",
                     "mp4_h265",

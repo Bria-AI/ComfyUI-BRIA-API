@@ -39,7 +39,7 @@ class VideoMaskByKeyPointsNode():
                     "mkv_vp9",
                     "gif"
                 ], {"default": "mp4_h264"}),
-                "preserve_audio": ("BOOLEAN", {"default": False}),
+                "preserve_audio": ("BOOLEAN", {"default": True}),
                 "video_format": ("STRING", {
                     "default": "mp4",
                     "tooltip": "Original video format from Load Video node"
@@ -51,7 +51,7 @@ class VideoMaskByKeyPointsNode():
             }
         }
 
-    RETURN_TYPES = ("IMAGE", "INT","STRING",  "FLOAT",)
+    RETURN_TYPES = ("IMAGE", "STRING", "INT",  "FLOAT",)
     RETURN_NAMES = ("mask_frames",'mask_url', "frame_count", "fps",)
     CATEGORY = "API Nodes"
     FUNCTION = "execute"

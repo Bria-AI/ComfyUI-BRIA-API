@@ -38,7 +38,7 @@ class VideoMaskByPromptNode():
                     "mkv_vp9",
                     "gif"
                 ], {"default": "mp4_h264"}),
-                "preserve_audio": ("BOOLEAN", {"default": False}),
+                "preserve_audio": ("BOOLEAN", {"default": True}),
                 "video_format": ("STRING", {
                     "default": "mp4",
                     "tooltip": "Original video format from Load Video node"
