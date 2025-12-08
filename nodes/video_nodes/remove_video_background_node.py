@@ -1,18 +1,20 @@
+import os
 import requests
 from ..common import deserialize_and_get_comfy_key, poll_status_until_completed
+from .video_utils import frames_to_video, video_to_frames, upload_video_to_s3
 
 class RemoveVideoBackgroundNode():
     """
     Bria Remove Video Background Node
     
     This node removes the background from videos using the Bria API.
-    It accepts a publicly accessible video URL and returns a processed video URL
-    with the background removed.
+    It accepts video frames from the Load Video node, uploads to S3,
+    processes via API, and returns the processed frames for preview.
     
     Supported input resolution: up to 16000x16000 (16K)
     
     Parameters:
-    - video_url: Publicly accessible URL of the input video
+    - frames: Batch of image frames from Load Video node
     - api_key: Your Bria API token
     - output_container_and_codec: Output video format and codec (default: webm_vp9)
     """
@@ -20,11 +22,11 @@ class RemoveVideoBackgroundNode():
     def INPUT_TYPES(self):
         return {
             "required": {
-                "video_url": ("STRING", {"default": ""}),
+                "frames": ("IMAGE", {"tooltip": "Batch of video frames"}),
                 "api_key": ("STRING", {"default": "BRIA_API_TOKEN"}),
             },
             "optional": {
-                "preserve_audio": ("BOOLEAN", {"default":True}), 
+                "preserve_audio": ("BOOLEAN", {"default": False}), 
                 "output_container_and_codec": ([
                     "mp4_h264",
                     "mp4_h265",
@@ -36,36 +38,56 @@ class RemoveVideoBackgroundNode():
                     "mkv_vp9",
                     "gif"
                 ], {"default": "webm_vp9"}),
+                "video_format": ("STRING", {
+                    "default": "mp4",
+                    "tooltip": "Original video format from Load Video node"
+                }),
+                "fbs": ("FLOAT", {
+                    "default": "30",
+                    "tooltip": "Original video format from Load Video node"
+                }),
             }
         }
 
-    RETURN_TYPES = ("STRING",)
-    RETURN_NAMES = ("video_url_response",)
+    RETURN_TYPES = ("IMAGE", "INT", "FLOAT")
+    RETURN_NAMES = ("frames", "frame_count", "fps")
     CATEGORY = "API Nodes"
     FUNCTION = "execute"
 
     def __init__(self):
-        self.api_url = "https://engine.prod.bria-api.com/v2/video/edit/remove_background"  # Video RMBG API URL
+        self.api_url = "https://engine.prod.bria-api.com/v2/video/edit/remove_background"
 
     # Define the execute method as expected by ComfyUI
-    def execute(self, video_url, api_key, preserve_audio, output_container_and_codec="webm_vp9"):
+    def execute(self, frames, api_key, fbs, video_format, preserve_audio=False, output_container_and_codec="webm_vp9"):
         if api_key.strip() == "" or api_key.strip() == "BRIA_API_TOKEN":
             raise Exception("Please insert a valid API key.")
         api_key = deserialize_and_get_comfy_key(api_key)
         
-        # Prepare the API request payload
-        payload = {
-            "video": video_url,
-            "preserve_audio": preserve_audio,
-            "output_container_and_codec": output_container_and_codec
-        }
-
-        headers = {
-            "Content-Type": "application/json",
-            "api_token": f"{api_key}"
-        }
-
+        print(f"Processing {frames.shape[0]} frames for background removal...")
+        
+        # Step 1: Convert frames to video
+        print("Step 1: Converting frames to video...")
+        video_path = frames_to_video(frames, fbs,  video_format=video_format)
+        
         try:
+            # Step 2: Upload video to S3
+            print("Step 2: Uploading video to S3...")
+            filename = f"input_video_{os.path.basename(video_path)}"
+            video_url = upload_video_to_s3(video_path, filename,api_key)
+            
+            # Step 3: Call Bria API for background removal
+            print("Step 3: Calling Bria API for background removal...")
+            payload = {
+                "video": video_url,
+                "preserve_audio": preserve_audio,
+                "output_container_and_codec": output_container_and_codec
+            }
+
+            headers = {
+                "Content-Type": "application/json",
+                "api_token": f"{api_key}"
+            }
+
             response = requests.post(self.api_url, json=payload, headers=headers)
             
             if response.status_code == 200 or response.status_code == 202:
@@ -86,12 +108,23 @@ class RemoveVideoBackgroundNode():
                 
                 print(f"Video processing completed. Result URL: {result_video_url}")
                 
+                # Step 4: Download and convert processed video to frames
+                print("Step 4: Downloading and converting processed video to frames...")
+                result_frames, result_frame_count, result_fps = video_to_frames(result_video_url)
                 
-    
-                return (result_video_url,)
+                print(f"Background removal complete! Processed {result_frame_count} frames.")
+                
+                return (result_frames, result_frame_count, result_fps)
             else:
                 raise Exception(f"Error: API request failed with status code {response.status_code} {response.text}")
 
         except Exception as e:
             raise Exception(f"{e}")
+        finally:
+            # Clean up temporary video file
+            try:
+                if os.path.exists(video_path):
+                    os.unlink(video_path)
+            except:
+                pass
 

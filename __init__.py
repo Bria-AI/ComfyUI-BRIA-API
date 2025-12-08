@@ -33,6 +33,8 @@ from .nodes import (
     VideoMaskByKeyPointsNode,
     VideoIncreaseResolutionNode,
     VideoEraseElementsNode,
+    LoadVideoFramesNode,
+    PreviewVideoFramesNode
 )
 
 # Map the node class to a name used internally by ComfyUI
@@ -71,6 +73,8 @@ NODE_CLASS_MAPPINGS = {
     "VideoMaskByKeyPointsNode":VideoMaskByKeyPointsNode,
     "VideoIncreaseResolutionNode":VideoIncreaseResolutionNode,
     "VideoEraseElementsNode":VideoEraseElementsNode,
+    "LoadVideoFramesNode":LoadVideoFramesNode,
+    "PreviewVideoFramesNode":PreviewVideoFramesNode
 }
 # Map the node display name to the one shown in the ComfyUI node interface
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -108,4 +112,6 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "VideoMaskByKeyPointsNode":"Bria Video Mask By Key Points",
     "VideoIncreaseResolutionNode":"Bria Video Increase Resolution",
     "VideoEraseElementsNode":"Bria Video Erase Elements",
+    "LoadVideoFramesNode":"Load Video Node",
+    "PreviewVideoFramesNode":"Preview Video Node"
 }

@@ -1,5 +1,7 @@
+import os
 import requests
 from ..common import deserialize_and_get_comfy_key, poll_status_until_completed
+from .video_utils import frames_to_video, video_to_frames, upload_video_to_s3
 import json
 
 class VideoMaskByKeyPointsNode():
@@ -7,21 +9,21 @@ class VideoMaskByKeyPointsNode():
     Bria Video Mask by Key Points Node
     
     This node generates a mask for specific elements in videos based on key point coordinates
-    using the Bria API. It accepts a publicly accessible video URL and an array of coordinate
-    objects defining the mask hints.
+    using the Bria API. It accepts video frames from the Load Video node, uploads to S3,
+    processes via API, and returns the processed mask frames for preview.
     
     Parameters:
-    - video_url: Publicly accessible URL of the input video
+    - frames: Batch of image frames from Load Video node
     - api_key: Your Bria API token
     - key_points: Array of coordinate objects defining the mask hints (JSON format)
     - output_container_and_codec: Output video format and codec (default: mp4_h264)
-    - preserve_audio: Audio preservation (default: True)
+    - preserve_audio: Audio preservation (default: False)
     """
     @classmethod
     def INPUT_TYPES(self):
         return {
             "required": {
-                "video_url": ("STRING", {"default": ""}),
+                "frames": ("IMAGE", {"tooltip": "Batch of video frames"}),
                 "key_points": ("STRING", {"default": "[]", "multiline": True}),
                 "api_key": ("STRING", {"default": "BRIA_API_TOKEN"}),
             },
@@ -37,19 +39,28 @@ class VideoMaskByKeyPointsNode():
                     "mkv_vp9",
                     "gif"
                 ], {"default": "mp4_h264"}),
-                "preserve_audio": ("BOOLEAN", {"default": True}),
+                "preserve_audio": ("BOOLEAN", {"default": False}),
+                "video_format": ("STRING", {
+                    "default": "mp4",
+                    "tooltip": "Original video format from Load Video node"
+                }),
+                "fbs": ("FLOAT", {
+                    "default": "30",
+                    "tooltip": "Original video format from Load Video node"
+                }),
             }
         }
 
-    RETURN_TYPES = ("STRING",)
-    RETURN_NAMES = ("mask_url_response",)
+    RETURN_TYPES = ("IMAGE", "INT","STRING",  "FLOAT",)
+    RETURN_NAMES = ("mask_frames",'mask_url', "frame_count", "fps",)
     CATEGORY = "API Nodes"
     FUNCTION = "execute"
 
     def __init__(self):
         self.api_url = "https://engine.prod.bria-api.com/v2/video/segment/mask_by_key_points"
 
-    def execute(self, video_url, key_points, api_key, output_container_and_codec="mp4_h264", preserve_audio=True):
+    def execute(self, frames, key_points, api_key,video_format, fbs, output_container_and_codec="mp4_h264", 
+                preserve_audio=False):
         if api_key.strip() == "" or api_key.strip() == "BRIA_API_TOKEN":
             raise Exception("Please insert a valid API key.")
         api_key = deserialize_and_get_comfy_key(api_key)
@@ -59,20 +70,32 @@ class VideoMaskByKeyPointsNode():
         except json.JSONDecodeError as e:
             raise Exception(f"Invalid JSON format for key_points: {e}")
         
-        # Prepare the API request payload
-        payload = {
-            "video": video_url,
-            "key_points": key_points_array,
-            "output_container_and_codec": output_container_and_codec,
-            "preserve_audio": preserve_audio
-        }
-
-        headers = {
-            "Content-Type": "application/json",
-            "api_token": f"{api_key}"
-        }
-
+        print(f"Processing {frames.shape[0]} frames for video mask generation by key points...")
+        
+        # Step 1: Convert frames to video
+        print("Step 1: Converting frames to video...")
+        video_path = frames_to_video(frames, fbs, video_format=video_format)
+        
         try:
+            # Step 2: Upload video to S3
+            print("Step 2: Uploading video to S3...")
+            filename = f"input_video_{os.path.basename(video_path)}"
+            video_url = upload_video_to_s3(video_path, filename, api_key)
+            
+            # Step 3: Call Bria API for mask generation
+            print("Step 3: Calling Bria API for video mask generation by key points...")
+            payload = {
+                "video": video_url,
+                "key_points": key_points_array,
+                "output_container_and_codec": output_container_and_codec,
+                "preserve_audio": preserve_audio
+            }
+
+            headers = {
+                "Content-Type": "application/json",
+                "api_token": f"{api_key}"
+            }
+
             response = requests.post(self.api_url, json=payload, headers=headers)
             
             if response.status_code == 200 or response.status_code == 202:
@@ -93,9 +116,22 @@ class VideoMaskByKeyPointsNode():
                 
                 print(f"Video mask processing completed. Result URL: {result_mask_url}")
                 
-                return (result_mask_url,)
+                # Step 4: Download and convert processed mask video to frames
+                print("Step 4: Downloading and converting processed mask video to frames...")
+                result_frames, result_frame_count, result_fps = video_to_frames(result_mask_url)
+                
+                print(f"Video mask generation complete! Processed {result_frame_count} frames.")
+                
+                return (result_frames, result_mask_url, result_frame_count, result_fps,)
             else:
                 raise Exception(f"Error: API request failed with status code {response.status_code} {response.text}")
 
         except Exception as e:
             raise Exception(f"{e}")
+        finally:
+            # Clean up temporary video file
+            try:
+                if os.path.exists(video_path):
+                    os.unlink(video_path)
+            except:
+                pass
