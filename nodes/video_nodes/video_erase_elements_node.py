@@ -7,7 +7,7 @@ class VideoEraseElementsNode():
     """
     Bria Video Erase Elements Node
     
-    This node erases specific elements from videos based on a text prompt using the Bria API.
+    This node erases specific elements from videos using the Bria API.
     It accepts video frames from the Load Video node, uploads to S3, processes via API,
     and returns the processed frames for preview.
     
@@ -15,7 +15,6 @@ class VideoEraseElementsNode():
     - frames: Batch of image frames from Load Video node
     - api_key: Your Bria API token
     - mask_url: Publicly accessible URL of the mask video (optional)
-    - prompt: Text instruction describing the object to be masked
     - output_container_and_codec: Output video format and codec (default: mp4_h264)
     - preserve_audio: Audio preservation (default: False)
     """
@@ -24,7 +23,6 @@ class VideoEraseElementsNode():
         return {
             "required": {
                 "frames": ("IMAGE", {"tooltip": "Batch of video frames"}),
-                "prompt": ("STRING", {"default": ""}),
                 "api_key": ("STRING", {"default": "BRIA_API_TOKEN"}),
             },
             "optional": {
@@ -49,7 +47,7 @@ class VideoEraseElementsNode():
                     "tooltip": "Original video format from Load Video node"
                 }),
                 "fbs": ("FLOAT", {
-                    "default": "30",
+                    "default": 25,
                     "tooltip": "Original video format from Load Video node"
                 }),
             }
@@ -63,7 +61,7 @@ class VideoEraseElementsNode():
     def __init__(self):
         self.api_url = "https://engine.prod.bria-api.com/v2/video/edit/erase"
 
-    def execute(self, frames, prompt, api_key, fbs, video_format, mask_url="", output_container_and_codec="mp4_h264", 
+    def execute(self, frames, api_key, fbs, video_format, mask_url="", output_container_and_codec="mp4_h264", 
                 preserve_audio=False):
         if api_key.strip() == "" or api_key.strip() == "BRIA_API_TOKEN":
             raise Exception("Please insert a valid API key.")
@@ -86,7 +84,6 @@ class VideoEraseElementsNode():
             payload = {
                 "video": video_url,
                 "mask": mask_url,
-                "prompt": prompt,
                 "output_container_and_codec": output_container_and_codec,
                 "preserve_audio": preserve_audio
             }

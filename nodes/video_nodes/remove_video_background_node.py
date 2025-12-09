@@ -43,7 +43,7 @@ class RemoveVideoBackgroundNode():
                     "tooltip": "Original video format from Load Video node"
                 }),
                 "fbs": ("FLOAT", {
-                    "default": "30",
+                    "default": 25,
                     "tooltip": "Original video format from Load Video node"
                 }),
             }
