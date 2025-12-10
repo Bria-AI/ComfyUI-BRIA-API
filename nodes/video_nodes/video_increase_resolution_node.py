@@ -50,8 +50,8 @@ class VideoIncreaseResolutionNode():
             }
         }
 
-    RETURN_TYPES = ("IMAGE", "INT", "FLOAT")
-    RETURN_NAMES = ("frames", "frame_count", "fps")
+    RETURN_TYPES = ("IMAGE", "INT", "FLOAT", "STRING")
+    RETURN_NAMES = ("frames", "frame_count", "fps", "result_video_url")
     CATEGORY = "API Nodes"
     FUNCTION = "execute"
 
@@ -116,7 +116,7 @@ class VideoIncreaseResolutionNode():
                 
                 print(f"Resolution increase complete! Processed {result_frame_count} frames.")
                 
-                return (result_frames, result_frame_count, result_fps)
+                return (result_frames, result_frame_count, result_fps, result_video_url,)
             else:
                 raise Exception(f"Error: API request failed with status code {response.status_code} {response.text}")
 
