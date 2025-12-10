@@ -8,7 +8,10 @@ class _BaseRefineImageNodeV2:
     api_url = None  # Must be overridden by subclasses
     generate_api_url = None
     supports_negative_prompt = True  # Can be overridden by subclasses
-
+    # STEP SETTINGS (defaults for standard API)
+    default_steps = 50
+    min_steps = 20
+    max_steps = 50
     @classmethod
     def INPUT_TYPES(cls):
         optional_inputs = {
@@ -17,7 +20,14 @@ class _BaseRefineImageNodeV2:
                 ["1:1", "2:3", "3:2", "3:4", "4:3", "4:5", "5:4", "9:16", "16:9"],
                 {"default": "1:1"},
             ),
-            "steps_num": ("INT", {"default": 50, "min": 20, "max": 50}),
+            "steps_num": (
+                "INT",
+                {
+                    "default": cls.default_steps,
+                    "min": cls.min_steps,
+                    "max": cls.max_steps,
+                },
+            ),
             "guidance_scale": ("INT", {"default": 5, "min": 3, "max": 5}),
             "seed": ("INT", {"default": 123456}),
         }
@@ -178,6 +188,10 @@ class RefineImageNodeV2(_BaseRefineImageNodeV2):
 class RefineImageLiteNodeV2(_BaseRefineImageNodeV2):
     """Lite Refine Image Node"""
     supports_negative_prompt = False
+    supports_negative_prompt = False
+    default_steps = 8
+    min_steps = 4
+    max_steps = 30
     
     def __init__(self):
         self.api_url = "https://engine.prod.bria-api.com/v2/structured_prompt/generate/lite"
