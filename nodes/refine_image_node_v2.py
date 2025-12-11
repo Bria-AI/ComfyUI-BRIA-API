@@ -10,7 +10,7 @@ class _BaseRefineImageNodeV2:
     supports_negative_prompt = True  # Can be overridden by subclasses
     # STEP SETTINGS (defaults for standard API)
     default_steps = 50
-    min_steps = 20
+    min_steps = 35
     max_steps = 50
     @classmethod
     def INPUT_TYPES(cls):
