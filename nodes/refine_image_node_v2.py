@@ -190,7 +190,7 @@ class RefineImageLiteNodeV2(_BaseRefineImageNodeV2):
     supports_negative_prompt = False
     supports_negative_prompt = False
     default_steps = 8
-    min_steps = 4
+    min_steps = 8
     max_steps = 30
     
     def __init__(self):

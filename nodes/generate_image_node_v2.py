@@ -170,7 +170,7 @@ class GenerateImageLiteNodeV2(_BaseGenerateImageNodeV2):
     """Lite Image Generation Node"""
     supports_negative_prompt = False
     default_steps = 8
-    min_steps = 4
+    min_steps = 8
     max_steps = 30
     def __init__(self):
         self.api_url = "https://engine.prod.bria-api.com/v2/image/generate/lite"
