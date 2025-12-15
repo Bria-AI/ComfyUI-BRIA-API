@@ -35,4 +35,5 @@ from .video_nodes.video_erase_elements_node import VideoEraseElementsNode
 from .video_nodes.video_mask_by_prompt_node import VideoMaskByPromptNode
 from .video_nodes.video_mask_by_key_points_node import VideoMaskByKeyPointsNode
 from .video_nodes.load_video import LoadVideoFramesNode
-from .video_nodes.preview_video import PreviewVideoFramesNode
+from .video_nodes.preview_video_node_from_url import PreviewVideoURLNode
+

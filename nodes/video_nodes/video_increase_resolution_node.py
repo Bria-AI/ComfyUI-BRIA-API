@@ -1,29 +1,33 @@
 import os
+import uuid
 import requests
+import folder_paths
 from ..common import deserialize_and_get_comfy_key, poll_status_until_completed
-from .video_utils import frames_to_video, video_to_frames, upload_video_to_s3
+from .video_utils import  upload_video_to_s3
 
 class VideoIncreaseResolutionNode():
     """
-    Bria Video Increase Resolution Node
-    
-    This node increases the resolution of videos using the Bria API.
-    It accepts video frames from the Load Video node, uploads to S3,
-    processes via API, and returns the processed frames for preview.
-    
+    Increase the resolution of a video using the Bria API.
+
     Parameters:
-    - frames: Batch of image frames from Load Video node
-    - api_key: Your Bria API token
-    - desired_increase: Integer scale factor for upscaling (2 or 4)
-    - output_container_and_codec: Output video format and codec (default: mp4_h264)
-    - preserve_audio: Audio preservation (default: False)
+        api_key (str): Your Bria API key.
+        video_url (str): Local path or URL of the video to process.
+        desired_increase (str, optional): Resolution increase factor, '2' or '4'. Default is '2'.
+        output_container_and_codec (str, optional): Desired output format and codec. Default is "mp4_h264".
+        preserve_audio (bool, optional): Whether to keep the audio track. Default is True.
+
+    Returns:
+        result_video_url (STRING): URL of the processed video with increased resolution.
     """
     @classmethod
     def INPUT_TYPES(self):
         return {
             "required": {
-                "frames": ("IMAGE", {"tooltip": "Batch of video frames"}),
                 "api_key": ("STRING", {"default": "BRIA_API_TOKEN"}),
+                "video_url": ("STRING", {
+                    "default": "",
+                    "tooltip": "URL of video to process (provide either frames or video_url)"
+                }),
             },
             "optional": {
                 "desired_increase": (['2', '4'], {"default": '2'}),
@@ -39,47 +43,41 @@ class VideoIncreaseResolutionNode():
                     "gif"
                 ], {"default": "mp4_h264"}),
                 "preserve_audio": ("BOOLEAN", {"default": True}),
-                "video_format": ("STRING", {
-                    "default": "mp4",
-                    "tooltip": "Original video format from Load Video node"
-                }),
-                "fbs": ("FLOAT", {
-                    "default": 25,
-                    "tooltip": "Original video format from Load Video node"
-                }),
             }
         }
 
-    RETURN_TYPES = ("IMAGE", "INT", "FLOAT", "STRING")
-    RETURN_NAMES = ("frames", "frame_count", "fps", "result_video_url")
+    RETURN_TYPES = ("STRING",)
+    RETURN_NAMES = ("result_video_url",)
     CATEGORY = "API Nodes"
     FUNCTION = "execute"
 
     def __init__(self):
         self.api_url = "https://engine.prod.bria-api.com/v2/video/edit/increase_resolution"
 
-    def execute(self, frames, api_key, video_format, fbs, desired_increase='2', output_container_and_codec="mp4_h264", 
-                preserve_audio=False):
+    def execute(self, api_key, video_url, desired_increase='2', output_container_and_codec="mp4_h264", preserve_audio=True):
         if api_key.strip() == "" or api_key.strip() == "BRIA_API_TOKEN":
             raise Exception("Please insert a valid API key.")
         api_key = deserialize_and_get_comfy_key(api_key)
+        video_path = None
         
-        print(f"Processing {frames.shape[0]} frames for resolution increase...")
-        
-        # Step 1: Convert frames to video
-        print("Step 1: Converting frames to video...")
-        video_path = frames_to_video(frames, fbs, video_format=video_format)
+        if video_url and video_url.strip() != "":
+            if os.path.exists(video_url):
+                filename = f"{ str(uuid.uuid4())}_{os.path.basename(video_url)}"
+                input_video_url = upload_video_to_s3(video_url, filename, api_key)
+                
+                if not input_video_url or not (input_video_url.startswith('http://') or input_video_url.startswith('https://')):
+                    raise Exception(f"Failed to upload video to S3. Got: {input_video_url}")
+                
+                if video_url.startswith(folder_paths.get_temp_directory()):
+                    video_path = None
+            else:
+                input_video_url = video_url
         
         try:
-            # Step 2: Upload video to S3
-            print("Step 2: Uploading video to S3...")
-            filename = f"input_video_{os.path.basename(video_path)}"
-            video_url = upload_video_to_s3(video_path, filename, api_key)
             
-            # Step 3: Call Bria API for resolution increase
             print("Step 3: Calling Bria API for resolution increase...")
             payload = {
-                "video": video_url,
+                "video": input_video_url,
                 "desired_increase": desired_increase,
                 "output_container_and_codec": output_container_and_codec,
                 "preserve_audio": preserve_audio
@@ -109,23 +107,18 @@ class VideoIncreaseResolutionNode():
                 result_video_url = final_response['result']['video_url']
                 
                 print(f"Video processing completed. Result URL: {result_video_url}")
+                print(f"Resolution increase complete! Use Preview Video URL node to view the result.")
                 
-                # Step 4: Download and convert processed video to frames
-                print("Step 4: Downloading and converting processed video to frames...")
-                result_frames, result_frame_count, result_fps = video_to_frames(result_video_url)
-                
-                print(f"Resolution increase complete! Processed {result_frame_count} frames.")
-                
-                return (result_frames, result_frame_count, result_fps, result_video_url,)
+                return (result_video_url,)
             else:
                 raise Exception(f"Error: API request failed with status code {response.status_code} {response.text}")
 
         except Exception as e:
             raise Exception(f"{e}")
         finally:
-            # Clean up temporary video file
-            try:
-                if os.path.exists(video_path):
-                    os.unlink(video_path)
-            except:
-                pass
+            if video_path:
+                try:
+                    if os.path.exists(video_path):
+                        os.unlink(video_path)
+                except:
+                    pass

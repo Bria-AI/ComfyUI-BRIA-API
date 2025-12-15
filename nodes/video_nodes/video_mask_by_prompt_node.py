@@ -1,30 +1,34 @@
 import os
+import uuid
 import requests
+import folder_paths
 from ..common import deserialize_and_get_comfy_key, poll_status_until_completed
-from .video_utils import frames_to_video, video_to_frames, upload_video_to_s3
+from .video_utils import upload_video_to_s3
 
 class VideoMaskByPromptNode():
     """
-    Bria Video Mask by Prompt Node
-    
-    This node generates a mask for specific elements in videos based on a text prompt
-    using the Bria API. It accepts video frames from the Load Video node, uploads to S3,
-    processes via API, and returns the processed mask frames for preview.
-    
+    Generate a video mask using a text prompt with the Bria API.
+
     Parameters:
-    - frames: Batch of image frames from Load Video node
-    - api_key: Your Bria API token
-    - prompt: Text instruction describing the object to be masked
-    - output_container_and_codec: Output video format and codec (default: mp4_h264)
-    - preserve_audio: Audio preservation (default: False)
+        prompt (str): Text prompt describing what to mask in the video.
+        api_key (str): Your Bria API key.
+        video_url (str): Local path or URL of the video to process.
+        output_container_and_codec (str, optional): Desired output format and codec. Default is "mp4_h264".
+        preserve_audio (bool, optional): Whether to keep the audio track. Default is True.
+
+    Returns:
+        mask_url (STRING): URL of the generated video mask.
     """
     @classmethod
     def INPUT_TYPES(self):
         return {
             "required": {
-                "frames": ("IMAGE", {"tooltip": "Batch of video frames"}),
                 "prompt": ("STRING", {"default": ""}),
                 "api_key": ("STRING", {"default": "BRIA_API_TOKEN"}),
+                "video_url": ("STRING", {
+                    "default": "",
+                    "tooltip": "URL of video to process (provide either frames or video_url)"
+                }),
             },
             "optional": {
                 "output_container_and_codec": ([
@@ -39,47 +43,43 @@ class VideoMaskByPromptNode():
                     "gif"
                 ], {"default": "mp4_h264"}),
                 "preserve_audio": ("BOOLEAN", {"default": True}),
-                "video_format": ("STRING", {
-                    "default": "mp4",
-                    "tooltip": "Original video format from Load Video node"
-                }),
-                "fbs": ("FLOAT", {
-                    "default": 25,
-                    "tooltip": "Original video format from Load Video node"
-                }),
             }
         }
 
-    RETURN_TYPES = ("IMAGE",  "STRING", "INT", "FLOAT", )
-    RETURN_NAMES = ("mask_frames", "mask_url", "frame_count", "fps")
+    RETURN_TYPES = ("STRING",)
+    RETURN_NAMES = ("mask_url",)
     CATEGORY = "API Nodes"
     FUNCTION = "execute"
 
     def __init__(self):
         self.api_url = "https://engine.prod.bria-api.com/v2/video/segment/mask_by_prompt"
 
-    def execute(self, frames, prompt, api_key, video_format, fbs, output_container_and_codec="mp4_h264", 
-                preserve_audio=False):
+    def execute(self, prompt, api_key, video_url, output_container_and_codec="mp4_h264", preserve_audio=True):
         if api_key.strip() == "" or api_key.strip() == "BRIA_API_TOKEN":
             raise Exception("Please insert a valid API key.")
         api_key = deserialize_and_get_comfy_key(api_key)
+
+        video_path = None
         
-        print(f"Processing {frames.shape[0]} frames for video mask generation...")
-        
-        # Step 1: Convert frames to video
-        print("Step 1: Converting frames to video...")
-        video_path = frames_to_video(frames, fbs, video_format=video_format)
+        if video_url and video_url.strip() != "":
+            if os.path.exists(video_url):
+                filename = f"{ str(uuid.uuid4())}_{os.path.basename(video_url)}"
+                input_video_url = upload_video_to_s3(video_url, filename, api_key)
+                
+                if not input_video_url or not (input_video_url.startswith('http://') or input_video_url.startswith('https://')):
+                    raise Exception(f"Failed to upload video to S3. Got: {input_video_url}")
+                
+                
+                if video_url.startswith(folder_paths.get_temp_directory()):
+                    video_path = None
+            else:
+                input_video_url = video_url
         
         try:
-            # Step 2: Upload video to S3
-            print("Step 2: Uploading video to S3...")
-            filename = f"input_video_{os.path.basename(video_path)}"
-            video_url = upload_video_to_s3(video_path, filename, api_key)
             
-            # Step 3: Call Bria API for mask generation
             print("Step 3: Calling Bria API for video mask generation...")
             payload = {
-                "video": video_url,
+                "video": input_video_url,
                 "prompt": prompt,
                 "output_container_and_codec": output_container_and_codec,
                 "preserve_audio": preserve_audio
@@ -109,23 +109,18 @@ class VideoMaskByPromptNode():
                 result_mask_url = final_response['result']['mask_url']
                 
                 print(f"Video mask processing completed. Result URL: {result_mask_url}")
+                print(f"Video mask generation complete! Use Preview Video URL node to view the result.")
                 
-                # Step 4: Download and convert processed mask video to frames
-                print("Step 4: Downloading and converting processed mask video to frames...")
-                result_frames, result_frame_count, result_fps = video_to_frames(result_mask_url)
-                
-                print(f"Video mask generation complete! Processed {result_frame_count} frames.")
-                
-                return (result_frames,  result_mask_url, result_frame_count, result_fps,)
+                return (result_mask_url,)
             else:
                 raise Exception(f"Error: API request failed with status code {response.status_code} {response.text}")
 
         except Exception as e:
             raise Exception(f"{e}")
         finally:
-            # Clean up temporary video file
-            try:
-                if os.path.exists(video_path):
-                    os.unlink(video_path)
-            except:
-                pass
+            if video_path:
+                try:
+                    if os.path.exists(video_path):
+                        os.unlink(video_path)
+                except:
+                    pass
