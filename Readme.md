@@ -31,27 +31,52 @@ To load a workflow, import the compatible workflow.json files from this [folder]
 
 ## Image Generation Nodes
 
-These nodes allow you to leverage Bria's image generation capabilities within ComfyUI. We offer our latest **V2 nodes** designed for precise control via structured prompts (currently powered by the **FIBO** model), alongside our **V1 nodes** for various established pipelines.
+These nodes allow you to leverage Bria's image generation capabilities within ComfyUI. We offer our latest **V2 nodes** (powered by the **FIBO** model) for precise control via structured prompts, alongside our legacy **V1 nodes**.
 
-### V2 Generation Nodes
+### V2 Generation Nodes (FIBO)
 
-These nodes generate images based on detailed **structured prompts** for enhanced control and consistency. They are currently powered by the state-of-the-art **FIBO** text-to-image model.
+Our V2 nodes utilize a state-of-the-art **two-step process** for enhanced control and consistency:
 
-| **Node** | **Description** |
-| --- | --- |
-| **Generate Image** | Creates new images from text or image inputs. Internally translates the input into a structured prompt using a selected VLM bridge before generating with the image model. |
-| **Refine and Regenerate Image** | Refines a generated image using a provided `structured_prompt` (from a previous generation) and a refinement text prompt. |
+- **Translation**: A VLM Bridge translates your input (prompt/images) into a machine-readable `structured_prompt` (JSON).  
+- **Generation**: The FIBO model generates the final image based on that specific JSON.
 
-### V1 Generation Nodes
+**Available Versions:**
 
+- **Regular**: Uses **Gemini 2.5 Flash** as the bridge for state-of-the-art, detailed prompt creation.  
+- **Lite**: Uses **FIBO-VLM** (Bria's open-source bridge) for faster, flexible, or on-prem deployment.  
+
+**Available V2 Nodes & Input Rules**
+
+We offer three distinct nodes to give you full control over this pipeline:
+
+1. **Structured Prompt Bridge**  
+   - Outputs a JSON string only (no image).  
+   - This node decouples the "intent translation" step from generation. It is ideal for "human-in-the-loop" workflows where you want to inspect, audit, or version-control the JSON instructions before generating. 
+   - **Supported Input Combinations:**  
+     - `prompt`: Generates a structured prompt from text.  
+     - `images`: Generates a structured prompt based on an input image.  
+     - `images + prompt`: Generates a structured prompt based on an image, guided by text.  
+     - `structured_prompt + prompt`: Updates an existing structured prompt using new text instructions (outputs updated JSON).  
+
+2. **Generate Image**  
+   - Outputs an Image.  
+   - The primary node for generation. It automatically handles translation and generation in one go, or accepts a pre-made structured prompt for reproducible results.  
+   - **Supported Input Combinations:**  
+     - `prompt`: Generates a new image from text.  
+     - `images`: Generates a new image inspired by a reference image.  
+     - `images + prompt`: Generates a new image inspired by an image and guided by text.  
+     - `structured_prompt`: Recreates a previous image exactly (when combined with a seed).  
+
+3. **Refine and Regenerate**  
+   - Outputs a Refined Image.  
+   - This node allows you to take a result you like and tweak it without losing the original composition. 
+   - **Supported Input Combination:**  
+     - `structured_prompt + prompt`: Refines a previous image using new text instructions (combined with a seed) to adjust details while maintaining consistency.  
+
+### V1 Generation Nodes (Legacy)
+
+These nodes utilize Bria's previous generation pipeline. While V2 is recommended for the highest control and quality, V1 remains available for backward compatibility with established workflows.  
 These nodes create high-quality images using Bria's V1 pipelines, supporting various aspect ratios and styles.
-
-| Node                   | Description                                                        |
-|------------------------|--------------------------------------------------------------------|
-| **Text2Image Base**    | Generates images from text prompts, serving as the foundation for text-based image creation. |
-| **Text2Image Fast**    | Optimized for speed, this node generates images from text prompts with faster results while maintaining quality. |
-| **Text2Image HD**      | Optimized for high-resolution outputs, this node generates detailed and sharp visuals from text prompts. |
-| **Reimagine**          | Guides image generation using both prompts and an input image. Preserve the original structure and depth while introducing new materials, colors, and textures. |
 
 ## Tailored Generation Nodes
 These nodes use pre-trained tailored models to generate images that faithfully reproduce specific visual IP elements or guidelines.
