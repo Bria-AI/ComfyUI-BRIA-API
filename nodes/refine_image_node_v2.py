@@ -2,48 +2,46 @@ import requests
 from .common import deserialize_and_get_comfy_key, poll_status_until_completed, postprocess_image
 
 
-class _BaseRefineImageNodeV2:
-    """Base class for refine image nodes (standard & pro)."""
+class RefineImageNodeV2:
+    """Standard Refine Image Node"""
 
-    api_url = None  # Must be overridden by subclasses
-    generate_api_url = None
-    supports_negative_prompt = True  # Can be overridden by subclasses
-    # STEP SETTINGS (defaults for standard API)
-    default_steps = 50
-    min_steps = 35
-    max_steps = 50
+    api_url = "https://engine.prod.bria-api.com/v2/structured_prompt/generate"  # Must be overridden by subclasses
+    generate_api_url = "https://engine.prod.bria-api.com/v2/image/generate"
     @classmethod
     def INPUT_TYPES(cls):
-        optional_inputs = {
-            "model_version": (["FIBO"], {"default": "FIBO"}),
-            "aspect_ratio": (
-                ["1:1", "2:3", "3:2", "3:4", "4:3", "4:5", "5:4", "9:16", "16:9"],
-                {"default": "1:1"},
-            ),
-            "steps_num": (
-                "INT",
-                {
-                    "default": cls.default_steps,
-                    "min": cls.min_steps,
-                    "max": cls.max_steps,
-                },
-            ),
-            "guidance_scale": ("INT", {"default": 5, "min": 3, "max": 5}),
-            "seed": ("INT", {"default": 123456}),
-        }
-        
-        # Add negative_prompt only if supported
-        if cls.supports_negative_prompt:
-            optional_inputs["negative_prompt"] = ("STRING", {"default": ""})
-        
         return {
             "required": {
                 "api_token": ("STRING", {"default": "BRIA_API_TOKEN"}),
                 "prompt": ("STRING",),
                 "structured_prompt": ("STRING",),
             },
-            "optional": optional_inputs,
+            "optional": {
+                "model_version": (["FIBO"], {"default": "FIBO"}),
+                "aspect_ratio": (
+                    ["1:1", "2:3", "3:2", "3:4", "4:3", "4:5", "5:4", "9:16", "16:9"],
+                    {"default": "1:1"},
+                ),
+                "steps_num": (
+                    "INT",
+                    {
+                        "default": 50,
+                        "min": 35,
+                        "max": 50,
+                    },
+                ),
+                "guidance_scale": (
+                    "INT",
+                    {
+                        "default": 5,
+                        "min": 3,
+                        "max": 5,
+                    },
+                ),
+                "seed": ("INT", {"default": 123456}),
+                "negative_prompt": ("STRING", {"default": ""}),
+            },
         }
+
 
     RETURN_TYPES = ("IMAGE", "STRING", "INT")
     RETURN_NAMES = ("image", "structured_prompt", "seed")
@@ -63,7 +61,6 @@ class _BaseRefineImageNodeV2:
         steps_num,
         guidance_scale,
         seed,
-        negative_prompt=None,
     ):
         payload = {
             "prompt": prompt,
@@ -72,11 +69,9 @@ class _BaseRefineImageNodeV2:
             "steps_num": steps_num,
             "guidance_scale": guidance_scale,
             "seed": seed,
-            "structured_prompt": structured_prompt,
         }
-        
-        if self.supports_negative_prompt and negative_prompt is not None:
-            payload["negative_prompt"] = negative_prompt
+        if structured_prompt:
+            payload["structured_prompt"] = structured_prompt
         
         return payload
 
@@ -101,7 +96,6 @@ class _BaseRefineImageNodeV2:
             steps_num,
             guidance_scale,
             seed,
-            negative_prompt,
         )
         api_token = deserialize_and_get_comfy_key(api_token)
         headers = {"Content-Type": "application/json", "api_token": api_token}
@@ -135,11 +129,8 @@ class _BaseRefineImageNodeV2:
                     "steps_num": steps_num,
                     "guidance_scale": guidance_scale,
                     "seed": used_seed,
+                    "negative_prompt":negative_prompt
                 }
-                
-                # Add negative_prompt only if supported and provided
-                if self.supports_negative_prompt and negative_prompt is not None:
-                    payloadForImageGenetrate["negative_prompt"] = negative_prompt
                 
                 headers = {"Content-Type": "application/json", "api_token": api_token}
 
@@ -176,23 +167,3 @@ class _BaseRefineImageNodeV2:
 
         except Exception as e:
             raise Exception(f"{e}")
-
-
-class RefineImageNodeV2(_BaseRefineImageNodeV2):
-    """Standard Refine Image Node"""
-    def __init__(self):
-        self.api_url = "https://engine.prod.bria-api.com/v2/structured_prompt/generate"
-        self.generate_api_url = "https://engine.prod.bria-api.com/v2/image/generate"
-
-
-class RefineImageLiteNodeV2(_BaseRefineImageNodeV2):
-    """Lite Refine Image Node"""
-    supports_negative_prompt = False
-    supports_negative_prompt = False
-    default_steps = 8
-    min_steps = 8
-    max_steps = 30
-    
-    def __init__(self):
-        self.api_url = "https://engine.prod.bria-api.com/v2/structured_prompt/generate/lite"
-        self.generate_api_url = "https://engine.prod.bria-api.com/v2/image/generate/lite"
