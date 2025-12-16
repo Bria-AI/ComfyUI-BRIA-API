@@ -7,11 +7,10 @@ from .common import (
 )
 import torch
 
+class GenerateStructuredPromptNodeV2:
+    """Standard Structured Prompt Generation Node"""
 
-class _BaseGenerateStructuredPromptNodeV2:
-    """Base class for structured prompt generation nodes (standard & lite)."""
-
-    api_url = None  # Each subclass must define its API endpoint
+    api_url = "https://engine.prod.bria-api.com/v2/structured_prompt/generate"
 
     @classmethod
     def INPUT_TYPES(cls):
@@ -46,8 +45,9 @@ class _BaseGenerateStructuredPromptNodeV2:
         payload = {
             "prompt": prompt,
             "seed": seed,
-            "structured_prompt":structured_prompt
         }
+        if structured_prompt:
+            payload["structured_prompt"] = structured_prompt
         if images is not None:
             if isinstance(images, torch.Tensor):
                 preprocess_images = preprocess_image(images)
@@ -103,16 +103,3 @@ class _BaseGenerateStructuredPromptNodeV2:
 
         except Exception as e:
             raise Exception(f"{e}")
-
-
-class GenerateStructuredPromptNodeV2(_BaseGenerateStructuredPromptNodeV2):
-    """Standard Structured Prompt Generation Node"""
-    def __init__(self):
-        self.api_url = "https://engine.prod.bria-api.com/v2/structured_prompt/generate"
-
-
-class GenerateStructuredPromptLiteNodeV2(_BaseGenerateStructuredPromptNodeV2):
-    """Lite Structured Prompt Generation Node"""
-    def __init__(self):
-        self.api_url = "https://engine.prod.bria-api.com/v2/structured_prompt/generate/lite"
-
