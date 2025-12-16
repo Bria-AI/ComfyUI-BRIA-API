@@ -10,10 +10,10 @@ from .common import (
 )
 
 
-class GenerateImageNodeV2:
-    """Standard Image Generation Node"""
+class GenerateImageLiteNodeV2:
+    """Lite Image Generation Node"""
 
-    api_url = "https://engine.prod.bria-api.com/v2/image/generate"
+    api_url = "https://engine.prod.bria-api.com/v2/image/generate/lite"
 
     @classmethod
     def INPUT_TYPES(cls):
@@ -25,7 +25,6 @@ class GenerateImageNodeV2:
             "optional": {
                 "model_version": (["FIBO"], {"default": "FIBO"}),
                 "structured_prompt": ("STRING", {"default": ""}),
-                "negative_prompt": ("STRING",),
                 "images": ("IMAGE",),
                 "aspect_ratio": (
                     ["1:1", "2:3", "3:2", "3:4", "4:3", "4:5", "5:4", "9:16", "16:9"],
@@ -34,9 +33,9 @@ class GenerateImageNodeV2:
                 "steps_num": (
                     "INT",
                     {
-                        "default": 50,
-                        "min": 35,
-                        "max": 50,
+                        "default": 8,
+                        "min": 8,
+                        "max": 30,
                     },
                 ),
                 "guidance_scale": (
@@ -56,7 +55,6 @@ class GenerateImageNodeV2:
     CATEGORY = "API Nodes"
     FUNCTION = "execute"
 
-
     def _validate_token(self, api_token: str):
         if api_token.strip() == "" or api_token.strip() == "BRIA_API_TOKEN":
             raise Exception("Please insert a valid API token.")
@@ -70,7 +68,6 @@ class GenerateImageNodeV2:
         steps_num,
         guidance_scale,
         seed,
-        negative_prompt=None,
         images=None,
     ):
         payload = {
@@ -80,7 +77,6 @@ class GenerateImageNodeV2:
             "steps_num": steps_num,
             "guidance_scale": guidance_scale,
             "seed": seed,
-            "negative_prompt":negative_prompt
         }
         if structured_prompt:
             payload["structured_prompt"] = structured_prompt 
@@ -102,7 +98,6 @@ class GenerateImageNodeV2:
         steps_num,
         guidance_scale,
         seed,
-        negative_prompt=None,
         images=None,
     ):
         self._validate_token(api_token)
@@ -114,7 +109,6 @@ class GenerateImageNodeV2:
             steps_num,
             guidance_scale,
             seed,
-            negative_prompt,
             images,
         )
         api_token = deserialize_and_get_comfy_key(api_token)

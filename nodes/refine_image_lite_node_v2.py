@@ -1,32 +1,23 @@
 import requests
-import torch
-
-from .common import (
-    deserialize_and_get_comfy_key,
-    postprocess_image,
-    preprocess_image,
-    image_to_base64,
-    poll_status_until_completed,
-)
+from .common import deserialize_and_get_comfy_key, poll_status_until_completed, postprocess_image
 
 
-class GenerateImageNodeV2:
-    """Standard Image Generation Node"""
 
-    api_url = "https://engine.prod.bria-api.com/v2/image/generate"
+class RefineImageLiteNodeV2:
+    """Lite Refine Image Node"""
 
+    api_url = "https://engine.prod.bria-api.com/v2/structured_prompt/generate/lite"
+    generate_api_url = "https://engine.prod.bria-api.com/v2/image/generate/lite"
     @classmethod
     def INPUT_TYPES(cls):
         return {
             "required": {
                 "api_token": ("STRING", {"default": "BRIA_API_TOKEN"}),
                 "prompt": ("STRING",),
+                "structured_prompt": ("STRING",),
             },
             "optional": {
                 "model_version": (["FIBO"], {"default": "FIBO"}),
-                "structured_prompt": ("STRING", {"default": ""}),
-                "negative_prompt": ("STRING",),
-                "images": ("IMAGE",),
                 "aspect_ratio": (
                     ["1:1", "2:3", "3:2", "3:4", "4:3", "4:5", "5:4", "9:16", "16:9"],
                     {"default": "1:1"},
@@ -34,9 +25,9 @@ class GenerateImageNodeV2:
                 "steps_num": (
                     "INT",
                     {
-                        "default": 50,
-                        "min": 35,
-                        "max": 50,
+                        "default": 8,
+                        "min": 8,
+                        "max": 30,
                     },
                 ),
                 "guidance_scale": (
@@ -51,11 +42,11 @@ class GenerateImageNodeV2:
             },
         }
 
+
     RETURN_TYPES = ("IMAGE", "STRING", "INT")
     RETURN_NAMES = ("image", "structured_prompt", "seed")
     CATEGORY = "API Nodes"
     FUNCTION = "execute"
-
 
     def _validate_token(self, api_token: str):
         if api_token.strip() == "" or api_token.strip() == "BRIA_API_TOKEN":
@@ -64,14 +55,12 @@ class GenerateImageNodeV2:
     def _build_payload(
         self,
         prompt,
-        model_version,
         structured_prompt,
+        model_version,
         aspect_ratio,
         steps_num,
         guidance_scale,
         seed,
-        negative_prompt=None,
-        images=None,
     ):
         payload = {
             "prompt": prompt,
@@ -80,15 +69,9 @@ class GenerateImageNodeV2:
             "steps_num": steps_num,
             "guidance_scale": guidance_scale,
             "seed": seed,
-            "negative_prompt":negative_prompt
         }
         if structured_prompt:
-            payload["structured_prompt"] = structured_prompt 
-
-        if images is not None:
-            if isinstance(images, torch.Tensor):
-                preprocess_images = preprocess_image(images)
-            payload["images"] = [image_to_base64(preprocess_images)]
+            payload["structured_prompt"] = structured_prompt
 
         return payload
 
@@ -96,38 +79,31 @@ class GenerateImageNodeV2:
         self,
         api_token,
         prompt,
-        model_version,
         structured_prompt,
+        model_version,
         aspect_ratio,
         steps_num,
         guidance_scale,
-        seed,
-        negative_prompt=None,
-        images=None,
+        seed
     ):
         self._validate_token(api_token)
         payload = self._build_payload(
             prompt,
-            model_version,
             structured_prompt,
+            model_version,
             aspect_ratio,
             steps_num,
             guidance_scale,
             seed,
-            negative_prompt,
-            images,
         )
         api_token = deserialize_and_get_comfy_key(api_token)
-
         headers = {"Content-Type": "application/json", "api_token": api_token}
 
         try:
             response = requests.post(self.api_url, json=payload, headers=headers)
 
             if response.status_code in (200, 202):
-                print(
-                    f"Initial request successful to {self.api_url}, polling for completion..."
-                )
+                print(f"Initial refine request successful to {self.api_url}, polling for completion...")
                 response_dict = response.json()
                 status_url = response_dict.get("status_url")
                 request_id = response_dict.get("request_id")
@@ -140,14 +116,48 @@ class GenerateImageNodeV2:
                 final_response = poll_status_until_completed(status_url, api_token)
 
                 result = final_response.get("result", {})
-                result_image_url = result.get("image_url")
                 structured_prompt = result.get("structured_prompt", "")
-                used_seed = result.get("seed")
+                used_seed = result.get("seed", seed)
 
-                image_response = requests.get(result_image_url)
-                result_image = postprocess_image(image_response.content)
+                # Step 2 to call genearte image
+                payloadForImageGenetrate = {
+                    "prompt": prompt,
+                    "structured_prompt":structured_prompt,
+                    "model_version": model_version,
+                    "aspect_ratio": aspect_ratio,
+                    "steps_num": steps_num,
+                    "guidance_scale": guidance_scale,
+                    "seed": used_seed,
+                }
+                
+                headers = {"Content-Type": "application/json", "api_token": api_token}
 
-                return (result_image, structured_prompt, used_seed)
+                response = requests.post(self.generate_api_url, json=payloadForImageGenetrate, headers=headers)
+
+                if response.status_code in (200, 202):
+                    print(
+                        f"Initial request successful to {self.generate_api_url}, polling for completion..."
+                    )
+                    response_dict = response.json()
+                    status_url = response_dict.get("status_url")
+                    request_id = response_dict.get("request_id")
+
+                    if not status_url:
+                        raise Exception("No status_url returned from API")
+
+                    print(f"Request ID: {request_id}, Status URL: {status_url}")
+
+                    final_response = poll_status_until_completed(status_url, api_token)
+
+                    result = final_response.get("result", {})
+                    result_image_url = result.get("image_url")
+                    structured_prompt = result.get("structured_prompt", "")
+                    used_seed = result.get("seed")
+
+                    image_response = requests.get(result_image_url)
+                    result_image = postprocess_image(image_response.content)
+
+                    return (result_image, structured_prompt, used_seed)
 
             raise Exception(
                 f"Error: API request failed with status code {response.status_code} {response.text}"

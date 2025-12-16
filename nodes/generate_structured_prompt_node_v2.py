@@ -1,19 +1,16 @@
 import requests
-import torch
-
 from .common import (
     deserialize_and_get_comfy_key,
-    postprocess_image,
-    preprocess_image,
     image_to_base64,
     poll_status_until_completed,
+    preprocess_image,
 )
+import torch
 
+class GenerateStructuredPromptNodeV2:
+    """Standard Structured Prompt Generation Node"""
 
-class GenerateImageNodeV2:
-    """Standard Image Generation Node"""
-
-    api_url = "https://engine.prod.bria-api.com/v2/image/generate"
+    api_url = "https://engine.prod.bria-api.com/v2/structured_prompt/generate"
 
     @classmethod
     def INPUT_TYPES(cls):
@@ -23,39 +20,16 @@ class GenerateImageNodeV2:
                 "prompt": ("STRING",),
             },
             "optional": {
-                "model_version": (["FIBO"], {"default": "FIBO"}),
-                "structured_prompt": ("STRING", {"default": ""}),
-                "negative_prompt": ("STRING",),
+                "structured_prompt": ("STRING",),
                 "images": ("IMAGE",),
-                "aspect_ratio": (
-                    ["1:1", "2:3", "3:2", "3:4", "4:3", "4:5", "5:4", "9:16", "16:9"],
-                    {"default": "1:1"},
-                ),
-                "steps_num": (
-                    "INT",
-                    {
-                        "default": 50,
-                        "min": 35,
-                        "max": 50,
-                    },
-                ),
-                "guidance_scale": (
-                    "INT",
-                    {
-                        "default": 5,
-                        "min": 3,
-                        "max": 5,
-                    },
-                ),
                 "seed": ("INT", {"default": 123456}),
             },
         }
 
-    RETURN_TYPES = ("IMAGE", "STRING", "INT")
-    RETURN_NAMES = ("image", "structured_prompt", "seed")
+    RETURN_TYPES = ("STRING", "INT")
+    RETURN_NAMES = ("structured_prompt", "seed")
     CATEGORY = "API Nodes"
     FUNCTION = "execute"
-
 
     def _validate_token(self, api_token: str):
         if api_token.strip() == "" or api_token.strip() == "BRIA_API_TOKEN":
@@ -64,58 +38,36 @@ class GenerateImageNodeV2:
     def _build_payload(
         self,
         prompt,
-        model_version,
-        structured_prompt,
-        aspect_ratio,
-        steps_num,
-        guidance_scale,
         seed,
-        negative_prompt=None,
-        images=None,
+        structured_prompt,
+        images=None
     ):
         payload = {
             "prompt": prompt,
-            "model_version": model_version,
-            "aspect_ratio": aspect_ratio,
-            "steps_num": steps_num,
-            "guidance_scale": guidance_scale,
             "seed": seed,
-            "negative_prompt":negative_prompt
         }
         if structured_prompt:
-            payload["structured_prompt"] = structured_prompt 
-
+            payload["structured_prompt"] = structured_prompt
         if images is not None:
             if isinstance(images, torch.Tensor):
                 preprocess_images = preprocess_image(images)
             payload["images"] = [image_to_base64(preprocess_images)]
-
         return payload
 
     def execute(
         self,
         api_token,
         prompt,
-        model_version,
-        structured_prompt,
-        aspect_ratio,
-        steps_num,
-        guidance_scale,
         seed,
-        negative_prompt=None,
+        structured_prompt,
         images=None,
     ):
         self._validate_token(api_token)
         payload = self._build_payload(
             prompt,
-            model_version,
-            structured_prompt,
-            aspect_ratio,
-            steps_num,
-            guidance_scale,
             seed,
-            negative_prompt,
-            images,
+            structured_prompt,
+            images
         )
         api_token = deserialize_and_get_comfy_key(api_token)
 
@@ -140,14 +92,10 @@ class GenerateImageNodeV2:
                 final_response = poll_status_until_completed(status_url, api_token)
 
                 result = final_response.get("result", {})
-                result_image_url = result.get("image_url")
                 structured_prompt = result.get("structured_prompt", "")
-                used_seed = result.get("seed")
+                used_seed = result.get("seed", seed)
 
-                image_response = requests.get(result_image_url)
-                result_image = postprocess_image(image_response.content)
-
-                return (result_image, structured_prompt, used_seed)
+                return (structured_prompt, used_seed)
 
             raise Exception(
                 f"Error: API request failed with status code {response.status_code} {response.text}"

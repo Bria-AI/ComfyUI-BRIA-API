@@ -2,12 +2,11 @@ import requests
 from .common import deserialize_and_get_comfy_key, poll_status_until_completed, postprocess_image
 
 
-class _BaseRefineImageNodeV2:
-    """Base class for refine image nodes (standard & pro)."""
+class RefineImageNodeV2:
+    """Standard Refine Image Node"""
 
-    api_url = None  # Must be overridden by subclasses
-    generate_api_url = None
-
+    api_url = "https://engine.prod.bria-api.com/v2/structured_prompt/generate"  # Must be overridden by subclasses
+    generate_api_url = "https://engine.prod.bria-api.com/v2/image/generate"
     @classmethod
     def INPUT_TYPES(cls):
         return {
@@ -18,16 +17,31 @@ class _BaseRefineImageNodeV2:
             },
             "optional": {
                 "model_version": (["FIBO"], {"default": "FIBO"}),
-                "negative_prompt": ("STRING", {"default": ""}),
                 "aspect_ratio": (
                     ["1:1", "2:3", "3:2", "3:4", "4:3", "4:5", "5:4", "9:16", "16:9"],
                     {"default": "1:1"},
                 ),
-                "steps_num": ("INT", {"default": 50, "min": 20, "max": 50}),
-                "guidance_scale": ("INT", {"default": 5, "min": 3, "max": 5}),
+                "steps_num": (
+                    "INT",
+                    {
+                        "default": 50,
+                        "min": 35,
+                        "max": 50,
+                    },
+                ),
+                "guidance_scale": (
+                    "INT",
+                    {
+                        "default": 5,
+                        "min": 3,
+                        "max": 5,
+                    },
+                ),
                 "seed": ("INT", {"default": 123456}),
+                "negative_prompt": ("STRING", {"default": ""}),
             },
         }
+
 
     RETURN_TYPES = ("IMAGE", "STRING", "INT")
     RETURN_NAMES = ("image", "structured_prompt", "seed")
@@ -43,22 +57,23 @@ class _BaseRefineImageNodeV2:
         prompt,
         structured_prompt,
         model_version,
-        negative_prompt,
         aspect_ratio,
         steps_num,
         guidance_scale,
         seed,
     ):
-        return {
+        payload = {
             "prompt": prompt,
             "model_version": model_version,
-            "negative_prompt": negative_prompt,
             "aspect_ratio": aspect_ratio,
             "steps_num": steps_num,
             "guidance_scale": guidance_scale,
             "seed": seed,
-            "structured_prompt": structured_prompt,
         }
+        if structured_prompt:
+            payload["structured_prompt"] = structured_prompt
+        
+        return payload
 
     def execute(
         self,
@@ -66,18 +81,17 @@ class _BaseRefineImageNodeV2:
         prompt,
         structured_prompt,
         model_version,
-        negative_prompt,
         aspect_ratio,
         steps_num,
         guidance_scale,
         seed,
+        negative_prompt=None,
     ):
         self._validate_token(api_token)
         payload = self._build_payload(
             prompt,
             structured_prompt,
             model_version,
-            negative_prompt,
             aspect_ratio,
             steps_num,
             guidance_scale,
@@ -111,12 +125,13 @@ class _BaseRefineImageNodeV2:
                     "prompt": prompt,
                     "structured_prompt":structured_prompt,
                     "model_version": model_version,
-                    "negative_prompt": negative_prompt,
                     "aspect_ratio": aspect_ratio,
                     "steps_num": steps_num,
                     "guidance_scale": guidance_scale,
                     "seed": used_seed,
+                    "negative_prompt":negative_prompt
                 }
+                
                 headers = {"Content-Type": "application/json", "api_token": api_token}
 
                 response = requests.post(self.generate_api_url, json=payloadForImageGenetrate, headers=headers)
@@ -152,10 +167,3 @@ class _BaseRefineImageNodeV2:
 
         except Exception as e:
             raise Exception(f"{e}")
-
-
-class RefineImageNodeV2(_BaseRefineImageNodeV2):
-    """Standard Refine Image Node"""
-    def __init__(self):
-        self.api_url = "https://engine.prod.bria-api.com/v2/structured_prompt/generate"
-        self.generate_api_url = "https://engine.prod.bria-api.com/v2/image/generate"

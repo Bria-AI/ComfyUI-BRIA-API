@@ -12,7 +12,11 @@ from .text_2_image_fast_node import Text2ImageFastNode
 from .text_2_image_hd_node import Text2ImageHDNode
 from .reimagine_node import ReimagineNode
 from .generate_image_node_v2 import GenerateImageNodeV2
+from .generate_image_lite_node_v2 import GenerateImageLiteNodeV2
 from .refine_image_node_v2 import RefineImageNodeV2
+from .refine_image_lite_node_v2 import RefineImageLiteNodeV2
+from .generate_structured_prompt_node_v2 import GenerateStructuredPromptNodeV2
+from .generate_structured_prompt_lite_node_v2 import GenerateStructuredPromptLiteNodeV2
 from .shot_by_text_node import ShotByTextOriginalNode
 from .shot_by_text_automatic_aspect_ratio_node import ShotByTextAutomaticAspectRatioNode
 from .shot_by_text_automatic_node import ShotByTextAutomaticNode
