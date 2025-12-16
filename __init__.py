@@ -15,7 +15,11 @@ from .nodes import (
     TailoredPortraitNode,
     ReimagineNode,
     GenerateImageNodeV2,
+    GenerateImageLiteNodeV2,
     RefineImageNodeV2,
+    RefineImageLiteNodeV2,
+    GenerateStructuredPromptNodeV2,
+    GenerateStructuredPromptLiteNodeV2,
     ShotByTextAutomaticNode,
     ShotByImageManualPaddingNode,
     ShotByImageAutomaticAspectRatioNode,
@@ -58,7 +62,11 @@ NODE_CLASS_MAPPINGS = {
     "ReimagineNode": ReimagineNode,
     "AttributionByImageNode": AttributionByImageNode,
     "GenerateImageNodeV2": GenerateImageNodeV2,
+    "GenerateImageLiteNodeV2": GenerateImageLiteNodeV2,
     "RefineImageNodeV2": RefineImageNodeV2,
+    "RefineImageLiteNodeV2": RefineImageLiteNodeV2,
+    "GenerateStructuredPromptNodeV2": GenerateStructuredPromptNodeV2,
+    "GenerateStructuredPromptLiteNodeV2": GenerateStructuredPromptLiteNodeV2,
 }
 # Map the node display name to the one shown in the ComfyUI node interface
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -89,5 +97,11 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "ReimagineNode": "Bria Reimagine",
     "AttributionByImageNode": "Attribution By Image Node",
     "GenerateImageNodeV2": "Generate Image",
+    "GenerateImageLiteNodeV2": "Generate Image - Lite",
     "RefineImageNodeV2": "Refine and Regenerate Image",
+    "RefineImageLiteNodeV2": "Refine Image - Lite",
+    "GenerateStructuredPromptNodeV2": "Generate Structured Prompt",
+    "GenerateStructuredPromptLiteNodeV2": "Generate Structured Prompt - Lite",
 }
+
+
