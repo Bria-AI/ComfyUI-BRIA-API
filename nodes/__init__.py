@@ -32,3 +32,12 @@ from .shot_by_image_node import ShotByImageOriginalNode
 from .shot_by_image_manual_placement_node import ShotByImageManualPlacementNode
 from .shot_by_image_manual_padding_node import ShotByImageManualPaddingNode
 from .attribution_by_image_node import AttributionByImageNode
+from .video_nodes.remove_video_background_node import RemoveVideoBackgroundNode
+from .video_nodes.video_increase_resolution_node import VideoIncreaseResolutionNode
+from .video_nodes.video_solid_color_background_node import VideoSolidColorBackgroundNode
+from .video_nodes.video_erase_elements_node import VideoEraseElementsNode
+from .video_nodes.video_mask_by_prompt_node import VideoMaskByPromptNode
+from .video_nodes.video_mask_by_key_points_node import VideoMaskByKeyPointsNode
+from .video_nodes.load_video import LoadVideoFramesNode
+from .video_nodes.preview_video_node_from_url import PreviewVideoURLNode
+
