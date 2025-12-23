@@ -2,6 +2,7 @@ from .nodes import (
     EraserNode,
     GenFillNode,
     ImageExpansionNode,
+    ImageEnhanceNode,
     ReplaceBgNode,
     RmbgNode,
     RemoveForegroundNode,
@@ -46,6 +47,7 @@ NODE_CLASS_MAPPINGS = {
     "BriaEraser": EraserNode,  # Return the class, not an instance
     "BriaGenFill": GenFillNode,
     "ImageExpansionNode": ImageExpansionNode,
+    "ImageEnhanceNode": ImageEnhanceNode,
     "ReplaceBgNode": ReplaceBgNode,
     "RmbgNode": RmbgNode,
     "RemoveForegroundNode": RemoveForegroundNode,
@@ -89,6 +91,7 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "BriaEraser": "Bria Eraser",
     "BriaGenFill": "Bria GenFill",
     "ImageExpansionNode": "Bria Image Expansion",
+    "ImageEnhanceNode": "Bria Image Enhance",
     "ReplaceBgNode": "Bria Replace Background",
     "RmbgNode": "Bria RMBG",
     "RemoveForegroundNode": "Bria Remove Foreground",
