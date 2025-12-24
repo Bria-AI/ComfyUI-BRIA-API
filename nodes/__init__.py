@@ -1,6 +1,7 @@
 from .eraser_node import EraserNode
 from .generative_fill_node import GenFillNode
 from .image_expansion_node import ImageExpansionNode
+from .image_enhance_node import ImageEnhanceNode
 from .replace_bg_node import ReplaceBgNode
 from .rmbg_node import RmbgNode
 from .remove_foreground_node import RemoveForegroundNode
