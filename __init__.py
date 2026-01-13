@@ -39,7 +39,9 @@ from .nodes import (
     VideoIncreaseResolutionNode,
     VideoEraseElementsNode,
     LoadVideoFramesNode,
-    PreviewVideoURLNode
+    PreviewVideoURLNode,
+    FIBOEditNode,
+    FIBOEditStructuredInstructionNode
 )
 
 # Map the node class to a name used internally by ComfyUI
@@ -84,7 +86,9 @@ NODE_CLASS_MAPPINGS = {
     "VideoIncreaseResolutionNode":VideoIncreaseResolutionNode,
     "VideoEraseElementsNode":VideoEraseElementsNode,
     "LoadVideoFramesNode":LoadVideoFramesNode,
-    "PreviewVideoURLNode":PreviewVideoURLNode
+    "PreviewVideoURLNode":PreviewVideoURLNode,
+    "FIBOEditNode": FIBOEditNode,
+    "FIBOEditStructuredInstructionNode": FIBOEditStructuredInstructionNode
 }
 # Map the node display name to the one shown in the ComfyUI node interface
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -128,7 +132,9 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "VideoIncreaseResolutionNode":"Bria Video Increase Resolution",
     "VideoEraseElementsNode":"Bria Video Erase Elements",
     "LoadVideoFramesNode":"Bria Load Video",
-    "PreviewVideoURLNode":"Bria Preview Video"
+    "PreviewVideoURLNode":"Bria Preview Video",
+    "FIBOEditNode": "FIBO - Edit",
+    "FIBOEditStructuredInstructionNode": "FIBO - Edit - Structured Instruction"
 }
 
 
