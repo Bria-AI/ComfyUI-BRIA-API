@@ -21,10 +21,10 @@ class FIBOEditNode:
         return {
             "required": {
                 "api_token": ("STRING", {"default": "BRIA_API_TOKEN"}),
-                "instruction": ("STRING",),
                 "images": ("IMAGE",),
             },
             "optional": {
+                "instruction": ("STRING",),
                 "mask": ("MASK",),
                 "structured_instruction": ("STRING",),
                 "negative_prompt": ("STRING",),
@@ -49,7 +49,7 @@ class FIBOEditNode:
         }
 
     RETURN_TYPES = ("IMAGE", "STRING", "INT")
-    RETURN_NAMES = ("IMAGE", "structured_prompt", "seed")
+    RETURN_NAMES = ("IMAGE", "structured_instruction", "seed")
     CATEGORY = "API Nodes"
     FUNCTION = "execute"
 
@@ -75,7 +75,6 @@ class FIBOEditNode:
             processed_images = images
 
         payload = {
-            "instruction": instruction,
             "images": [image_to_base64(processed_images)],
             "steps_num": steps_num,
             "guidance_scale": guidance_scale,
@@ -93,7 +92,9 @@ class FIBOEditNode:
         # Add optional structured_instruction
         if structured_instruction:
             payload["structured_instruction"] = structured_instruction
-
+         # Add optional structured_instruction
+        if instruction:
+            payload["instruction"] = instruction
         # Add optional negative_prompt
         if negative_prompt:
             payload["negative_prompt"] = negative_prompt
