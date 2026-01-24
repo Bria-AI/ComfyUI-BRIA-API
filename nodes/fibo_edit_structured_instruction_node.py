@@ -1,11 +1,9 @@
 import requests
-import torch
-
 from .common import (
     deserialize_and_get_comfy_key,
     image_to_base64,
+    normalize_images_input,
     poll_status_until_completed,
-    preprocess_image,
 )
 
 
@@ -19,7 +17,7 @@ class FIBOEditStructuredInstructionNode:
         return {
             "required": {
                 "api_token": ("STRING", {"default": "BRIA_API_TOKEN"}),
-                "image": ("IMAGE",),
+                "images": ("IMAGE",),
                 "instruction": ("STRING",),
             },
         }
@@ -33,53 +31,46 @@ class FIBOEditStructuredInstructionNode:
         if api_token.strip() == "" or api_token.strip() == "BRIA_API_TOKEN":
             raise Exception("Please insert a valid API token.")
 
-    def _build_payload(self, image, instruction):
-        # Process image
-        if isinstance(image, torch.Tensor):
-            processed_image = preprocess_image(image)
-        else:
-            processed_image = image
-
+    def _build_payload(self, processed_image, instruction):
         payload = {
             "instruction": instruction,
             "images": [image_to_base64(processed_image)],
         }
-
         return payload
 
-    def execute(self, api_token, image, instruction):
+    def execute(self, api_token, images, instruction):
         self._validate_token(api_token)
-        payload = self._build_payload(image, instruction)
         api_token = deserialize_and_get_comfy_key(api_token)
 
-        headers = {"Content-Type": "application/json", "api_token": api_token}
+        # Normalize input to list of PIL images
+        images = normalize_images_input(images)
 
-        try:
-            response = requests.post(self.api_url, json=payload, headers=headers)
+        batch_results = []
 
-            if response.status_code in (200, 202):
-                print(
-                    f"Initial request successful to {self.api_url}, polling for completion..."
-                )
+        for idx, pil_image in enumerate(images):
+            try:
+                payload = self._build_payload(pil_image, instruction)
+                headers = {"Content-Type": "application/json", "api_token": api_token}
+
+                response = requests.post(self.api_url, json=payload, headers=headers)
+
+                if response.status_code not in (200, 202):
+                    raise Exception(f"API request failed with status {response.status_code}: {response.text}")
+
+                print(f"Initial request successful for image {idx}, polling for completion...")
                 response_dict = response.json()
                 status_url = response_dict.get("status_url")
-                request_id = response_dict.get("request_id")
-
                 if not status_url:
                     raise Exception("No status_url returned from API")
 
-                print(f"Request ID: {request_id}, Status URL: {status_url}")
-
                 final_response = poll_status_until_completed(status_url, api_token)
-
                 result = final_response.get("result", {})
                 structured_instruction = result.get("structured_instruction", "")
+                batch_results.append(structured_instruction)
 
-                return (structured_instruction,)
+            except Exception as e:
+                print(f"[FIBOEditStructuredInstructionNode] Skipping image {idx} due to error: {e}")
+                batch_results.append("")
 
-            raise Exception(
-                f"Error: API request failed with status code {response.status_code} {response.text}"
-            )
-
-        except Exception as e:
-            raise Exception(f"{e}")
+        combined_instructions = "\n---\n".join(batch_results)
+        return (combined_instructions,)

@@ -1,48 +1,9 @@
 {
   "id": "3eb93704-25f0-4511-b147-cf0403c5d060",
   "revision": 0,
-  "last_node_id": 8,
-  "last_link_id": 9,
+  "last_node_id": 10,
+  "last_link_id": 11,
   "nodes": [
-    {
-      "id": 2,
-      "type": "LoadImage",
-      "pos": [
-        -245.09060668945312,
-        882.640869140625
-      ],
-      "size": [
-        274.080078125,
-        314
-      ],
-      "flags": {},
-      "order": 0,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": [
-            4,
-            6,
-            8
-          ]
-        },
-        {
-          "name": "MASK",
-          "type": "MASK",
-          "links": null
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "LoadImage"
-      },
-      "widgets_values": [
-        "0a9d91e579872d653daf3243df4598f0 (2).png",
-        "image"
-      ]
-    },
     {
       "id": 7,
       "type": "PreviewImage",
@@ -130,7 +91,7 @@
           "widget": {
             "name": "structured_instruction"
           },
-          "link": 7
+          "link": 11
         }
       ],
       "outputs": [
@@ -142,7 +103,7 @@
           ]
         },
         {
-          "name": "structured_prompt",
+          "name": "structured_instruction",
           "type": "STRING",
           "links": null
         },
@@ -164,44 +125,6 @@
         5,
         1199,
         "randomize"
-      ]
-    },
-    {
-      "id": 5,
-      "type": "FIBOEditStructuredInstructionNode",
-      "pos": [
-        -122.1817626953125,
-        435.91400146484375
-      ],
-      "size": [
-        314.6372985839844,
-        82
-      ],
-      "flags": {},
-      "order": 2,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "image",
-          "type": "IMAGE",
-          "link": 6
-        }
-      ],
-      "outputs": [
-        {
-          "name": "structured_instruction",
-          "type": "STRING",
-          "links": [
-            7
-          ]
-        }
-      ],
-      "properties": {
-        "Node name for S&R": "FIBOEditStructuredInstructionNode"
-      },
-      "widgets_values": [
-        "",
-        "change the lamp to a coffee mug"
       ]
     },
     {
@@ -240,7 +163,7 @@
           ]
         },
         {
-          "name": "structured_prompt",
+          "name": "structured_instruction",
           "type": "STRING",
           "links": null
         },
@@ -263,6 +186,83 @@
         55,
         "randomize"
       ]
+    },
+    {
+      "id": 2,
+      "type": "LoadImage",
+      "pos": [
+        -245.09060668945312,
+        882.640869140625
+      ],
+      "size": [
+        274.080078125,
+        314
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            4,
+            8,
+            10
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "0a9d91e579872d653daf3243df4598f0 (2).png",
+        "image"
+      ]
+    },
+    {
+      "id": 10,
+      "type": "FIBOEditStructuredInstructionNode",
+      "pos": [
+        -139.52833557128906,
+        410.5189208984375
+      ],
+      "size": [
+        314.6372985839844,
+        82
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 10
+        }
+      ],
+      "outputs": [
+        {
+          "name": "structured_instruction",
+          "type": "STRING",
+          "links": [
+            11
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "FIBOEditStructuredInstructionNode"
+      },
+      "widgets_values": [
+        "BRIA_API_TOKEN",
+        ""
+      ]
     }
   ],
   "links": [
@@ -283,22 +283,6 @@
       "IMAGE"
     ],
     [
-      6,
-      2,
-      0,
-      5,
-      0,
-      "IMAGE"
-    ],
-    [
-      7,
-      5,
-      0,
-      8,
-      2,
-      "STRING"
-    ],
-    [
       8,
       2,
       0,
@@ -313,6 +297,22 @@
       7,
       0,
       "IMAGE"
+    ],
+    [
+      10,
+      2,
+      0,
+      10,
+      0,
+      "IMAGE"
+    ],
+    [
+      11,
+      10,
+      0,
+      8,
+      2,
+      "STRING"
     ]
   ],
   "groups": [],
@@ -321,8 +321,8 @@
     "ds": {
       "scale": 0.7522123482651067,
       "offset": [
-        958.445911560887,
-        -236.63172581276325
+        684.0553164416729,
+        -258.9658284524182
       ]
     },
     "frontendVersion": "1.25.11"
