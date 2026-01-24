@@ -1,19 +1,19 @@
-import numpy as np
-import requests
-from PIL import Image
 import io
+import requests
+import numpy as np
+from PIL import Image
 import torch
 
-from .common import deserialize_and_get_comfy_key, image_to_base64, preprocess_image
+from .common import deserialize_and_get_comfy_key, image_to_base64, normalize_images_input, to_pil_safe
 
 class TailoredPortraitNode():
     @classmethod
-    def INPUT_TYPES(self):
+    def INPUT_TYPES(cls):
         return {
             "required": {
-                "image": ("IMAGE",),  # Input image from another node
-                "tailored_model_id": ("STRING",), # API Key input with a default value
-                "api_key": ("STRING", {"default": "BRIA_API_TOKEN"}), # API Key input with a default value
+                "images": ("IMAGE",),
+                "tailored_model_id": ("STRING",),
+                "api_key": ("STRING", {"default": "BRIA_API_TOKEN"}),
             },
             "optional": {
                 "seed": ("INT", {"default": 123456}),
@@ -23,54 +23,66 @@ class TailoredPortraitNode():
         }
 
     RETURN_TYPES = ("IMAGE",)
-    RETURN_NAMES = ("output_image",)
+    RETURN_NAMES = ("output_images",)
     CATEGORY = "API Nodes"
-    FUNCTION = "execute"  # This is the method that will be executed
+    FUNCTION = "execute"
 
     def __init__(self):
-        self.api_url = "https://engine.prod.bria-api.com/v1/tailored-gen/restyle_portrait"  # Eraser API URL
+        self.api_url = "https://engine.prod.bria-api.com/v1/tailored-gen/restyle_portrait"
 
-    # Define the execute method as expected by ComfyUI
-    def execute(self, image, tailored_model_id, api_key, seed, tailored_model_influence, id_strength):
+    def execute(
+        self,
+        images,
+        tailored_model_id,
+        api_key,
+        seed,
+        tailored_model_influence,
+        id_strength
+    ):
         if api_key.strip() == "" or api_key.strip() == "BRIA_API_TOKEN":
             raise Exception("Please insert a valid API key.")
         api_key = deserialize_and_get_comfy_key(api_key)
 
-        # Convert the image and mask directly to  if isinstance(image, torch.Tensor):
-        if isinstance(image, torch.Tensor):
-            image = preprocess_image(image)
-            
-        image_base64 = image_to_base64(image)
+        # Normalize images to list of PIL images
+        images = normalize_images_input(images)
 
-        # Prepare the API request payload
-        payload = {
-            "id_image_file": f"{image_base64}",
-            "tailored_model_id": int(tailored_model_id),
-            "tailored_model_influence": tailored_model_influence,
-            "id_strength": id_strength,
-            "seed": seed
-        }
+        batch_results = []
 
-        headers = {
-            "Content-Type": "application/json",
-            "api_token": f"{api_key}"
-        }
+        for idx, pil_image in enumerate(images):
+            try:
+                image_base64 = image_to_base64(pil_image)
 
-        try:
-            response = requests.post(self.api_url, json=payload, headers=headers)
-            # Check for successful response
-            if response.status_code == 200:
-                print('response is 200')
-                # Process the output image from API response
+                payload = {
+                    "id_image_file": image_base64,
+                    "tailored_model_id": int(tailored_model_id),
+                    "tailored_model_influence": tailored_model_influence,
+                    "id_strength": id_strength,
+                    "seed": seed
+                }
+
+                headers = {
+                    "Content-Type": "application/json",
+                    "api_token": api_key
+                }
+
+                response = requests.post(self.api_url, json=payload, headers=headers)
+                if response.status_code != 200:
+                    raise Exception(f"API request failed with status {response.status_code}: {response.text}")
+
                 response_dict = response.json()
-                image_response = requests.get(response_dict['image_res'])
-                result_image = Image.open(io.BytesIO(image_response.content))
-                result_image = result_image.convert("RGB")
-                result_image = np.array(result_image).astype(np.float32) / 255.0
-                result_image = torch.from_numpy(result_image)[None,]
-                return (result_image,)
-            else:
-                raise Exception(f"Error: API request failed with status code {response.status_code} {response.text}")
+                image_response = requests.get(response_dict["image_res"])
+                result_image = Image.open(io.BytesIO(image_response.content)).convert("RGB")
 
-        except Exception as e:
-            raise Exception(f"{e}")
+                # Convert to float32 tensor (H,W,C), 0-1
+                result_array = np.array(result_image).astype(np.float32) / 255.0
+                result_tensor = torch.from_numpy(result_array)
+
+                batch_results.append(result_tensor)
+
+            except Exception as e:
+                print(f"[TailoredPortraitNode] Skipping image {idx} due to error: {e}")
+                fallback_array = np.array(pil_image).astype(np.float32) / 255.0
+                batch_results.append(torch.from_numpy(fallback_array))
+
+        # Return list of tensors (avoids size/dtype mismatch)
+        return (batch_results,)
