@@ -1,17 +1,16 @@
 import requests
-import torch
 
-from .common import deserialize_and_get_comfy_key, preprocess_image, image_to_base64, poll_status_until_completed
+from .common import deserialize_and_get_comfy_key, image_to_base64, normalize_images_input, poll_status_until_completed, to_pil_safe
 
 class AttributionByImageNode():
     @classmethod
     def INPUT_TYPES(self):
         return {
             "required": {
-                "image": ("IMAGE",),
-                "model_version": (["2.3", "3.0","3.2"], {"default": "2.3"}),
+                "images": ("IMAGE",),
+                "model_version": (["2.3", "3.0", "3.2"], {"default": "2.3"}),
                 "api_key": ("STRING", {"default": "BRIA_API_TOKEN"}),
-            },              
+            },
         }
 
     RETURN_TYPES = ("STRING",)
@@ -22,46 +21,48 @@ class AttributionByImageNode():
     def __init__(self):
         self.api_url = "https://engine.prod.bria-api.com/v2/image/attribution/by_image"
 
-    # Define the execute method as expected by ComfyUI
-    def execute(self, image, model_version, api_key):
+    def execute(self, images, model_version, api_key):
         if api_key.strip() == "" or api_key.strip() == "BRIA_API_TOKEN":
             raise Exception("Please insert a valid API key.")
         api_key = deserialize_and_get_comfy_key(api_key)
 
-        # Check if image is tensor, if so, convert to NumPy array
-        if isinstance(image, torch.Tensor):
-            image = preprocess_image(image)
+        images = normalize_images_input(images)
 
-        # Convert image to base64 for the new API format
-        image_base64 = image_to_base64(image)
-        payload = {
-            "image": image_base64,
-            "model_version": model_version,
-        }
+        batch_results = []
 
-        headers = {
-            "Content-Type": "application/json",
-            "api_token": f"{api_key}"
-        }
+        for idx, pil_image in enumerate(images):
+            try:
+                image_base64 = image_to_base64(pil_image)
 
-        try:
-            response = requests.post(self.api_url, json=payload, headers=headers)
-            
-            if response.status_code == 200 or response.status_code == 202:
-                print('Initial Attribution via Images API request successful, polling for completion...')
-                response_dict = response.json()
+                payload = {
+                    "image": image_base64,
+                    "model_version": model_version,
+                }
 
-                status_url = response_dict.get('status_url')
-                request_id = response_dict.get('request_id')
+                headers = {
+                    "Content-Type": "application/json",
+                    "api_token": f"{api_key}"
+                }
+
+                response = requests.post(self.api_url, json=payload, headers=headers)
                 
+                if response.status_code not in (200, 202):
+                    raise Exception(f"API request failed with status {response.status_code}: {response.text}")
+
+                # Poll until completion
+                response_dict = response.json()
+                status_url = response_dict.get('status_url')
                 if not status_url:
                     raise Exception("No status_url returned from API")
-                
-                print(f"Request ID: {request_id}, Status URL: {status_url}")
-                
+
                 final_response = poll_status_until_completed(status_url, api_key)
-                return (str(final_response.get("result",{}).get("content")),)
-            else:
-                raise Exception(f"Error: API request failed with status code {response.status_code} {response.text}")
-        except Exception as e:
-            raise Exception(f"{e}")
+                content = str(final_response.get("result", {}).get("content", ""))
+                batch_results.append(content)
+
+            except Exception as e:
+                print(f"[AttributionByImageNode] Skipping image {idx} due to error: {e}")
+                batch_results.append("")
+
+        # Join all responses with a delimiter
+        combined_response = "\n---\n".join(batch_results)
+        return (combined_response,)

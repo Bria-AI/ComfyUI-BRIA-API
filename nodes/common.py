@@ -41,6 +41,35 @@ def preprocess_image(image):
             print("Unexpected image dimensions. Expected 4D tensor.")
     return image
 
+def to_pil_safe(image):
+    """
+    Converts a single image tensor or numpy array (H,W,C) to PIL Image.
+    Handles float32 in 0-1 and uint8.
+    """
+    if isinstance(image, torch.Tensor):
+        image = image.detach().cpu().numpy()
+
+    # If image is empty, replace with 1x1 black
+    if image.size == 0:
+        image = np.zeros((1,1,3), dtype=np.uint8)
+
+    # Ensure float images are scaled 0-255
+    if image.dtype in [np.float32, np.float64]:
+        if image.max() <= 1.0:
+            image = (image * 255).astype(np.uint8)
+        else:
+            image = image.astype(np.uint8)
+
+    # Handle grayscale images
+    if image.ndim == 2:
+        return Image.fromarray(image, mode="L")
+    elif image.shape[2] == 3:
+        return Image.fromarray(image, mode="RGB")
+    elif image.shape[2] == 4:
+        return Image.fromarray(image, mode="RGBA")
+    else:
+        raise ValueError(f"Cannot convert image with shape {image.shape} to PIL")
+
 
 def preprocess_mask(mask):
     if isinstance(mask, torch.Tensor):
@@ -171,5 +200,29 @@ def deserialize_and_get_comfy_key(encoded: str) -> str:
 
     except Exception as e:
         raise Exception(COMFY_KEY_ERROR)
+
+def normalize_images_input(images):
+    """
+    Converts various image inputs into a list of PIL images:
+    - PIL.Image → [PIL.Image]
+    - list of PIL.Image → unchanged
+    - torch.Tensor (H,W,C) → [PIL.Image]
+    - torch.Tensor (B,H,W,C) → list of PIL.Images
+    """
+
+
+    if isinstance(images, Image.Image):
+        return [images]
+    elif isinstance(images, list):
+        return [to_pil_safe(img) if isinstance(img, torch.Tensor) else img for img in images]
+    elif isinstance(images, torch.Tensor):
+        if images.ndim == 3:  # (H,W,C)
+            return [to_pil_safe(images)]
+        elif images.ndim == 4:  # (B,H,W,C)
+            return [to_pil_safe(img) for img in images]
+        else:
+            raise ValueError(f"Unsupported tensor shape: {images.shape}")
+    else:
+        raise ValueError(f"Unsupported input type: {type(images)}")
 
    

@@ -41,7 +41,8 @@ from .nodes import (
     LoadVideoFramesNode,
     PreviewVideoURLNode,
     FIBOEditNode,
-    FIBOEditStructuredInstructionNode
+    FIBOEditStructuredInstructionNode,
+    BriaMultiImageSelect
 )
 
 # Map the node class to a name used internally by ComfyUI
@@ -88,7 +89,8 @@ NODE_CLASS_MAPPINGS = {
     "LoadVideoFramesNode":LoadVideoFramesNode,
     "PreviewVideoURLNode":PreviewVideoURLNode,
     "FIBOEditNode": FIBOEditNode,
-    "FIBOEditStructuredInstructionNode": FIBOEditStructuredInstructionNode
+    "FIBOEditStructuredInstructionNode": FIBOEditStructuredInstructionNode,
+    "BriaMultiImageSelect":BriaMultiImageSelect
 }
 # Map the node display name to the one shown in the ComfyUI node interface
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -134,7 +136,8 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "LoadVideoFramesNode":"Bria Load Video",
     "PreviewVideoURLNode":"Bria Preview Video",
     "FIBOEditNode": "FIBO - Edit",
-    "FIBOEditStructuredInstructionNode": "FIBO - Edit - Structured Instruction"
+    "FIBOEditStructuredInstructionNode": "FIBO - Edit - Structured Instruction",
+    "BriaMultiImageSelect":"Bria Multi Image Select"
 }
 
-
+WEB_DIRECTORY = "./web"
