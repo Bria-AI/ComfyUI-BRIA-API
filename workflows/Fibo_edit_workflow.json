@@ -1,0 +1,331 @@
+{
+  "id": "3eb93704-25f0-4511-b147-cf0403c5d060",
+  "revision": 0,
+  "last_node_id": 10,
+  "last_link_id": 11,
+  "nodes": [
+    {
+      "id": 7,
+      "type": "PreviewImage",
+      "pos": [
+        756.945556640625,
+        406.1631774902344
+      ],
+      "size": [
+        140,
+        246
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 9
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 6,
+      "type": "PreviewImage",
+      "pos": [
+        702.7532348632812,
+        830.3753662109375
+      ],
+      "size": [
+        140,
+        246
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 5
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 8,
+      "type": "FIBOEditNode",
+      "pos": [
+        390.8927307128906,
+        339.14031982421875
+      ],
+      "size": [
+        278.720703125,
+        266
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 8
+        },
+        {
+          "name": "mask",
+          "shape": 7,
+          "type": "MASK",
+          "link": null
+        },
+        {
+          "name": "structured_instruction",
+          "shape": 7,
+          "type": "STRING",
+          "widget": {
+            "name": "structured_instruction"
+          },
+          "link": 11
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            9
+          ]
+        },
+        {
+          "name": "structured_instruction",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "seed",
+          "type": "INT",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "FIBOEditNode"
+      },
+      "widgets_values": [
+        "",
+        "",
+        "",
+        "",
+        50,
+        5,
+        1199,
+        "randomize"
+      ]
+    },
+    {
+      "id": 4,
+      "type": "FIBOEditNode",
+      "pos": [
+        301.3495788574219,
+        884.5100708007812
+      ],
+      "size": [
+        278.720703125,
+        266
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 4
+        },
+        {
+          "name": "mask",
+          "shape": 7,
+          "type": "MASK",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            5
+          ]
+        },
+        {
+          "name": "structured_instruction",
+          "type": "STRING",
+          "links": null
+        },
+        {
+          "name": "seed",
+          "type": "INT",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "FIBOEditNode"
+      },
+      "widgets_values": [
+        "",
+        "change the lamp to a radio",
+        "",
+        "",
+        50,
+        5,
+        55,
+        "randomize"
+      ]
+    },
+    {
+      "id": 2,
+      "type": "LoadImage",
+      "pos": [
+        -245.09060668945312,
+        882.640869140625
+      ],
+      "size": [
+        274.080078125,
+        314
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            4,
+            8,
+            10
+          ]
+        },
+        {
+          "name": "MASK",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadImage"
+      },
+      "widgets_values": [
+        "0a9d91e579872d653daf3243df4598f0 (2).png",
+        "image"
+      ]
+    },
+    {
+      "id": 10,
+      "type": "FIBOEditStructuredInstructionNode",
+      "pos": [
+        -139.52833557128906,
+        410.5189208984375
+      ],
+      "size": [
+        314.6372985839844,
+        82
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 10
+        }
+      ],
+      "outputs": [
+        {
+          "name": "structured_instruction",
+          "type": "STRING",
+          "links": [
+            11
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "FIBOEditStructuredInstructionNode"
+      },
+      "widgets_values": [
+        "BRIA_API_TOKEN",
+        ""
+      ]
+    }
+  ],
+  "links": [
+    [
+      4,
+      2,
+      0,
+      4,
+      0,
+      "IMAGE"
+    ],
+    [
+      5,
+      4,
+      0,
+      6,
+      0,
+      "IMAGE"
+    ],
+    [
+      8,
+      2,
+      0,
+      8,
+      0,
+      "IMAGE"
+    ],
+    [
+      9,
+      8,
+      0,
+      7,
+      0,
+      "IMAGE"
+    ],
+    [
+      10,
+      2,
+      0,
+      10,
+      0,
+      "IMAGE"
+    ],
+    [
+      11,
+      10,
+      0,
+      8,
+      2,
+      "STRING"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.7522123482651067,
+      "offset": [
+        684.0553164416729,
+        -258.9658284524182
+      ]
+    },
+    "frontendVersion": "1.25.11"
+  },
+  "version": 0.4
+}

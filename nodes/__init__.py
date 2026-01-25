@@ -41,4 +41,6 @@ from .video_nodes.video_mask_by_prompt_node import VideoMaskByPromptNode
 from .video_nodes.video_mask_by_key_points_node import VideoMaskByKeyPointsNode
 from .video_nodes.load_video import LoadVideoFramesNode
 from .video_nodes.preview_video_node_from_url import PreviewVideoURLNode
+from .fibo_edit_node import FIBOEditNode
+from .fibo_edit_structured_instruction_node import FIBOEditStructuredInstructionNode
 from .multi_image_select import BriaMultiImageSelect
