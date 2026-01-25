@@ -39,7 +39,8 @@ from .nodes import (
     VideoIncreaseResolutionNode,
     VideoEraseElementsNode,
     LoadVideoFramesNode,
-    PreviewVideoURLNode
+    PreviewVideoURLNode,
+    BriaMultiImageSelect
 )
 
 # Map the node class to a name used internally by ComfyUI
@@ -84,7 +85,8 @@ NODE_CLASS_MAPPINGS = {
     "VideoIncreaseResolutionNode":VideoIncreaseResolutionNode,
     "VideoEraseElementsNode":VideoEraseElementsNode,
     "LoadVideoFramesNode":LoadVideoFramesNode,
-    "PreviewVideoURLNode":PreviewVideoURLNode
+    "PreviewVideoURLNode":PreviewVideoURLNode,
+    "BriaMultiImageSelect":BriaMultiImageSelect
 }
 # Map the node display name to the one shown in the ComfyUI node interface
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -128,7 +130,8 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "VideoIncreaseResolutionNode":"Bria Video Increase Resolution",
     "VideoEraseElementsNode":"Bria Video Erase Elements",
     "LoadVideoFramesNode":"Bria Load Video",
-    "PreviewVideoURLNode":"Bria Preview Video"
+    "PreviewVideoURLNode":"Bria Preview Video",
+    "BriaMultiImageSelect":"Bria Multi Image Select"
 }
 
-
+WEB_DIRECTORY = "./web"

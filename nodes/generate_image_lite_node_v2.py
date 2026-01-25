@@ -1,17 +1,14 @@
 import requests
 import torch
-
 from .common import (
     deserialize_and_get_comfy_key,
+    normalize_images_input,
     postprocess_image,
-    preprocess_image,
     image_to_base64,
     poll_status_until_completed,
 )
-
-
 class GenerateImageLiteNodeV2:
-    """Lite Image Generation Node"""
+    """Lite Image Generation Node (multi-image compatible)"""
 
     api_url = "https://engine.prod.bria-api.com/v2/image/generate/lite"
 
@@ -30,27 +27,13 @@ class GenerateImageLiteNodeV2:
                     ["1:1", "2:3", "3:2", "3:4", "4:3", "4:5", "5:4", "9:16", "16:9"],
                     {"default": "1:1"},
                 ),
-                "steps_num": (
-                    "INT",
-                    {
-                        "default": 8,
-                        "min": 8,
-                        "max": 30,
-                    },
-                ),
-                "guidance_scale": (
-                    "INT",
-                    {
-                        "default": 5,
-                        "min": 3,
-                        "max": 5,
-                    },
-                ),
-                "seed": ("INT", {"default": 123456}),
+                "steps_num": ("INT", {"default": 8, "min": 8, "max": 30}),
+                "guidance_scale": ("INT", {"default": 5, "min": 3, "max": 5}),
+                "seed": ("STRING", {"default": "123456"}),
             },
         }
 
-    RETURN_TYPES = ("IMAGE", "STRING", "INT")
+    RETURN_TYPES = ("IMAGE", "STRING", "STRING")
     RETURN_NAMES = ("image", "structured_prompt", "seed")
     CATEGORY = "API Nodes"
     FUNCTION = "execute"
@@ -68,7 +51,7 @@ class GenerateImageLiteNodeV2:
         steps_num,
         guidance_scale,
         seed,
-        images=None,
+        processed_image=None,
     ):
         payload = {
             "prompt": prompt,
@@ -76,16 +59,12 @@ class GenerateImageLiteNodeV2:
             "aspect_ratio": aspect_ratio,
             "steps_num": steps_num,
             "guidance_scale": guidance_scale,
-            "seed": seed,
+            "seed": int(seed),
         }
         if structured_prompt:
-            payload["structured_prompt"] = structured_prompt 
-
-        if images is not None:
-            if isinstance(images, torch.Tensor):
-                preprocess_images = preprocess_image(images)
-            payload["images"] = [image_to_base64(preprocess_images)]
-
+            payload["structured_prompt"] = structured_prompt
+        if processed_image is not None:
+            payload["images"] = [image_to_base64(processed_image)]
         return payload
 
     def execute(
@@ -101,51 +80,80 @@ class GenerateImageLiteNodeV2:
         images=None,
     ):
         self._validate_token(api_token)
-        payload = self._build_payload(
-            prompt,
-            model_version,
-            structured_prompt,
-            aspect_ratio,
-            steps_num,
-            guidance_scale,
-            seed,
-            images,
-        )
         api_token = deserialize_and_get_comfy_key(api_token)
 
-        headers = {"Content-Type": "application/json", "api_token": api_token}
+        images_list = normalize_images_input(images) if images is not None else [None]
 
-        try:
-            response = requests.post(self.api_url, json=payload, headers=headers)
+        # Structured prompts per image
+        if isinstance(structured_prompt, str):
+            structured_prompts_list = structured_prompt.split("\n---\n")
+        elif isinstance(structured_prompt, list):
+            structured_prompts_list = structured_prompt
+        else:
+            structured_prompts_list = [""] * len(images_list)
+        if len(structured_prompts_list) < len(images_list):
+            structured_prompts_list += [structured_prompts_list[-1]] * (len(images_list) - len(structured_prompts_list))
 
-            if response.status_code in (200, 202):
-                print(
-                    f"Initial request successful to {self.api_url}, polling for completion..."
+        # Seeds per image
+        if isinstance(seed, str):
+            seed_values = [int(s.strip()) for s in seed.split(",")]
+        else:
+            seed_values = [int(seed)]
+        if len(seed_values) < len(images_list):
+            seed_values += [seed_values[-1]] * (len(images_list) - len(seed_values))
+
+        batch_results = []
+        batch_structured_prompts = []
+        batch_seeds = []
+
+        for idx, ref_image in enumerate(images_list):
+            try:
+
+                payload = self._build_payload(
+                    prompt,
+                    model_version,
+                    structured_prompts_list[idx],
+                    aspect_ratio,
+                    steps_num,
+                    guidance_scale,
+                    seed_values[idx],
+                    ref_image,
                 )
+
+                headers = {"Content-Type": "application/json", "api_token": api_token}
+                response = requests.post(self.api_url, json=payload, headers=headers)
+                if response.status_code not in (200, 202):
+                    raise Exception(
+                        f"API request failed with status code {response.status_code}: {response.text}"
+                    )
+
+                print(f"GenerateImageLiteNodeV2 - Initial request successful for image {idx}, polling for completion...")
                 response_dict = response.json()
                 status_url = response_dict.get("status_url")
-                request_id = response_dict.get("request_id")
-
                 if not status_url:
                     raise Exception("No status_url returned from API")
 
-                print(f"Request ID: {request_id}, Status URL: {status_url}")
-
                 final_response = poll_status_until_completed(status_url, api_token)
-
                 result = final_response.get("result", {})
                 result_image_url = result.get("image_url")
-                structured_prompt = result.get("structured_prompt", "")
-                used_seed = result.get("seed")
+                structured_prompt_result = result.get("structured_prompt", "")
+                used_seed = result.get("seed", seed_values[idx])
 
                 image_response = requests.get(result_image_url)
                 result_image = postprocess_image(image_response.content)
 
-                return (result_image, structured_prompt, used_seed)
+                batch_results.append(result_image)
+                batch_structured_prompts.append(structured_prompt_result)
+                batch_seeds.append(str(used_seed))
 
-            raise Exception(
-                f"Error: API request failed with status code {response.status_code} {response.text}"
-            )
+            except Exception as e:
+                print(f"[GenerateImageLiteNodeV2] Skipping iteration {idx} due to error: {e}")
+                batch_results.append(torch.zeros((1, 512, 512, 3), dtype=torch.float32))
+                batch_structured_prompts.append("")
+                batch_seeds.append(str(seed_values[idx]))
 
-        except Exception as e:
-            raise Exception(f"{e}")
+        output_batch = torch.cat(batch_results, dim=0)
+        combined_structured_prompts = "\n---\n".join(batch_structured_prompts)
+        combined_seeds = ",".join(batch_seeds)
+
+        return output_batch, combined_structured_prompts, combined_seeds
