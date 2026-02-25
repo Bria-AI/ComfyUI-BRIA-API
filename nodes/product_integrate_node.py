@@ -28,7 +28,7 @@ class ProductIntegrateNode:
                 "height": ("INT", {"default": 512, "min": 1, "max": 10000}),
             },
             "optional": {
-                "seed": ("INT", {"default": 123456}),
+                "seed": ("STRING", {"default": "123456"}),
             }
         }
 
@@ -64,7 +64,7 @@ class ProductIntegrateNode:
                     }
                 }
             ],
-            "seed": seed,
+            "seed": int(seed),
         }
 
         return payload
