@@ -1,6 +1,11 @@
 import requests
 import torch
-from ..common import deserialize_and_get_comfy_key, postprocess_image, preprocess_image, image_to_base64
+from ..common import (
+    bria_json_headers,
+    image_to_base64,
+    postprocess_image,
+    preprocess_image,
+)
 
 shot_by_text_api_url = (
     "https://engine.prod.bria-api.com/v1/product/lifestyle_shot_by_text"
@@ -130,8 +135,7 @@ def make_api_request(api_url, payload, api_key, Placement_type = None):
 
 
     try:
-        api_key = deserialize_and_get_comfy_key(api_key)
-        headers = {"Content-Type": "application/json", "api_token": f"{api_key}"}
+        headers = bria_json_headers(api_key)
         response = requests.post(api_url, json=payload, headers=headers)
 
         if response.status_code == 200:

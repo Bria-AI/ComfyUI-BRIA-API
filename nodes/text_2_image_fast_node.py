@@ -1,6 +1,11 @@
 import requests
 
-from .common import deserialize_and_get_comfy_key, postprocess_image, preprocess_image, image_to_base64
+from .common import (
+    bria_json_headers,
+    image_to_base64,
+    postprocess_image,
+    preprocess_image,
+)
 
 
 class Text2ImageFastNode():
@@ -45,7 +50,6 @@ class Text2ImageFastNode():
             image_prompt_mode=None, image_prompt_image=None, image_prompt_scale=None,
             content_moderation=0,
         ):
-        api_key = deserialize_and_get_comfy_key(api_key)
         payload = {
             "prompt": prompt,
             "num_results": 1,
@@ -77,7 +81,7 @@ class Text2ImageFastNode():
         response = requests.post(
             self.api_url,
             json=payload,
-            headers={"api_token": api_key}
+            headers=bria_json_headers(api_key),
         )
         if response.status_code == 200:
                 response_dict = response.json()

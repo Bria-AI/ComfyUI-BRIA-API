@@ -5,10 +5,10 @@ from PIL import Image
 import torch
 
 from .common import (
-    deserialize_and_get_comfy_key,
+    bria_json_headers,
     image_to_base64,
     normalize_images_input,
-    poll_status_until_completed
+    poll_status_until_completed,
 )
 
 class ImageEnhanceNode():
@@ -51,8 +51,6 @@ class ImageEnhanceNode():
         # Validate API key
         if api_key.strip() == "" or api_key.strip() == "BRIA_API_TOKEN":
             raise Exception("Please insert a valid API key.")
-        api_key = deserialize_and_get_comfy_key(api_key)
-
         # Normalize input to list of PIL images
         images = normalize_images_input(images)
 
@@ -73,10 +71,7 @@ class ImageEnhanceNode():
                     "preserve_alpha": preserve_alpha
                 }
 
-                headers = {
-                    "Content-Type": "application/json",
-                    "api_token": f"{api_key}"
-                }
+                headers = bria_json_headers(api_key)
 
                 # Send request
                 response = requests.post(self.api_url, json=payload, headers=headers)

@@ -1,5 +1,6 @@
 import requests
-from .common import deserialize_and_get_comfy_key, poll_status_until_completed, postprocess_image
+
+from .common import bria_json_headers, poll_status_until_completed, postprocess_image
 
 
 
@@ -96,8 +97,7 @@ class RefineImageLiteNodeV2:
             guidance_scale,
             seed,
         )
-        api_token = deserialize_and_get_comfy_key(api_token)
-        headers = {"Content-Type": "application/json", "api_token": api_token}
+        headers = bria_json_headers(api_token)
 
         try:
             response = requests.post(self.api_url, json=payload, headers=headers)
@@ -130,7 +130,7 @@ class RefineImageLiteNodeV2:
                     "seed": used_seed,
                 }
                 
-                headers = {"Content-Type": "application/json", "api_token": api_token}
+                headers = bria_json_headers(api_token)
 
                 response = requests.post(self.generate_api_url, json=payloadForImageGenetrate, headers=headers)
 

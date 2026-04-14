@@ -5,7 +5,7 @@ from PIL import Image
 import torch
 
 from .common import (
-    deserialize_and_get_comfy_key,
+    bria_json_headers,
     image_to_base64,
     normalize_images_input,
     poll_status_until_completed,
@@ -59,8 +59,6 @@ class ImageExpansionNode():
     ):
         if api_key.strip() in ("", "BRIA_API_TOKEN"):
             raise Exception("Please insert a valid API key.")
-        api_key = deserialize_and_get_comfy_key(api_key)
-
         images = normalize_images_input(images)
         canvas_size = [int(x.strip()) for x in canvas_size.split(",")] if canvas_size else ()
         original_image_size = [int(x.strip()) for x in original_image_size.split(",")] if original_image_size else ()
@@ -107,7 +105,7 @@ class ImageExpansionNode():
                         "visual_output_content_moderation": visual_output_content_moderation
                     }
 
-                headers = {"Content-Type": "application/json", "api_token": api_key}
+                headers = bria_json_headers(api_key)
                 response = requests.post(self.api_url, json=payload, headers=headers)
                 if response.status_code not in (200, 202):
                     raise Exception(f"API request failed with status {response.status_code}: {response.text}")
