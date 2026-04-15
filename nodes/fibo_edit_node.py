@@ -31,7 +31,7 @@ class FIBOEditNode:
                 "steps_num": (
                     "INT",
                     {
-                        "default": 50,
+                        "default": 30,
                         "min": 1,
                         "max": 100,
                     },
