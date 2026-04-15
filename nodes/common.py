@@ -6,16 +6,17 @@ import base64
 from torchvision.transforms import ToPILImage
 import requests
 import time
-import json
 
 
-COMFY_KEY_ERROR = (
-    "Invalid Token Type\n\n"
-    "The API token you’ve entered is not a ComfyUI token.\n"
-    "Please use the valid token from your BRIA Account API Keys page:\n"
-    "https://platform.bria.ai/console/account/api-keys"
-)
+BRIA_COMFYUI_USER_AGENT = "bria/ComfyUI"
 
+def bria_json_headers(api_token: str) -> dict:
+    """Headers for JSON POST requests to Bria API."""
+    return {
+        "Content-Type": "application/json",
+        "api_token": api_token,
+        "User-Agent": BRIA_COMFYUI_USER_AGENT,
+    }
 def postprocess_image(image):
     result_image = Image.open(io.BytesIO(image))
     result_image = result_image.convert("RGB")
@@ -86,7 +87,6 @@ def preprocess_mask(mask):
 def process_request(api_url, image, mask, api_key, visual_input_content_moderation, visual_output_content_moderation):
     if api_key.strip() == "" or api_key.strip() == "BRIA_API_TOKEN":
         raise Exception("Please insert a valid API key.")
-    api_key = deserialize_and_get_comfy_key(api_key)
 
     # Check if image and mask are tensors, if so, convert to NumPy arrays
     if isinstance(image, torch.Tensor):
@@ -106,10 +106,7 @@ def process_request(api_url, image, mask, api_key, visual_input_content_moderati
         "visual_output_content_moderation":visual_output_content_moderation
     }
 
-    headers = {
-        "Content-Type": "application/json",
-        "api_token": f"{api_key}"
-    }
+    headers = bria_json_headers(api_key)
 
     try:
         response = requests.post(api_url, json=payload, headers=headers) 
@@ -161,7 +158,7 @@ def poll_status_until_completed(status_url, api_key, timeout=360, check_interval
         Exception: If timeout is reached or API request fails
     """
     start_time = time.time()
-    headers = {"api_token": api_key}
+    headers = bria_json_headers(api_key)
     
     while time.time() - start_time < timeout:
         try:
@@ -185,21 +182,6 @@ def poll_status_until_completed(status_url, api_key, timeout=360, check_interval
     
     raise Exception(f"Timeout reached after {timeout} seconds")
 
-def deserialize_and_get_comfy_key(encoded: str) -> str:
-    """
-    Decodes a base64-encoded JSON token and returns the ComfyUI API key.
-    """
-    try:
-        decoded = base64.b64decode(encoded).decode("utf-8")
-        payload = json.loads(decoded)
-
-        if payload.get("type") != "comfy":
-            raise Exception(COMFY_KEY_ERROR)
-
-        return payload.get("apiKey")
-
-    except Exception as e:
-        raise Exception(COMFY_KEY_ERROR)
 
 def normalize_images_input(images):
     """

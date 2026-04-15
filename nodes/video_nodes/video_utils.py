@@ -1,11 +1,14 @@
 import os
 import requests
 
+from ..common import BRIA_COMFYUI_USER_AGENT
+
 
 def upload_video_to_s3(video_path, filename, api_token):
     api_url = "https://platform.prod.bria-api.com/upload-video/anonymous/presigned-url"
     headers = {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "User-Agent": BRIA_COMFYUI_USER_AGENT,
     }
     extension = os.path.splitext(filename)[1].lower()
     content_type_map = {

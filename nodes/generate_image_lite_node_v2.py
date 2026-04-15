@@ -1,11 +1,11 @@
 import requests
 import torch
 from .common import (
-    deserialize_and_get_comfy_key,
-    normalize_images_input,
-    postprocess_image,
+    bria_json_headers,
     image_to_base64,
+    normalize_images_input,
     poll_status_until_completed,
+    postprocess_image,
 )
 class GenerateImageLiteNodeV2:
     """Lite Image Generation Node (multi-image compatible)"""
@@ -80,8 +80,6 @@ class GenerateImageLiteNodeV2:
         images=None,
     ):
         self._validate_token(api_token)
-        api_token = deserialize_and_get_comfy_key(api_token)
-
         images_list = normalize_images_input(images) if images is not None else [None]
 
         # Structured prompts per image
@@ -120,7 +118,7 @@ class GenerateImageLiteNodeV2:
                     ref_image,
                 )
 
-                headers = {"Content-Type": "application/json", "api_token": api_token}
+                headers = bria_json_headers(api_token)
                 response = requests.post(self.api_url, json=payload, headers=headers)
                 if response.status_code not in (200, 202):
                     raise Exception(

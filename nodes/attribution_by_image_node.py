@@ -1,6 +1,12 @@
 import requests
 
-from .common import deserialize_and_get_comfy_key, image_to_base64, normalize_images_input, poll_status_until_completed, to_pil_safe
+from .common import (
+    bria_json_headers,
+    image_to_base64,
+    normalize_images_input,
+    poll_status_until_completed,
+    to_pil_safe,
+)
 
 class AttributionByImageNode():
     @classmethod
@@ -24,8 +30,6 @@ class AttributionByImageNode():
     def execute(self, images, model_version, api_key):
         if api_key.strip() == "" or api_key.strip() == "BRIA_API_TOKEN":
             raise Exception("Please insert a valid API key.")
-        api_key = deserialize_and_get_comfy_key(api_key)
-
         images = normalize_images_input(images)
 
         batch_results = []
@@ -39,10 +43,7 @@ class AttributionByImageNode():
                     "model_version": model_version,
                 }
 
-                headers = {
-                    "Content-Type": "application/json",
-                    "api_token": f"{api_key}"
-                }
+                headers = bria_json_headers(api_key)
 
                 response = requests.post(self.api_url, json=payload, headers=headers)
                 

@@ -1,5 +1,5 @@
 import requests
-from .common import deserialize_and_get_comfy_key
+from .common import bria_json_headers
 
 class TailoredModelInfoNode():
     @classmethod
@@ -21,10 +21,9 @@ class TailoredModelInfoNode():
 
     # Define the execute method as expected by ComfyUI
     def execute(self, model_id, api_key):
-        api_key = deserialize_and_get_comfy_key(api_key)
         response = requests.get(
             self.api_url + model_id,
-            headers={"api_token": api_key}
+            headers=bria_json_headers(api_key),
         )
         if response.status_code == 200:
             generation_prefix = response.json()["generation_prefix"]

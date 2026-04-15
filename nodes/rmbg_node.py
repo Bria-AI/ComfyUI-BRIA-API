@@ -4,7 +4,13 @@ import numpy as np
 from PIL import Image
 import torch
 
-from .common import deserialize_and_get_comfy_key, image_to_base64, normalize_images_input, poll_status_until_completed, to_pil_safe
+from .common import (
+    bria_json_headers,
+    image_to_base64,
+    normalize_images_input,
+    poll_status_until_completed,
+    to_pil_safe,
+)
 
 class RmbgNode():
     @classmethod
@@ -32,8 +38,6 @@ class RmbgNode():
     def execute(self, images, visual_input_content_moderation, visual_output_content_moderation, preserve_alpha, api_key):
         if api_key.strip() == "" or api_key.strip() == "BRIA_API_TOKEN":
             raise Exception("Please insert a valid API key.")
-        api_key = deserialize_and_get_comfy_key(api_key)
-
         # Normalize input to list of PIL images
         images = normalize_images_input(images)
 
@@ -50,10 +54,7 @@ class RmbgNode():
                     "preserve_alpha": preserve_alpha
                 }
 
-                headers = {
-                    "Content-Type": "application/json",
-                    "api_token": f"{api_key}"
-                }
+                headers = bria_json_headers(api_key)
 
                 response = requests.post(self.api_url, json=payload, headers=headers)
                 if response.status_code not in (200, 202):

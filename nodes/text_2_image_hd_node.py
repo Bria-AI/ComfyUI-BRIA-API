@@ -1,6 +1,6 @@
 import requests
 
-from .common import deserialize_and_get_comfy_key, postprocess_image
+from .common import bria_json_headers, postprocess_image
 
 
 class Text2ImageHDNode():
@@ -35,7 +35,6 @@ class Text2ImageHDNode():
             self, api_key, prompt, aspect_ratio, seed, negative_prompt, 
             steps_num, prompt_enhancement, text_guidance_scale, medium, content_moderation=0,
         ):
-        api_key = deserialize_and_get_comfy_key(api_key)
         payload = {
             "prompt": prompt,
             "num_results": 1,
@@ -53,7 +52,7 @@ class Text2ImageHDNode():
         response = requests.post(
             self.api_url,
             json=payload,
-            headers={"api_token": api_key}
+            headers=bria_json_headers(api_key),
         )
         if response.status_code == 200:
                 response_dict = response.json()

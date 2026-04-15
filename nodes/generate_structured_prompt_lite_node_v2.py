@@ -1,8 +1,8 @@
 import requests
 from .common import (
-    deserialize_and_get_comfy_key,
-    normalize_images_input,
+    bria_json_headers,
     image_to_base64,
+    normalize_images_input,
     poll_status_until_completed,
 )
 
@@ -45,8 +45,6 @@ class GenerateStructuredPromptLiteNodeV2:
 
     def execute(self, api_token, prompt, seed, structured_prompt, images=None):
         self._validate_token(api_token)
-        api_token = deserialize_and_get_comfy_key(api_token)
-
         images_list = normalize_images_input(images) if images is not None else [None]
 
         # Seeds per image
@@ -80,7 +78,7 @@ class GenerateStructuredPromptLiteNodeV2:
                     image,
                 )
 
-                headers = {"Content-Type": "application/json", "api_token": api_token}
+                headers = bria_json_headers(api_token)
                 response = requests.post(self.api_url, json=payload, headers=headers)
                 if response.status_code not in (200, 202):
                     raise Exception(
