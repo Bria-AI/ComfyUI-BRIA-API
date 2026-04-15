@@ -1,6 +1,11 @@
 import requests
 
-from .common import deserialize_and_get_comfy_key, postprocess_image, preprocess_image, image_to_base64
+from .common import (
+    bria_json_headers,
+    image_to_base64,
+    postprocess_image,
+    preprocess_image,
+)
 
 
 class TailoredGenNode():
@@ -45,7 +50,6 @@ class TailoredGenNode():
             guidance_method_2=None, guidance_method_2_scale=None, guidance_method_2_image=None,
             content_moderation=0,
         ):
-        api_key = deserialize_and_get_comfy_key(api_key)
         payload = {
             "prompt": generation_prefix + prompt,
             "num_results": 1,
@@ -74,7 +78,7 @@ class TailoredGenNode():
         response = requests.post(
             self.api_url + model_id,
             json=payload,
-            headers={"api_token": api_key}
+            headers=bria_json_headers(api_key),
         )
         if response.status_code == 200:
                 response_dict = response.json()

@@ -1,6 +1,6 @@
 import requests
 from .common import (
-    deserialize_and_get_comfy_key,
+    bria_json_headers,
     image_to_base64,
     normalize_images_input,
     poll_status_until_completed,
@@ -40,8 +40,6 @@ class FIBOEditStructuredInstructionNode:
 
     def execute(self, api_token, images, instruction):
         self._validate_token(api_token)
-        api_token = deserialize_and_get_comfy_key(api_token)
-
         # Normalize input to list of PIL images
         images = normalize_images_input(images)
 
@@ -50,7 +48,7 @@ class FIBOEditStructuredInstructionNode:
         for idx, pil_image in enumerate(images):
             try:
                 payload = self._build_payload(pil_image, instruction)
-                headers = {"Content-Type": "application/json", "api_token": api_token}
+                headers = bria_json_headers(api_token)
 
                 response = requests.post(self.api_url, json=payload, headers=headers)
 

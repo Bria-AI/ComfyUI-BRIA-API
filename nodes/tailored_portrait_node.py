@@ -4,7 +4,12 @@ import numpy as np
 from PIL import Image
 import torch
 
-from .common import deserialize_and_get_comfy_key, image_to_base64, normalize_images_input, to_pil_safe
+from .common import (
+    bria_json_headers,
+    image_to_base64,
+    normalize_images_input,
+    to_pil_safe,
+)
 
 class TailoredPortraitNode():
     @classmethod
@@ -41,8 +46,6 @@ class TailoredPortraitNode():
     ):
         if api_key.strip() == "" or api_key.strip() == "BRIA_API_TOKEN":
             raise Exception("Please insert a valid API key.")
-        api_key = deserialize_and_get_comfy_key(api_key)
-
         # Normalize images to list of PIL images
         images = normalize_images_input(images)
 
@@ -60,10 +63,7 @@ class TailoredPortraitNode():
                     "seed": seed
                 }
 
-                headers = {
-                    "Content-Type": "application/json",
-                    "api_token": api_key
-                }
+                headers = bria_json_headers(api_key)
 
                 response = requests.post(self.api_url, json=payload, headers=headers)
                 if response.status_code != 200:

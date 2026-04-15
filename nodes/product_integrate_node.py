@@ -2,11 +2,11 @@ import requests
 import torch
 
 from .common import (
-    deserialize_and_get_comfy_key,
-    postprocess_image,
-    preprocess_image,
+    bria_json_headers,
     image_to_base64,
     poll_status_until_completed,
+    postprocess_image,
+    preprocess_image,
 )
 
 
@@ -81,8 +81,6 @@ class ProductIntegrateNode:
         seed,
     ):
         self._validate_token(api_token)
-        api_token = deserialize_and_get_comfy_key(api_token)
-
         # Process single scene image
         if isinstance(scene, torch.Tensor):
             processed_scene = preprocess_image(scene)
@@ -99,7 +97,7 @@ class ProductIntegrateNode:
             seed,
         )
 
-        headers = {"Content-Type": "application/json", "api_token": api_token}
+        headers = bria_json_headers(api_token)
 
         try:
             response = requests.post(self.api_url, json=payload, headers=headers)

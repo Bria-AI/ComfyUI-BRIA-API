@@ -2,7 +2,7 @@ import os
 import uuid
 import requests
 import folder_paths
-from ..common import deserialize_and_get_comfy_key, poll_status_until_completed
+from ..common import bria_json_headers, poll_status_until_completed
 from .video_utils import upload_video_to_s3
 import json
 
@@ -58,8 +58,6 @@ class VideoMaskByKeyPointsNode():
     def execute(self, key_points, api_key, video_url, output_container_and_codec="mp4_h264", preserve_audio=True):
         if api_key.strip() == "" or api_key.strip() == "BRIA_API_TOKEN":
             raise Exception("Please insert a valid API key.")
-        api_key = deserialize_and_get_comfy_key(api_key)
-        
         try:
             key_points_array = json.loads(key_points)
         except json.JSONDecodeError as e:
@@ -91,10 +89,7 @@ class VideoMaskByKeyPointsNode():
                 "preserve_audio": preserve_audio
             }
 
-            headers = {
-                "Content-Type": "application/json",
-                "api_token": f"{api_key}"
-            }
+            headers = bria_json_headers(api_key)
 
             response = requests.post(self.api_url, json=payload, headers=headers)
             
