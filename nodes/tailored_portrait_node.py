@@ -5,6 +5,7 @@ from PIL import Image
 import torch
 
 from .common import (
+    bria_asset_headers,
     bria_json_headers,
     image_to_base64,
     normalize_images_input,
@@ -70,7 +71,10 @@ class TailoredPortraitNode():
                     raise Exception(f"API request failed with status {response.status_code}: {response.text}")
 
                 response_dict = response.json()
-                image_response = requests.get(response_dict["image_res"])
+                image_response = requests.get(
+                    response_dict["image_res"],
+                    headers=bria_asset_headers(),
+                )
                 result_image = Image.open(io.BytesIO(image_response.content)).convert("RGB")
 
                 # Convert to float32 tensor (H,W,C), 0-1

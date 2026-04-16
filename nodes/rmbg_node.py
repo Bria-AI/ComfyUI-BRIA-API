@@ -5,6 +5,7 @@ from PIL import Image
 import torch
 
 from .common import (
+    bria_asset_headers,
     bria_json_headers,
     image_to_base64,
     normalize_images_input,
@@ -71,7 +72,10 @@ class RmbgNode():
                 result_image_url = final_response['result']['image_url']
 
                 # Download result
-                image_response = requests.get(result_image_url)
+                image_response = requests.get(
+                    result_image_url,
+                    headers=bria_asset_headers(),
+                )
                 result_image = Image.open(io.BytesIO(image_response.content))
 
                 # Convert to float32 tensor (H, W, C), 0-1

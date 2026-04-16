@@ -1,6 +1,7 @@
 import requests
 import torch
 from ..common import (
+    bria_asset_headers,
     bria_json_headers,
     image_to_base64,
     postprocess_image,
@@ -145,7 +146,10 @@ def make_api_request(api_url, payload, api_key, Placement_type = None):
                 result_images = []
                 for i, result in enumerate(response_dict.get("result", [])[:7]):
                     image_url = result[0]
-                    image_response = requests.get(image_url)
+                    image_response = requests.get(
+                        image_url,
+                        headers=bria_asset_headers(),
+                    )
                     processed = postprocess_image(image_response.content)
                     result_images.append(processed)
 
@@ -156,7 +160,10 @@ def make_api_request(api_url, payload, api_key, Placement_type = None):
 
                 return tuple(result_images)
 
-            image_response = requests.get(response_dict["result"][0][0])
+            image_response = requests.get(
+                response_dict["result"][0][0],
+                headers=bria_asset_headers(),
+            )
             result_image = postprocess_image(image_response.content)
             return (result_image,)
         else:

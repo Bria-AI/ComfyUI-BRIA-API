@@ -3,6 +3,8 @@ import uuid
 import folder_paths
 import requests
 
+from ..common import bria_asset_headers
+
 class PreviewVideoURLNode:
     """
     Bria Preview Video URL Node
@@ -62,7 +64,12 @@ class PreviewVideoURLNode:
         
         # Download video from URL
         try:
-            response = requests.get(video_url, stream=True, timeout=60)
+            response = requests.get(
+                video_url,
+                stream=True,
+                timeout=60,
+                headers=bria_asset_headers(),
+            )
             response.raise_for_status()
             
             # Determine file extension from URL or Content-Type

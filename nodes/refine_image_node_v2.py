@@ -1,6 +1,11 @@
 import requests
 
-from .common import bria_json_headers, poll_status_until_completed, postprocess_image
+from .common import (
+    bria_asset_headers,
+    bria_json_headers,
+    poll_status_until_completed,
+    postprocess_image,
+)
 
 
 class RefineImageNodeV2:
@@ -156,7 +161,10 @@ class RefineImageNodeV2:
                     structured_prompt = result.get("structured_prompt", "")
                     used_seed = result.get("seed")
 
-                    image_response = requests.get(result_image_url)
+                    image_response = requests.get(
+                        result_image_url,
+                        headers=bria_asset_headers(),
+                    )
                     result_image = postprocess_image(image_response.content)
 
                     return (result_image, structured_prompt, used_seed)

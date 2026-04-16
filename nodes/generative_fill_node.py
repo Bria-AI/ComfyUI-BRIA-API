@@ -5,6 +5,7 @@ import io
 import torch
 
 from .common import (
+    bria_asset_headers,
     bria_json_headers,
     image_to_base64,
     poll_status_until_completed,
@@ -87,7 +88,10 @@ class GenFillNode():
                 
                 final_response = poll_status_until_completed(status_url, api_key)                
                 result_image_url = final_response['result']['image_url']
-                image_response = requests.get(result_image_url)
+                image_response = requests.get(
+                    result_image_url,
+                    headers=bria_asset_headers(),
+                )
                 result_image = Image.open(io.BytesIO(image_response.content))
                 result_image = result_image.convert("RGB")
                 result_image = np.array(result_image).astype(np.float32) / 255.0
