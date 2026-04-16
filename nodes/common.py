@@ -7,8 +7,20 @@ from torchvision.transforms import ToPILImage
 import requests
 import time
 
+from importlib.metadata import PackageNotFoundError, version as _package_version
 
-BRIA_COMFYUI_USER_AGENT = "bria/ComfyUI"
+try:
+    _BRIA_COMFYUI_PACKAGE_VERSION = _package_version("comfyui-bria-api")
+except PackageNotFoundError:
+    _BRIA_COMFYUI_PACKAGE_VERSION = "dev"
+
+BRIA_COMFYUI_USER_AGENT = f"bria/ComfyUI-BRIA-API/{_BRIA_COMFYUI_PACKAGE_VERSION}"
+
+
+def bria_asset_headers() -> dict:
+    """Headers for asset fetches (CDN/S3 URLs) where api_token is not sent."""
+    return {"User-Agent": BRIA_COMFYUI_USER_AGENT}
+
 
 def bria_json_headers(api_token: str) -> dict:
     """Headers for JSON POST requests to Bria API."""
@@ -125,7 +137,7 @@ def process_request(api_url, image, mask, api_key, visual_input_content_moderati
             result_image_url = final_response['result']['image_url']
             
             # Download and process the result image
-            image_response = requests.get(result_image_url)
+            image_response = requests.get(result_image_url, headers=bria_asset_headers())
             result_image = Image.open(io.BytesIO(image_response.content))
             result_image = result_image.convert("RGBA")
             result_image = np.array(result_image).astype(np.float32) / 255.0

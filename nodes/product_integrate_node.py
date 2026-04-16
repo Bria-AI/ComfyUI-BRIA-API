@@ -2,6 +2,7 @@ import requests
 import torch
 
 from .common import (
+    bria_asset_headers,
     bria_json_headers,
     image_to_base64,
     poll_status_until_completed,
@@ -121,7 +122,10 @@ class ProductIntegrateNode:
                 result_image_url = result.get("image_url")
                 used_seed = result.get("seed", seed)
 
-                image_response = requests.get(result_image_url)
+                image_response = requests.get(
+                    result_image_url,
+                    headers=bria_asset_headers(),
+                )
                 result_image = postprocess_image(image_response.content)
 
                 return (result_image, used_seed)

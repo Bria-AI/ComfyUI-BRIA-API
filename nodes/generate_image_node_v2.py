@@ -2,6 +2,7 @@ import requests
 import torch
 
 from .common import (
+    bria_asset_headers,
     bria_json_headers,
     image_to_base64,
     normalize_images_input,
@@ -145,7 +146,10 @@ class GenerateImageNodeV2:
                 structured_prompt_result = result.get("structured_prompt", "")
                 used_seed = result.get("seed", seed_values[idx])
 
-                image_response = requests.get(result_image_url)
+                image_response = requests.get(
+                    result_image_url,
+                    headers=bria_asset_headers(),
+                )
                 result_image = postprocess_image(image_response.content)
 
                 batch_results.append(result_image)

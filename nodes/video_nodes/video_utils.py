@@ -1,7 +1,7 @@
 import os
 import requests
 
-from ..common import BRIA_COMFYUI_USER_AGENT
+from ..common import BRIA_COMFYUI_USER_AGENT, bria_asset_headers
 
 
 def upload_video_to_s3(video_path, filename, api_token):
@@ -55,7 +55,8 @@ def upload_video_to_s3(video_path, filename, api_token):
         
         # Determine content type based on file extension
         upload_headers = {
-            "Content-Type": content_type
+            "Content-Type": content_type,
+            **bria_asset_headers(),
         }
 
         upload_response = requests.put(upload_url, data=video_data, headers=upload_headers)

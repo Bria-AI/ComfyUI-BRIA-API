@@ -5,6 +5,7 @@ from PIL import Image
 import torch
 
 from .common import (
+    bria_asset_headers,
     bria_json_headers,
     image_to_base64,
     normalize_images_input,
@@ -90,7 +91,10 @@ class ImageEnhanceNode():
                 used_seed = final_response["result"].get("seed", seed)
 
                 # Download and process image
-                image_response = requests.get(result_image_url)
+                image_response = requests.get(
+                    result_image_url,
+                    headers=bria_asset_headers(),
+                )
                 result_image = Image.open(io.BytesIO(image_response.content)).convert("RGB")
                 result_array = np.array(result_image).astype(np.float32) / 255.0
                 result_tensor = torch.from_numpy(result_array)  # shape: (H,W,C)

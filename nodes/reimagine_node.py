@@ -1,6 +1,7 @@
 import requests
 
 from .common import (
+    bria_asset_headers,
     bria_json_headers,
     image_to_base64,
     postprocess_image,
@@ -67,7 +68,10 @@ class ReimagineNode():
         )
         if response.status_code == 200:
                 response_dict = response.json()
-                image_response = requests.get(response_dict['result'][0]["urls"][0])
+                image_response = requests.get(
+                    response_dict['result'][0]["urls"][0],
+                    headers=bria_asset_headers(),
+                )
                 result_image = postprocess_image(image_response.content)
                 return (result_image,)
         else:
