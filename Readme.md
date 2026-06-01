@@ -122,6 +122,7 @@ These nodes perform high-quality edits for a given video.
 | **Bria Video Mask By Prompt** | Generates a mask video using a text prompt describing what to mask. |
 | **Bria Video Mask By Key Points** | Generates a mask video using key-points guidance |
 
+  Check out the example workflow in the workflows/ folder to see how the nodes should be wired together for loading and previewing a video end-to-end.
 
 ## Attribution Node
 
