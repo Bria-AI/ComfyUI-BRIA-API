@@ -1,0 +1,150 @@
+{
+  "id": "faacd69e-30b7-4ae8-a9e0-11e3523139f9",
+  "revision": 0,
+  "last_node_id": 14,
+  "last_link_id": 9,
+  "nodes": [
+    {
+      "id": 5,
+      "type": "LoadVideoFramesNode",
+      "pos": [
+        -377.4424627503264,
+        265.04224992480954
+      ],
+      "size": [
+        270,
+        276.890625
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "video_path",
+          "type": "STRING",
+          "links": [
+            3
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "LoadVideoFramesNode"
+      },
+      "widgets_values": [
+        "6952253-uhd_3840_2160_25fps.mp4",
+        "image"
+      ]
+    },
+    {
+      "id": 7,
+      "type": "RemoveVideoBackgroundNode",
+      "pos": [
+        176.90761152601942,
+        244.1153564319173
+      ],
+      "size": [
+        550.953125,
+        348.203125
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "video_url",
+          "type": "STRING",
+          "widget": {
+            "name": "video_url"
+          },
+          "link": 3
+        }
+      ],
+      "outputs": [
+        {
+          "name": "result_video_url",
+          "type": "STRING",
+          "links": [
+            4
+          ]
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "RemoveVideoBackgroundNode"
+      },
+      "widgets_values": [
+        "",
+        "",
+        true,
+        "webm_vp9"
+      ]
+    },
+    {
+      "id": 8,
+      "type": "PreviewVideoURLNode",
+      "pos": [
+        1020.6454228509147,
+        264.9389174606007
+      ],
+      "size": [
+        270,
+        252.890625
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "video_url",
+          "type": "STRING",
+          "widget": {
+            "name": "video_url"
+          },
+          "link": 4
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewVideoURLNode"
+      },
+      "widgets_values": [
+        ""
+      ]
+    }
+  ],
+  "links": [
+    [
+      3,
+      5,
+      0,
+      7,
+      0,
+      "STRING"
+    ],
+    [
+      4,
+      7,
+      0,
+      8,
+      0,
+      "STRING"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.43094644375454877,
+      "offset": [
+        685.6754838043107,
+        494.0393339664482
+      ]
+    },
+    "frontendVersion": "1.43.18",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
+  },
+  "version": 0.4
+}
