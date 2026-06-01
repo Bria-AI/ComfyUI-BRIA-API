@@ -14,6 +14,7 @@ class RemoveVideoBackgroundNode():
         video_url (str): Local path or URL of the video to process.
         preserve_audio (bool, optional): Whether to keep the audio track. Default is True.
         output_container_and_codec (str, optional): Desired output format and codec. Default is "webm_vp9".
+        background_color Predefined string only - one of the predefined enum values
 
     Returns:
         result_video_url (STRING): URL of the video with background removed.
@@ -41,6 +42,19 @@ class RemoveVideoBackgroundNode():
                     "mkv_vp9",
                     "gif"
                 ], {"default": "webm_vp9"}),
+                "background_color": ([
+                    "Transparent",
+                    "Black",
+                    "White",
+                    "Gray",
+                    "Red",
+                    "Green",
+                    "Blue",
+                    "Yellow",
+                    "Cyan",
+                    "Magenta",
+                    "Orange"
+                ], {"default": "Transparent"})
             }
         }
 
@@ -52,7 +66,7 @@ class RemoveVideoBackgroundNode():
     def __init__(self):
         self.api_url = "https://engine.prod.bria-api.com/v2/video/edit/remove_background"
 
-    def execute(self, api_key, video_url, preserve_audio=True, output_container_and_codec="webm_vp9",):
+    def execute(self, api_key, video_url, preserve_audio=True, output_container_and_codec="webm_vp9",background_color="Transparent"):
         if api_key.strip() == "" or api_key.strip() == "BRIA_API_TOKEN":
             raise Exception("Please insert a valid API key.")
         video_path = None
@@ -73,7 +87,8 @@ class RemoveVideoBackgroundNode():
             payload = {
                 "video": input_video_url,
                 "preserve_audio": preserve_audio,
-                "output_container_and_codec": output_container_and_codec
+                "output_container_and_codec": output_container_and_codec,
+                "background_color":background_color
             }
 
             headers = bria_json_headers(api_key)
