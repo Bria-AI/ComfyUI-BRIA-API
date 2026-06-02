@@ -66,7 +66,7 @@ class RemoveVideoBackgroundNode():
     def __init__(self):
         self.api_url = "https://engine.prod.bria-api.com/v2/video/edit/remove_background"
 
-    def execute(self, api_key, video_url, preserve_audio=True, output_container_and_codec="webm_vp9",background_color="Transparent"):
+    def execute(self, api_key, video_url, preserve_audio=True, output_container_and_codec="webm_vp9",background_color="Black"):
         if api_key.strip() == "" or api_key.strip() == "BRIA_API_TOKEN":
             raise Exception("Please insert a valid API key.")
         video_path = None
