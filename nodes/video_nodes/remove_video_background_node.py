@@ -54,7 +54,7 @@ class RemoveVideoBackgroundNode():
                     "Cyan",
                     "Magenta",
                     "Orange"
-                ], {"default": "Transparent"})
+                ], {"default": "Black"})
             }
         }
 
