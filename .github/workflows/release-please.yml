@@ -1,0 +1,35 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+
+# SPDX-FileCopyrightText: 2026 Bria AI <support@bria.ai>
+#
+# SPDX-License-Identifier: Apache-2.0
+
+name: Release Please
+
+on:
+  push:
+    branches: [dev]
+
+permissions: {}
+
+jobs:
+  release-please:
+    name: Release Please
+
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      # Plain GITHUB_TOKEN is sufficient here: publishing to the Comfy Registry
+      # is triggered by the pyproject.toml version bump landing on dev (see
+      # publish.yml), NOT by the tag release-please pushes — so we don't need a
+      # PAT to make a tag trigger a downstream workflow. release-please still
+      # cuts the tag + GitHub release for provenance.
+      - uses: googleapis/release-please-action@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json

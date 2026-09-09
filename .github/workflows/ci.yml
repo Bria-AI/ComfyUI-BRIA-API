@@ -1,0 +1,71 @@
+# yaml-language-server: $schema=https://json.schemastore.org/github-workflow.json
+
+# SPDX-FileCopyrightText: 2026 Bria AI <support@bria.ai>
+#
+# SPDX-License-Identifier: Apache-2.0
+
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [dev]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    name: Build check
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      # ComfyUI + torch are heavy host deps we don't install in CI; compileall
+      # catches syntax errors across all node modules without importing them.
+      - name: Compile all sources
+        run: python -m compileall -q nodes __init__.py
+
+      # pyproject.toml is the version source of record (release-please bumps it,
+      # and the Comfy Registry reads it) — fail fast if it stops parsing.
+      - name: Validate pyproject.toml
+        run: |
+          python - <<'PY'
+          import tomllib
+          with open("pyproject.toml", "rb") as f:
+              data = tomllib.load(f)
+          assert data["project"]["version"], "pyproject.toml [project].version missing"
+          assert data["tool"]["comfy"]["PublisherId"], "[tool.comfy].PublisherId missing"
+          print("pyproject.toml OK — version", data["project"]["version"])
+          PY
+
+  format:
+    name: Ruff format check (advisory)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install ruff
+        run: pip install ruff
+
+      # Advisory only: the existing tree predates any formatter and a whole-repo
+      # run would flag pre-existing files, so this never fails the check yet.
+      # Format files you touch with `ruff format <files>`; once the tree is
+      # clean, drop continue-on-error to make it a hard gate.
+      - name: Check formatting
+        continue-on-error: true
+        run: ruff format --check .

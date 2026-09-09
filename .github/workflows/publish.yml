@@ -2,8 +2,12 @@ name: Publish to Comfy registry
 on:
   workflow_dispatch:
   push:
+    # dev is the single trunk (§ branch model). Publishing fires when the
+    # pyproject.toml version bump lands on dev — i.e. when release-please's
+    # release PR is merged. The Comfy publish action reads the version from
+    # pyproject.toml, so no tag is involved.
     branches:
-      - main
+      - dev
     paths:
       - "pyproject.toml"
 
